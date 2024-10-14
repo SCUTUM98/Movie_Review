@@ -6,12 +6,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="ko">
 <head>
   <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
   <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <!-- Site Metas -->
@@ -224,6 +223,16 @@
     </section>
     <!-- end slider section -->
   </div>
+  
+  
+
+        </div>
+
+      </div>
+      <span onmouseover="scrollDireita()" onmouseout="clearScroll()"  class="handle handleNext active">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </span>
+    </div>
 
   <!-- about section -->
 
