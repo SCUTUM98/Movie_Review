@@ -16,7 +16,7 @@ public class TmdbService {
         this.restTemplate = restTemplate;
     }
 
-    public String searchMovie(String apiKey, String query) {
+    public String searchByName(String apiKey, String query) {
         String url = String.format("https://api.themoviedb.org/3/search/movie?query=%s&language=ko-KR&page=1", query);
 
         // 헤더 설정
@@ -30,6 +30,57 @@ public class TmdbService {
         // API 호출
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         
-        return response.getBody(); // 응답 본문 반환
+        return response.getBody();
+    }
+    
+    public String searchById(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/movie/movie_id=%s&language=ko-KR", id);
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey); // Bearer token 설정
+
+        // 요청 엔티티 생성
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // API 호출
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        return response.getBody();
+    }
+    
+    public String searchActor(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/movie/%s/credits?language=ko-KR", id);
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey); // Bearer token 설정
+
+        // 요청 엔티티 생성
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // API 호출
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        return response.getBody();
+    }
+    
+    public String suggestMovie(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&page=1");
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey); // Bearer token 설정
+
+        // 요청 엔티티 생성
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // API 호출
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        return response.getBody();
     }
 }
