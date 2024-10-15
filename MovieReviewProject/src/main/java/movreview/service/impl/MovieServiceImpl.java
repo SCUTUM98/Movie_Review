@@ -23,9 +23,8 @@ public class MovieServiceImpl implements MovieService {
 	private MovDAO movDAO;
 
 	@Override
-	public List<MovieVO> searchMovie(MovieVO vo) throws Exception {
-		
-		return null;
+	public List<?> searchMovie(MovieVO vo) throws Exception {
+		return movDAO.searchMovie(vo);
 	}
 
 }

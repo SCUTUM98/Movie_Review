@@ -9,5 +9,5 @@ public interface MovieService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	List<MovieVO> searchMovie(MovieVO vo) throws Exception;
+	List<?> searchMovie(MovieVO vo) throws Exception;
 }
