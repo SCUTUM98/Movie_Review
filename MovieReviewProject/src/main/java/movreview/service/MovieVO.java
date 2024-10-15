@@ -1,17 +1,39 @@
 package movreview.service;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieVO {
+	@JsonProperty("id")
 	private int movieId;
+	@JsonProperty("original_title")
 	private String titleKr;
+	@JsonProperty("title")
 	private String titleEn;
-	private String genre;
+	@JsonProperty("genre_ids")
+	private List<Integer> genre;
+	@JsonProperty("release_date")
 	private String releaseDate;
+	@JsonProperty("overview")
 	private String overview;
+	@JsonProperty("backdrop_path")
 	private String backdropPath;
+	@JsonProperty("poster_path")
 	private String posterPath;
-	private int collectionId;
+	@JsonProperty("belongs_to_collection")
+	private CollectionVO belongsToCollection;
+	@JsonProperty("status")
 	private String status;
+	@JsonProperty("tagline")
 	private String tagline;
+	
+	private boolean adult;
+	private String original_language;
+	private boolean video;
 	
 	public int getMovieId() {
 		return movieId;
@@ -34,10 +56,10 @@ public class MovieVO {
 		this.titleEn = titleEn;
 	}
 	
-	public String getGenre() {
+	public List<Integer> getGenre() {
 		return genre;
 	}
-	public void setGenre(String genre) {
+	public void setGenre(List<Integer> genre) {
 		this.genre = genre;
 	}
 	
@@ -69,11 +91,11 @@ public class MovieVO {
 		this.posterPath = posterPath;
 	}
 	
-	public int getCollectionId() {
-		return collectionId;
+	public CollectionVO getBelongsToCollection() {
+		return belongsToCollection;
 	}
-	public void setCollectionId(int collectionId) {
-		this.collectionId = collectionId;
+	public void setBelongsToCollection(CollectionVO belongsToCollection) {
+		this.belongsToCollection = belongsToCollection;
 	}
 	
 	public String getStatus() {
