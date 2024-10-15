@@ -99,7 +99,7 @@
 		<![CDATA[
 			SELECT movie_id, title_kr, title_er, genre, backdrop_path, poster_path
 			FROM movie_page
-			WHERE title_kr = #title# OR title_er = #title#
+			WHERE title_kr = #titleKr# OR title_er = #titleEn#
 		]]>
 	</select>
 
