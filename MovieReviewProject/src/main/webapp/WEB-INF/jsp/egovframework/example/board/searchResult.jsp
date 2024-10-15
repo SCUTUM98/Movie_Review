@@ -43,6 +43,7 @@
     <!-- MAIN CONTAINER -->
     <section class="main-container" >
       <div class="location" id="home">
+      		${movieData }
           <h1 id="home">Search Result</h1>
           <div class="box">
             <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p1.PNG?raw=true" alt=""></a>
@@ -62,7 +63,7 @@
       </div>
       
 
-      <h1 id="myList">Trending Now</h1>
+      <h1 id="myList">Unregistered Movie</h1>
       <div class="box">
         <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t1.PNG?raw=true" alt=""></a>
         <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t2.PNG?raw=true" alt=""></a>
@@ -72,7 +73,7 @@
         <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t6.PNG?raw=true" alt=""></a>                  
       </div>
       
-      <h1 id="tvShows">TV Shows</h1>
+      <h1 id="tvShows">Trending Now</h1>
       <div class="box">
         <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv1.PNG?raw=true" alt=""></a>
         <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv2.PNG?raw=true" alt=""></a>

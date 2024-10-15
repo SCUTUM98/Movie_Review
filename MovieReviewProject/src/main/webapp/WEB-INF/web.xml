@@ -50,6 +50,18 @@
 		<servlet-name>action</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 사용할 servlet 이름 및 클래스 설정 -->
+	<servlet>
+	  <servlet-name>eGovFrame</servlet-name>
+	  <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	  <load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- eGovFrame-servlet.xml 파일을 사용 -->
+	<servlet-mapping>
+	  <servlet-name>eGovFrame</servlet-name>
+	  <url-pattern>*.json</url-pattern>
+	</servlet-mapping>
     
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

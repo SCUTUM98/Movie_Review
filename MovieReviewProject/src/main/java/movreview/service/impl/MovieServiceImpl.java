@@ -4,7 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
+
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
@@ -17,5 +21,11 @@ public class MovieServiceImpl implements MovieService {
 	
 	@Resource(name = "movDAO")
 	private MovDAO movDAO;
+
+	@Override
+	public List<MovieVO> searchMovie(MovieVO vo) throws Exception {
+		
+		return null;
+	}
 
 }

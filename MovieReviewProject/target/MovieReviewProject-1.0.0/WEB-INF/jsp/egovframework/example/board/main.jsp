@@ -223,6 +223,16 @@
     </section>
     <!-- end slider section -->
   </div>
+  
+  
+
+        </div>
+
+      </div>
+      <span onmouseover="scrollDireita()" onmouseout="clearScroll()"  class="handle handleNext active">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </span>
+    </div>
 
   <!-- about section -->
 

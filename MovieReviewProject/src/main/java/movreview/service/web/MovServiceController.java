@@ -2,19 +2,24 @@ package movreview.service.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.URI;
+import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
+import movreview.service.TmdbService;
 import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
 import movreview.service.CollectionVO;
@@ -28,21 +33,33 @@ public class MovServiceController {
 	@Resource(name = "movService")
 	private MovieService movService;
 	
+	@Autowired
+	private TmdbService tmdbService;
+	
 	@RequestMapping(value="/main.do")
-	public String mainPage() {
+	public String mainPage() throws Exception {
 		return "board/main";
 	}
 	
 	@RequestMapping(value="/search.do")
-	public String searchPage() {
+	public String searchPage() throws Exception {
 		return "board/search";
 	}
 	
-	@RequestMapping(value="/result.do")
-	public String searchResult() {
+	@RequestMapping(value="/result.do", method=RequestMethod.GET)
+	public String searchResult(HttpServletRequest request) throws Exception {
 		
 		
 		return "board/searchResult";
 	}
+	
+	@GetMapping("/searchMovie.do")
+    public String searchMovie(HttpServletRequest request, Model model) throws Exception {
+		String title2 = "아이언맨";
+        String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+        String movieData = tmdbService.searchMovie(apiKey, title2);
+        model.addAttribute("movieData", movieData); // 결과를 모델에 추가
+        return "board/dataTest"; // 결과를 보여줄 JSP 페이지로 이동
+    }
 	
 }
