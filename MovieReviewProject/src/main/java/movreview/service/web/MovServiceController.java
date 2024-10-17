@@ -85,11 +85,9 @@ public class MovServiceController {
 	    searchVO.setTitleEn(searchKeyword);
 	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
 
-	    // 영화 검색
 	    List<?> searchList = movService.searchMovie(searchVO);
 	    System.out.println("올포랜드 : " + searchList);
 	    
-	    // 검색 결과 모델에 추가
 	    model.addAttribute("searchList", searchList);
 		
 		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
