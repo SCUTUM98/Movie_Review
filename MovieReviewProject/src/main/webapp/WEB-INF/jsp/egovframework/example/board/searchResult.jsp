@@ -15,14 +15,23 @@
 
   <script src="main.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/search/main.css">
+  
+  <script type="text/javascript">
+		function movieSelect(id) {
+			console.log(id);
+	    	document.listForm.id.value = id;
+	       	document.listForm.action = "<c:url value='/detail.do'/>";
+	       	document.listForm.submit();
+	       	}
+  </script>
 </head>
 <body>
   <div class="wrapper">
 
     <!-- HEADER -->
     <header>
-      <div class="netflixLogo">
-        <a id="logo" href="#home"><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/logo.PNG?raw=true" alt="Logo Image"></a>
+      <div class="filmLogo">
+        <a id="logo" href="#home"><img src="${pageContext.request.contextPath}/images/logo.png" alt="Logo Image"></a>
       </div>      
       <nav class="main-nav">                
         <a href="#home">Home</a>
@@ -73,11 +82,14 @@
       </div>
       
       <h1 id="trendingMovie">Trending Now</h1>
-      <div class="box">
-      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
-      		<a href=""><img src="http://image.tmdb.org/t/p/w500${trending.posterPath }" alt="${trending.titleKr }"></a>
-      	</c:forEach>            
-      </div>
+      <form:form commandName="movieVO" name="listForm" method="post">
+      	  <input type="hidden" name="id" value="">
+	      <div class="box">
+	      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
+	      		<a href="javascript:movieSelect('${trending.movieId}')"><img src="http://image.tmdb.org/t/p/w500${trending.posterPath }" alt="${trending.titleKr }"></a>
+	      	</c:forEach>            
+	      </div>
+	  </form:form>
       
 
       <h1 id="movies">Blockbuster Action & Adventure</h1>
