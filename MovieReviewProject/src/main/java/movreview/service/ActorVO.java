@@ -1,12 +1,22 @@
 package movreview.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ActorVO {
 	private int movieId;
+	@JsonProperty("id")
 	private String characterId;
+	@JsonProperty("gender")
 	private int gender;
+	@JsonProperty("name")
 	private String actName;
+	@JsonProperty("original_name")
 	private String originalName;
+	@JsonProperty("porfile_path")
 	private String profilePath;
+	@JsonProperty("character")
 	private String character;
 	
 	public int getMovieId() {

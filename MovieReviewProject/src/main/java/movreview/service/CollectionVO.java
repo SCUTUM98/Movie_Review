@@ -1,10 +1,22 @@
 package movreview.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CollectionVO {
-	private int id;
-	private String name;
-	private String posterPath;
-	private String backdropPath;
+	@JsonProperty("id")
+    private int id;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+    @JsonProperty("poster_path")
+    private String posterPath;
+    @JsonProperty("overview")
+    private String overview;
+    
+    private boolean adult;
 	
 	public int getId() {
 		return id;
@@ -32,5 +44,12 @@ public class CollectionVO {
 	}
 	public void setBackdropPath(String backdropPath) {
 		this.backdropPath = backdropPath;
+	}
+	
+	public String getOverview() {
+		return overview;
+	}
+	public void setOverview(String overview) {
+		this.overview = overview;
 	}
 }

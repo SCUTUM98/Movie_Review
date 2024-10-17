@@ -49,12 +49,48 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/search.do")
 	public String searchPage() throws Exception {
+		
+		
 		return "board/search";
 	}
+	//API 테스트용
+	@GetMapping("/searchMovie.do")
+    public String searchMovie(HttpServletRequest request, Model model) throws Exception {
+		String searchKeyword = "아이언맨";
+        String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+        String movieData = tmdbService.searchByName(apiKey, searchKeyword);
+        model.addAttribute("movieData", movieData);
+        return "board/dataTest";
+    }
 	
-	@RequestMapping(value="/result.do", method=RequestMethod.GET)
-	public String searchResult(HttpServletRequest request, Model model) throws Exception {
-		//MovieVO suggestVO = new MovieVO(); // 영화 등록 제안
+	@RequestMapping(value="/movieSearch.do", method=RequestMethod.POST)
+	public String movieSearch( @RequestParam("searchKeyword") String title, Model model) throws Exception {
+	    MovieVO searchVO = new MovieVO();
+		LOGGER.debug("Title: " + title);
+		searchVO.setTitleEn(title);
+	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
+	    
+	    List<?> searchList = movService.searchMovie(searchVO);
+	    System.out.println("올포랜드 : " + searchList);
+	    
+	    model.addAttribute("searchList", searchList);
+	    
+	    return "redirect:/result.do";
+	}
+	
+	@RequestMapping(value="/result.do", method=RequestMethod.POST)
+	public String searchResult(@RequestParam("searchKeyword") String searchKeyword, HttpServletRequest request, Model model) throws Exception {
+		MovieVO searchVO = new MovieVO();
+	    LOGGER.debug("Title: " + searchKeyword);
+	    searchVO.setTitleEn(searchKeyword);
+	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
+
+	    // 영화 검색
+	    List<?> searchList = movService.searchMovie(searchVO);
+	    System.out.println("올포랜드 : " + searchList);
+	    
+	    // 검색 결과 모델에 추가
+	    model.addAttribute("searchList", searchList);
 		
 		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
 		String suggestData = tmdbService.suggestMovie(apiKey);
@@ -76,11 +112,9 @@ public class MovServiceController {
                 new TypeReference<List<MovieVO>>() {}
             );
 
-            // 모델에 추가
             model.addAttribute("suggestData", suggestVO);
             model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
             model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
-            //model.addAttribute("backdropPath", jsonNode.get("backdrop_path").asInt());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,20 +124,12 @@ public class MovServiceController {
 		return "board/searchResult";
 	}
 	
-	@GetMapping("/searchMovie.do")
-    public String searchMovie(HttpServletRequest request, Model model) throws Exception {
-		String title2 = "아이언맨";
-        String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
-        String movieData = tmdbService.searchByName(apiKey, title2);
-        model.addAttribute("movieData", movieData); // 결과를 모델에 추가
-        return "board/dataTest"; // 결과를 보여줄 JSP 페이지로 이동
-    }
-	
 	@RequestMapping(name="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		LOGGER.debug("ID Value: " + id);
 		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
 		String detailData = tmdbService.movieDetail(apiKey, id);
+		String recommendData = tmdbService.movieRecommend(apiKey, id);
 		
 		if (detailData == null || detailData.isEmpty()) {
             throw new RuntimeException("Received null or empty response from the API");
@@ -111,8 +137,23 @@ public class MovServiceController {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode jsonNode = objectMapper.readTree(detailData);
-            MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class); 
+            JsonNode jsonNode = objectMapper.readTree(detailData);            
+            MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
+            
+            if (recommendData != null && !recommendData.isEmpty()) {
+                JsonNode recommendNode = objectMapper.readTree(recommendData);
+                JsonNode recNode = recommendNode.path("results");
+                
+                // JsonNode를 List로 변환하여 모델에 추가
+                List<Map<String, Object>> recList = new ArrayList<>();
+                for (JsonNode actor : recNode) {
+                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+                    recList.add(actorMap);
+                }
+                LOGGER.debug("Recommend List: " + recList);
+                model.addAttribute("recommendData", recList);
+            }
+            
             model.addAttribute("detailData", detailVO);
             
             List<String> genres = new ArrayList<>();
@@ -120,13 +161,41 @@ public class MovServiceController {
                 genres.add(genreNode.path("name").asText());
             }
             detailVO.setGenre(genres);
+            LOGGER.debug("Genre list: " + detailVO.getGenre());
+            
+            if (jsonNode.has("belongs_to_collection")) {
+                JsonNode collectionNode = jsonNode.path("belongs_to_collection");
+                CollectionVO collectionVO = new CollectionVO();
+                collectionVO.setId(collectionNode.path("id").asInt());
+                collectionVO.setName(collectionNode.path("name").asText());
+                collectionVO.setPosterPath(collectionNode.path("poster_path").asText());
+                collectionVO.setBackdropPath(collectionNode.path("backdrop_path").asText());
+                
+                String collectionData = tmdbService.collectionDetail(apiKey, collectionVO.getName());
+                LOGGER.debug("CollectionData: " + collectionData);
+                JsonNode overviewNode = objectMapper.readTree(collectionData);
+                CollectionVO resultVO = objectMapper.convertValue(overviewNode, CollectionVO.class);
+                resultVO.setOverview(overviewNode.findPath("overview").asText());
+                model.addAttribute("overviewData", resultVO);
+                
+                if (overviewNode.has("results")) {
+                	JsonNode resultNode = overviewNode.findPath("result");
+                    collectionVO.setOverview(resultNode.path("overview").asText());
+                    LOGGER.debug("Collection Id: " + collectionVO.getId());
+                    LOGGER.debug("Collection Poster Path: " + collectionVO.getPosterPath());
+                    LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
+                    LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
+                    model.addAttribute("collectionData", collectionVO);
+                }
+                
+            }
             
             int movieId = jsonNode.path("id").asInt();
             String actorData = tmdbService.searchActor(apiKey, movieId);
 
             if (actorData != null && !actorData.isEmpty()) {
                 JsonNode actorNode = objectMapper.readTree(actorData);
-                JsonNode castNode = actorNode.path("cast"); // 'cast' 배열 가져오기
+                JsonNode castNode = actorNode.path("cast");
                 
                 // JsonNode를 List로 변환하여 모델에 추가
                 List<Map<String, Object>> actorList = new ArrayList<>();
@@ -135,7 +204,7 @@ public class MovServiceController {
                     actorList.add(actorMap);
                 }
                 LOGGER.debug("Actor List: " + actorList);
-                model.addAttribute("actorData", actorList); // 배우 목록을 모델에 추가
+                model.addAttribute("actorData", actorList);
             }
 
         } catch (Exception e) {
@@ -143,8 +212,6 @@ public class MovServiceController {
             throw new RuntimeException("Error processing the API response: " + e.getMessage());
         }
         
-        
-		
 		return "board/detail";
 	}
 }

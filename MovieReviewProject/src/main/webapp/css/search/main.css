@@ -45,24 +45,25 @@ header {
   margin-bottom: 0px;  
 }
 
-.netflixLogo {
+.filmLogo {
   grid-area: nt;
   object-fit: cover;
-  width: 100px;
+  width: 150px; /* 밑에 .logo와 동일하게 맞춤 */
   max-height: 100%;
   
   padding-left: 30px;
   padding-top: 0px;  
 }
 
-.netflixLogo img {  
-  height: 35px;     
+.filmLogo img {  
+  width: 150px; /* 이 부분은 그대로 유지 */
 }
 
 #logo {
   color: #E50914;  
   margin: 0; 
   padding: 0; 
+  width: 150px; /* .logo와 동일하게 설정 */
 }
 
 

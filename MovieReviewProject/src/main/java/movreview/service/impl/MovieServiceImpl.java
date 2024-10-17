@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
+import movreview.service.CollectionVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
 import movreview.service.impl.MovDAO;
@@ -22,9 +23,20 @@ public class MovieServiceImpl implements MovieService {
 	@Resource(name = "movDAO")
 	private MovDAO movDAO;
 
+	//영화 검색
 	@Override
 	public List<?> searchMovie(MovieVO vo) throws Exception {
 		return movDAO.searchMovie(vo);
+	}
+	//영화 삽입
+	@Override
+	public String insertMovie(MovieVO vo) throws Exception{
+		return movDAO.insertMovie(vo);
+	}
+	//시리즈 삽입
+	@Override
+	public String insertCollection(CollectionVO vo) throws Exception {
+		return movDAO.insertCollection(vo);
 	}
 
 }

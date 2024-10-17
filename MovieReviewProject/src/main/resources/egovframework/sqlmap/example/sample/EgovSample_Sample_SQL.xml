@@ -6,7 +6,7 @@
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
 	<typeAlias  alias="actorVO" type="movreview.service.ActorVO"/>
-	<typeAlias  alias="collectionVO" type="movreview.service.collectionVO"/>
+	<typeAlias  alias="collectionVO" type="movreview.service.CollectionVO"/>
 	<typeAlias  alias="loginVO" type="movreview.service.LoginVO"/>
 	<typeAlias  alias="movieVO" type="movreview.service.MovieVO"/>
 	
@@ -95,12 +95,63 @@
 	
 	<!-- SEARCH -->
 	<!-- 영화 검색 -->
+	<!-- <select id="movDAO.searchMovie" parameterClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id, title_kr, title_er, genre, backdrop_path, poster_path, collection_id
+	        FROM movie_page
+	        WHERE (title_kr ILIKE '%' || #titleEn# || '%' OR title_er ILIKE '%' || #titleEn# || '%')
+	    ]]>
+	</select> -->
 	<select id="movDAO.searchMovie" parameterClass="movieVO">
-		<![CDATA[
-			SELECT movie_id, title_kr, title_er, genre, backdrop_path, poster_path
-			FROM movie_page
-			WHERE title_kr = #titleKr# OR title_er = #titleEn#
-		]]>
+	    <![CDATA[
+	        SELECT *
+	        FROM movie_page
+	    ]]>
 	</select>
+	
 
+	
+	<!-- INSERT -->
+	<!-- 영화 삽입 -->
+	<insert id="movDAO.insertMovie" parameterClass="movieVO">
+		<![CDATA[
+			INSERT INTO movie_page( movie_id
+									, title_kr
+									, title_er
+									, genre
+									, release_date
+									, overview
+									, backdrop_path
+									, poster_path
+									, poster_path
+									, collection_id
+									, status
+									, tagline )
+			VALUES ( #movieId#
+					, #titleKr#
+					, #titleEn#
+					, #genre#
+					, #releaseDate#
+					, #overview#
+					, #backdropPath#
+					, #posterPath#
+					, #collectionId#
+					, #status#
+					, #tagline# )
+					
+		]]>
+	</insert>
+	<!-- 시리즈 삽입 -->
+	<insert id="movDAO.insertCollection" parameterClass="collectionVO">
+		<![CDATA[
+			INSERT INTO collection( id
+									, cname
+									, poster_path
+									, backdrop_path )
+			VALUES ( #id#
+					, #name#
+					, #posterPath#
+					, #backdropPath# )
+		]]>
+	</insert>
 </sqlMap>

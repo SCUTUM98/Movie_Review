@@ -23,7 +23,7 @@
 <body>
 
     <div class="navbar">
-        <li class="logo"><img src="https://www.searchpng.com/wp-content/uploads/2019/02/Netflix-Logo-PNG-image-200x200.png"></li>
+        <li class="logo"><img src="${pageContext.request.contextPath}/images/logo.png"></li>
         <li class="buttons">Sign In</li>
     </div>
     <div class="main">
@@ -33,7 +33,7 @@
             </h1>
             <h3>Watch anywhere. Cancel anytime.</h3>
 
-            <form action="/api/searchMovies" method="get">
+            <form action="result.do" method="post">
                 <div class="search">
                     <input type="text" name="searchKeyword" class="box" placeholder="Search for a movie" required> 
                     <button type="submit" class="try">Search

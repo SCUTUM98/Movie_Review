@@ -26,6 +26,8 @@ public class MovieVO {
 	private String posterPath;
 	@JsonProperty("belongs_to_collection")
 	private CollectionVO belongsToCollection;
+	@JsonProperty("collection_id")
+	private int collectionId;
 	@JsonProperty("status")
 	private String status;
 	@JsonProperty("tagline")
@@ -96,6 +98,13 @@ public class MovieVO {
 	}
 	public void setBelongsToCollection(CollectionVO belongsToCollection) {
 		this.belongsToCollection = belongsToCollection;
+	}
+	
+	public int getCollectionId() {
+		return collectionId;
+	}
+	public void setCollectionId(int collectionId) {
+		this.collectionId = collectionId;
 	}
 	
 	public String getStatus() {
