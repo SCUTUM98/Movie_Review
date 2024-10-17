@@ -15,7 +15,7 @@ public class MovieVO {
 	@JsonProperty("title")
 	private String titleEn;
 	@JsonProperty("genre_ids")
-	private List<Integer> genre;
+	private List<String> genre;
 	@JsonProperty("release_date")
 	private String releaseDate;
 	@JsonProperty("overview")
@@ -56,10 +56,10 @@ public class MovieVO {
 		this.titleEn = titleEn;
 	}
 	
-	public List<Integer> getGenre() {
+	public List<String> getGenre() {
 		return genre;
 	}
-	public void setGenre(List<Integer> genre) {
+	public void setGenre(List<String> genre) {
 		this.genre = genre;
 	}
 	

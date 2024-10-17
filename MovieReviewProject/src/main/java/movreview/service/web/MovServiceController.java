@@ -16,7 +16,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,4 +99,52 @@ public class MovServiceController {
         return "board/dataTest"; // 결과를 보여줄 JSP 페이지로 이동
     }
 	
+	@RequestMapping(name="/detail.do")
+	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
+		LOGGER.debug("ID Value: " + id);
+		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+		String detailData = tmdbService.movieDetail(apiKey, id);
+		
+		if (detailData == null || detailData.isEmpty()) {
+            throw new RuntimeException("Received null or empty response from the API");
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(detailData);
+            MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class); 
+            model.addAttribute("detailData", detailVO);
+            
+            List<String> genres = new ArrayList<>();
+            for (JsonNode genreNode : jsonNode.path("genres")) {
+                genres.add(genreNode.path("name").asText());
+            }
+            detailVO.setGenre(genres);
+            
+            int movieId = jsonNode.path("id").asInt();
+            String actorData = tmdbService.searchActor(apiKey, movieId);
+
+            if (actorData != null && !actorData.isEmpty()) {
+                JsonNode actorNode = objectMapper.readTree(actorData);
+                JsonNode castNode = actorNode.path("cast"); // 'cast' 배열 가져오기
+                
+                // JsonNode를 List로 변환하여 모델에 추가
+                List<Map<String, Object>> actorList = new ArrayList<>();
+                for (JsonNode actor : castNode) {
+                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+                    actorList.add(actorMap);
+                }
+                LOGGER.debug("Actor List: " + actorList);
+                model.addAttribute("actorData", actorList); // 배우 목록을 모델에 추가
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error processing the API response: " + e.getMessage());
+        }
+        
+        
+		
+		return "board/detail";
+	}
 }
