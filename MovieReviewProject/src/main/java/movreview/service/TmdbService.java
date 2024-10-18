@@ -25,15 +25,11 @@ public class TmdbService {
     public String searchByName(String apiKey, String query) {
         String url = String.format("https://api.themoviedb.org/3/search/movie?query=%s&language=ko-KR&page=1", query);
 
-        // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         headers.set("Authorization", "Bearer " + apiKey); // Bearer token 설정
 
-        // 요청 엔티티 생성
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // API 호출
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         
         return response.getBody();

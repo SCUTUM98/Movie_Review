@@ -35,4 +35,12 @@ public class MovDAO extends EgovAbstractDAO {
 	public String insertCollection(CollectionVO vo) throws Exception {
 		return (String) insert("movDAO.insertCollection", vo);
 	}
+	// 연기자 삽닙
+	public String insertActor(ActorVO vo) throws Exception {
+		return (String) insert("movDAO.insertActor", vo);
+	}
+	// 영화 상세 페이지
+	public String selectMovie(MovieVO vo) throws Exception {
+		return (String) select("movDAO.selectMovie", vo);
+	}
 }

@@ -75,22 +75,22 @@
     
     <form action="" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
-	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w500${detailData.backdropPath }');">
+	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w500${selectMovie.backdropPath }');">
 	        <div class="overlay">
 	            <div class="info">
-	                <img src="http://image.tmdb.org/t/p/w500${detailData.posterPath }" alt="Movie Poster" class="poster">
+	                <img src="http://image.tmdb.org/t/p/w500${selectMovie.posterPath }" alt="Movie Poster" class="poster">
 	                <div class="details">
-	                    <h1>${detailData.titleEn }</h1>
-	                    <h2><strong>${detailData.tagline }</strong></h2>
-	                    <p>${detailData.overview }</p>
-	                    <p><strong>개봉일: </strong>${detailData.releaseDate }</p>
+	                    <h1>${selectMovie.titleEn }</h1>
+	                    <h2><strong>${selectMovie.tagline }</strong></h2>
+	                    <p>${selectMovie.overview }</p>
+	                    <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
 	                    <p><strong>장르: </strong>
-	                    	  <c:forEach items="${detailData.genre}" var="genre" varStatus="status">
+	                    	  <c:forEach items="${selectMovie.genre}" var="genre" varStatus="status">
 						            ${genre}<c:if test="${!status.last}">, </c:if> <!-- 마지막 요소가 아닐 경우 쉼표 추가 -->
 						      </c:forEach></p>
 	                </div>
 	            </div>
-	            <button class="register-button">등록하기</button>
+	            <button class="play-button">보러가기</button>
 	        </div>
 	    </div>
 	    
@@ -117,7 +117,6 @@
 		            </div>
 		            <button type="button" class="scroll-btn right" onclick="javascript:scrollRight(event)">▶</button>
 		        </div>
-		    
 		</div>
 		
 		<c:if test="${not empty collectionData.name }">

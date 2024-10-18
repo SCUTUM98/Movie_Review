@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,7 +44,36 @@ public class MovServiceController {
 	private TmdbService tmdbService;
 	
 	@RequestMapping(value="/main.do")
-	public String mainPage() throws Exception {
+	public String mainPage(Model model) throws Exception {
+		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+		String suggestData = tmdbService.suggestMovie(apiKey);
+		
+		if (suggestData == null || suggestData.isEmpty()) {
+            throw new RuntimeException("Received null or empty response from the API");
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(suggestData);
+            JsonNode resultsNode = jsonNode.get("results");
+            if (resultsNode == null || !resultsNode.isArray()) {
+                throw new RuntimeException("No results found in the response");
+            }
+
+            List<MovieVO> suggestVO = objectMapper.convertValue(
+                resultsNode,
+                new TypeReference<List<MovieVO>>() {}
+            );
+            
+            LOGGER.debug("결과: " + suggestVO);
+            model.addAttribute("movieData", suggestVO);
+            model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
+            model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error processing the API response: " + e.getMessage());
+        }
+        
 		return "board/main";
 	}
 	
@@ -86,7 +116,6 @@ public class MovServiceController {
 	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
 
 	    List<?> searchList = movService.searchMovie(searchVO);
-	    System.out.println("올포랜드 : " + searchList);
 	    
 	    model.addAttribute("searchList", searchList);
 		
@@ -122,7 +151,7 @@ public class MovServiceController {
 		return "board/searchResult";
 	}
 	
-	@RequestMapping(name="/detail.do")
+	@RequestMapping(value="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		LOGGER.debug("ID Value: " + id);
 		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
@@ -212,4 +241,118 @@ public class MovServiceController {
         
 		return "board/detail";
 	}
+	
+	@RequestMapping(value="/localDetail.do")
+	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
+		MovieVO selectVO = new MovieVO();
+	    selectVO.setMovieId(id);
+	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
+	    
+		LOGGER.debug("ID Value: " + id);
+		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+		String recommendData = tmdbService.movieRecommend(apiKey, id);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        if (recommendData != null && !recommendData.isEmpty()) {
+            JsonNode recommendNode = objectMapper.readTree(recommendData);
+            JsonNode recNode = recommendNode.path("results");
+            
+            // JsonNode를 List로 변환하여 모델에 추가
+            List<Map<String, Object>> recList = new ArrayList<>();
+            for (JsonNode actor : recNode) {
+                Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+                recList.add(actorMap);
+            }
+            LOGGER.debug("Recommend List: " + recList);
+            model.addAttribute("recommendData", recList);
+        }
+        
+            
+		/*
+		 * String collectionData = tmdbService.collectionDetail(apiKey,
+		 * collectionVO.getName()); LOGGER.debug("CollectionData: " + collectionData);
+		 * JsonNode overviewNode = objectMapper.readTree(collectionData); CollectionVO
+		 * resultVO = objectMapper.convertValue(overviewNode, CollectionVO.class);
+		 * resultVO.setOverview(overviewNode.findPath("overview").asText());
+		 * model.addAttribute("overviewData", resultVO);
+		 * 
+		 * int movieId = jsonNode.path("id").asInt(); String actorData =
+		 * tmdbService.searchActor(apiKey, movieId);
+		 * 
+		 * if (actorData != null && !actorData.isEmpty()) { JsonNode actorNode =
+		 * objectMapper.readTree(actorData); JsonNode castNode = actorNode.path("cast");
+		 * 
+		 * // JsonNode를 List로 변환하여 모델에 추가 List<Map<String, Object>> actorList = new
+		 * ArrayList<>(); for (JsonNode actor : castNode) { Map<String, Object> actorMap
+		 * = objectMapper.convertValue(actor, Map.class); actorList.add(actorMap); }
+		 * LOGGER.debug("Actor List: " + actorList); model.addAttribute("actorData",
+		 * actorList); }
+		 */
+        
+		return "board/localDetail";
+	}
+	
+	@RequestMapping(value="/addMovie.do", method = RequestMethod.POST)
+	public String addMovie(SessionStatus status,
+	                        @RequestParam("id") int id,
+	                        @RequestParam("movieId") int movieId,
+	                        @RequestParam("titleKr") String titleKr,
+	                        @RequestParam("titleEn") String titleEn,
+	                        @RequestParam("genreDB") String genreDB,
+	                        @RequestParam("releaseDate") String releaseDate,
+	                        @RequestParam("overview") String overview,
+	                        @RequestParam("backdropPath") String backdropPath,
+	                        @RequestParam("posterPath") String posterPath,
+	                        @RequestParam("collectionId") int collectionId,
+	                        @RequestParam("status") String movieStatus,
+	                        @RequestParam("tagline") String tagline,
+	                        @RequestParam("seriesId") int seriesId,
+	                        @RequestParam("seriesName") String seriesName,
+	                        @RequestParam("seriesDropPath") String seriesDropPath,
+	                        @RequestParam("seriesPosterPath") String seriesPosterPath,
+	                        @RequestParam("seriesOverview") String seriesOverview,
+	                        @RequestParam("actorIdList") String[] actorIds, // 배열로 수신
+	                        @RequestParam("actNameList") String[] actorNames, // 배열로 수신
+	                        @RequestParam("actProfilePathList") String[] actorProfilePaths) throws Exception {
+	    
+	    // MovieVO 생성 및 설정
+	    MovieVO movieVO = new MovieVO();
+	    movieVO.setMovieId(movieId);
+	    movieVO.setTitleKr(titleKr);
+	    movieVO.setTitleEn(titleEn);
+	    movieVO.setGenreDB(genreDB);
+	    movieVO.setReleaseDate(releaseDate);
+	    movieVO.setOverview(overview);
+	    movieVO.setBackdropPath(backdropPath);
+	    movieVO.setPosterPath(posterPath);
+	    movieVO.setCollectionId(collectionId);
+	    movieVO.setStatus(movieStatus);
+	    movieVO.setTagline(tagline);
+	    
+	    // CollectionVO 생성 및 설정
+	    CollectionVO collectionVO = new CollectionVO();
+	    collectionVO.setId(seriesId);
+	    collectionVO.setName(seriesName);
+	    collectionVO.setBackdropPath(seriesDropPath);
+	    collectionVO.setPosterPath(seriesPosterPath);
+	    collectionVO.setOverview(seriesOverview);
+	    
+	    // Movie, Collection 데이터 삽입
+	    movService.insertMovie(movieVO);
+	    movService.insertCollection(collectionVO);
+	    
+	    // Actor 데이터 삽입
+	    for (int i = 0; i < actorIds.length; i++) {
+	        ActorVO actorVO = new ActorVO();
+	        actorVO.setActorId(actorIds[i]);
+	        actorVO.setActName(actorNames[i]);
+	        actorVO.setProfilePath(actorProfilePaths[i]);
+	        
+	        movService.insertActor(actorVO);
+	    }
+	    
+	    status.setComplete();
+	    return "redirect:/detail.do";
+	}
+
 }

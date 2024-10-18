@@ -95,23 +95,15 @@
 	
 	<!-- SEARCH -->
 	<!-- 영화 검색 -->
-	<!-- <select id="movDAO.searchMovie" parameterClass="movieVO">
+	<select id="movDAO.searchMovie" resultClass="movieVO">
 	    <![CDATA[
-	        SELECT movie_id, title_kr, title_er, genre, backdrop_path, poster_path, collection_id
+	        SELECT movie_id AS movieId, title_kr AS titleKr, title_er AS titleEr, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
 	        FROM movie_page
 	        WHERE (title_kr ILIKE '%' || #titleEn# || '%' OR title_er ILIKE '%' || #titleEn# || '%')
 	    ]]>
-	</select> -->
-	<select id="movDAO.searchMovie" parameterClass="movieVO">
-	    <![CDATA[
-	        SELECT *
-	        FROM movie_page
-	    ]]>
 	</select>
-	
 
-	
-	<!-- INSERT -->
+	<!-- 등록 -->
 	<!-- 영화 삽입 -->
 	<insert id="movDAO.insertMovie" parameterClass="movieVO">
 		<![CDATA[
@@ -123,14 +115,13 @@
 									, overview
 									, backdrop_path
 									, poster_path
-									, poster_path
 									, collection_id
 									, status
 									, tagline )
 			VALUES ( #movieId#
 					, #titleKr#
 					, #titleEn#
-					, #genre#
+					, #genreDB#
 					, #releaseDate#
 					, #overview#
 					, #backdropPath#
@@ -154,4 +145,25 @@
 					, #backdropPath# )
 		]]>
 	</insert>
+	<!-- 연기자 삽입 -->
+	<insert id="movDAO.insertActor" parameterClass="actorVO">
+		<![CDATA[
+			INSERT INTO actor( actor_id
+									, act_name
+									, profile_path )
+			VALUES ( #actorId#
+					, #actName#
+					, #profilePath# )
+		]]>
+	</insert>
+	
+	<!-- 상세페이지 -->
+	<!-- 영화 정보 불러오기 -->
+	<select id="movDAO.selectMovie" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT title_kr AS titleKr, title_er AS titleEr, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
+	        FROM movie_page
+	        WHERE movie_id = #id#
+	    ]]>
+	</select>
 </sqlMap>

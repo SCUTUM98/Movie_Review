@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActorVO {
-	private int movieId;
 	@JsonProperty("id")
-	private String characterId;
+	private String actorId;
 	@JsonProperty("gender")
 	private int gender;
 	@JsonProperty("name")
@@ -19,18 +18,11 @@ public class ActorVO {
 	@JsonProperty("character")
 	private String character;
 	
-	public int getMovieId() {
-		return movieId;
+	public String getActorId() {
+		return actorId;
 	}
-	public void setMovieId(int movieId) {
-		this.movieId = movieId;
-	}
-	
-	public String getCharacterId() {
-		return characterId;
-	}
-	public void setCharacterId(String characterId) {
-		this.characterId = characterId;
+	public void setActorId(String actorId) {
+		this.actorId = actorId;
 	}
 	
 	public int getGender() {
