@@ -127,6 +127,10 @@
 		        </div>
 		</div>
 		
+		<div class="review-section">
+			<h2> 리뷰 </h2>
+		</div>
+		
 		<c:if test="${not empty collectionData.name }">
 			<div class="collection-detail" style="background-image: url('http://image.tmdb.org/t/p/w500${detailData.backdropPath }');">
 			    <div class="collection-overlay">

@@ -171,7 +171,6 @@ public class MovServiceController {
                 JsonNode recommendNode = objectMapper.readTree(recommendData);
                 JsonNode recNode = recommendNode.path("results");
                 
-                // JsonNode를 List로 변환하여 모델에 추가
                 List<Map<String, Object>> recList = new ArrayList<>();
                 for (JsonNode actor : recNode) {
                     Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
@@ -224,7 +223,6 @@ public class MovServiceController {
                 JsonNode actorNode = objectMapper.readTree(actorData);
                 JsonNode castNode = actorNode.path("cast");
                 
-                // JsonNode를 List로 변환하여 모델에 추가
                 List<Map<String, Object>> actorList = new ArrayList<>();
                 for (JsonNode actor : castNode) {
                     Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
@@ -253,22 +251,41 @@ public class MovServiceController {
 		LOGGER.debug("ID Value: " + id);
 		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
 		String recommendData = tmdbService.movieRecommend(apiKey, id);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        if (recommendData != null && !recommendData.isEmpty()) {
-            JsonNode recommendNode = objectMapper.readTree(recommendData);
-            JsonNode recNode = recommendNode.path("results");
-            
-            // JsonNode를 List로 변환하여 모델에 추가
-            List<Map<String, Object>> recList = new ArrayList<>();
-            for (JsonNode actor : recNode) {
-                Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
-                recList.add(actorMap);
-            }
-            LOGGER.debug("Recommend List: " + recList);
-            model.addAttribute("recommendData", recList);
-        }
+		int movieId = id;
+        String actorData = tmdbService.searchActor(apiKey, movieId);
         
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+        	if (actorData != null && !actorData.isEmpty()) {
+                JsonNode actorNode = objectMapper.readTree(actorData);
+                JsonNode castNode = actorNode.path("cast");
+                
+                List<Map<String, Object>> actorList = new ArrayList<>();
+                for (JsonNode actor : castNode) {
+                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+                    actorList.add(actorMap);
+                }
+                LOGGER.debug("Actor List: " + actorList);
+                model.addAttribute("actorData", actorList);
+            }
+        	
+        	if (recommendData != null && !recommendData.isEmpty()) {
+                JsonNode recommendNode = objectMapper.readTree(recommendData);
+                JsonNode recNode = recommendNode.path("results");
+                
+                // JsonNode를 List로 변환하여 모델에 추가
+                List<Map<String, Object>> recList = new ArrayList<>();
+                for (JsonNode actor : recNode) {
+                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+                    recList.add(actorMap);
+                }
+                LOGGER.debug("Recommend List: " + recList);
+                model.addAttribute("recommendData", recList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error processing the API response: " + e.getMessage());
+        }
         
 		return "board/localDetail";
 	}
