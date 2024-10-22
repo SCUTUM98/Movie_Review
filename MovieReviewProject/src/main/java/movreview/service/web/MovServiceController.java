@@ -3,6 +3,9 @@ package movreview.service.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +36,14 @@ import movreview.service.CollectionVO;
 import movreview.service.LoginVO;
 import movreview.service.ActorVO;
 
+@Configuration
+@PropertySource("classpath:api.properties")
 @Controller
 public class MovServiceController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovSampleServiceImpl.class);
+	
+	@Value("${tmdb-api-key}")
+	private String apiKey;
 	
 	@Resource(name = "movService")
 	private MovieService movService;
@@ -45,7 +53,6 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/main.do")
 	public String mainPage(Model model) throws Exception {
-		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		
 		if (suggestData == null || suggestData.isEmpty()) {
@@ -80,14 +87,13 @@ public class MovServiceController {
 	@RequestMapping(value="/search.do")
 	public String searchPage() throws Exception {
 		
-		
 		return "board/search";
 	}
 	//API 테스트용
 	@GetMapping("/searchMovie.do")
     public String searchMovie(HttpServletRequest request, Model model) throws Exception {
 		String searchKeyword = "아이언맨";
-        String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+        
         String movieData = tmdbService.searchByName(apiKey, searchKeyword);
         model.addAttribute("movieData", movieData);
         return "board/dataTest";
@@ -119,7 +125,6 @@ public class MovServiceController {
 	    
 	    model.addAttribute("searchList", searchList);
 		
-		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		
 		if (suggestData == null || suggestData.isEmpty()) {
@@ -154,7 +159,7 @@ public class MovServiceController {
 	@RequestMapping(value="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		LOGGER.debug("ID Value: " + id);
-		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+		
 		String detailData = tmdbService.movieDetail(apiKey, id);
 		String recommendData = tmdbService.movieRecommend(apiKey, id);
 		
@@ -249,7 +254,7 @@ public class MovServiceController {
 	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
 	    
 		LOGGER.debug("ID Value: " + id);
-		String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOTFhNDM3OTVmMWRjMDMyNzk1OTA1NWJjN2FlOGJiOSIsIm5iZiI6MTcyODYwNTgwMS40Njk1NTMsInN1YiI6IjY3MDY0OTc4YTg4NjE0ZDZiMDhhZGRhNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.167LDdbBCOhEn0TosoOrME7mxJhmEq4T2Tq3lExAZ3Q";
+		
 		String recommendData = tmdbService.movieRecommend(apiKey, id);
 		int movieId = id;
         String actorData = tmdbService.searchActor(apiKey, movieId);
