@@ -77,7 +77,7 @@ body {
 .movie-section {
     position: relative;
     background-color: #141414; /* 배경 색상 설정 */
-    padding: 50px; /* 패딩 추가 */
+    padding: 10px;
 }
 
 .movie-container {

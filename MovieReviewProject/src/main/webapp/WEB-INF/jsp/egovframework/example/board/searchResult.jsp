@@ -32,28 +32,22 @@
   </script>
 </head>
 <body>
-  <div class="wrapper">
-
+  	<div class="header">
     <!-- HEADER -->
-    <header>
-      <div class="filmLogo">
-        <a id="logo" href="#home"><img src="${pageContext.request.contextPath}/images/logo.png" alt="Logo Image"></a>
-      </div>      
-      <nav class="main-nav">                
-        <a href="#home">Home</a>
-        <a href="#tvShows">TV Shows</a>
-        <a href="#movies">Movies</a>
-        <a href="#originals">Originals</a>
-        <a href="#">Recently Added</a>
-        <a target="_blank" href="https://codepen.io/cb2307/full/NzaOrm">Portfolio</a>        
-      </nav>
-      <nav class="sub-nav">
-        <a href="#"><i class="fas fa-search sub-nav-logo"></i></a>
-        <a href="#"><i class="fas fa-bell sub-nav-logo"></i></a>
-        <a href="#">Account</a>        
-      </nav>      
-    </header>
-    <!-- END OF HEADER -->
+	    <header>
+	        <img src="${pageContext.request.contextPath}/images/logo.png" alt="Platform Logo" class="logo">
+	        <nav class="main-nav">
+	                <a href="#">홈</a>
+	                <a href="#">영화</a>
+	                <a href="#">TV 프로그램</a>
+	                <a href="#">내 목록</a>
+	                <a href="#">설정</a>
+	        </nav>     
+	    </header>
+	    <!-- END OF HEADER -->
+	</div>
+
+    <div class="wrapper">
     
     <!-- MAIN CONTAINER -->
     <section class="main-container" >
@@ -71,14 +65,16 @@
       
 
       <h1 id="unregistered">Unregistered Movie</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t6.PNG?raw=true" alt=""></a>                  
-      </div>
+	  <form:form commandName="movieVO" name="tmdbForm" method="post">
+		  <input type="hidden" name="id" value="">
+		  <div class="box">
+			 <c:forEach items="${resultData }" var="result" varStatus="status">
+			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }"></a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+		  
+      
       
       <h1 id="trendingMovie">Trending Now</h1>
       <form:form commandName="movieVO" name="listForm" method="post">
