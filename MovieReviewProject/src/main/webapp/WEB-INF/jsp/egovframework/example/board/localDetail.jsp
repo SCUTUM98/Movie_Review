@@ -75,21 +75,29 @@
     
     <form action="" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
-	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w500${selectMovie.backdropPath }');">
-	        <div class="overlay">
-	            <div class="info">
-	                <img src="http://image.tmdb.org/t/p/w500${selectMovie.posterPath }" alt="Movie Poster" class="poster">
-	                <div class="details">
-	                    <h1>${selectMovie.titleEn }</h1>
-	                    <h2><strong>${selectMovie.tagline }</strong></h2>
-	                    <p>${selectMovie.overview }</p>
-	                    <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
-	                    <p><strong>장르: </strong>
-	                    	  <c:forEach items="${selectMovie.genre}" var="genre" varStatus="status">
-						            ${genre}<c:if test="${!status.last}">, </c:if> <!-- 마지막 요소가 아닐 경우 쉼표 추가 -->
-						      </c:forEach></p>
-	                </div>
-	            </div>
+	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${selectMovie.backdropPath }');">
+            <div class="overlay">
+                <div class="info">
+                    <img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
+                    <div class="details">
+                        <h1>${selectMovie.titleEn }</h1>
+                        <h2><strong>${selectMovie.tagline }</strong></h2>
+                        <p>${selectMovie.overview }</p>
+                        <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
+                        <p><strong>장르: </strong>
+						    <script type="text/javascript">
+						        var genreString = '${selectMovie.genreDB}';
+						        genreString = genreString.replace(/[\[\]']/g, '');
+						
+						        var genres = genreString.split(",").map(function(item) {
+						            return item.trim();
+						        });
+						
+						        document.write(genres.join(", "));
+						    </script>
+						</p>
+                    </div>
+                </div>
 	            <button class="play-button">보러가기</button>
 	        </div>
 	    </div>

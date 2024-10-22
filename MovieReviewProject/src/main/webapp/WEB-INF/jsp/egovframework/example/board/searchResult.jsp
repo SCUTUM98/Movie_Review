@@ -23,6 +23,12 @@
 	       	document.listForm.action = "<c:url value='/detail.do'/>";
 	       	document.listForm.submit();
 	       	}
+		function localMovieSelect(id) {
+			console.log(id);
+			document.searchForm.id.value = id;
+			document.searchForm.action = "<c:url value='/localDetail.do'/>";
+			document.searchForm.submit();
+		}
   </script>
 </head>
 <body>
@@ -53,11 +59,14 @@
     <section class="main-container" >
       <div class="location" id="home">
           <h1 id="result">Search Result</h1>
+          <form:form commandName="movieVO" name="searchForm" method="post">
+          	  <input type="hidden" name="id" value="">
 	          <div class="box">
 		      	<c:forEach items="${searchList }" var="search" varStatus="status">
-		      		<a href="javascript:movieSelect('${search.movieId}')"><img src="http://image.tmdb.org/t/p/w500${search.posterPath }" alt="${search.titleKr }"></a>
+		      		<a href="javascript:localMovieSelect('${search.movieId}')"><img src="http://image.tmdb.org/t/p/w500${search.posterPath }" alt="${search.titleKr }"></a>
 		      	</c:forEach>            
 		      </div>
+		  </form:form>
       </div>
       
 

@@ -13,5 +13,5 @@ public interface MovieService {
 	//연기자 등록
 	String insertActor(ActorVO vo) throws Exception;
 	//영화 상세 페이지
-	String selectMovie(MovieVO vo) throws Exception;
+	MovieVO selectMovie(MovieVO vo) throws Exception;
 }

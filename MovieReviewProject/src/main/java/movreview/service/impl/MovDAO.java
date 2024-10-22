@@ -40,7 +40,7 @@ public class MovDAO extends EgovAbstractDAO {
 		return (String) insert("movDAO.insertActor", vo);
 	}
 	// 영화 상세 페이지
-	public String selectMovie(MovieVO vo) throws Exception {
-		return (String) select("movDAO.selectMovie", vo);
+	public MovieVO selectMovie(MovieVO vo) throws Exception {
+		return (MovieVO) select("movDAO.selectMovie", vo);
 	}
 }

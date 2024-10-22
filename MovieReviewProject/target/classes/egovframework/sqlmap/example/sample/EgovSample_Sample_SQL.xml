@@ -161,9 +161,18 @@
 	<!-- 영화 정보 불러오기 -->
 	<select id="movDAO.selectMovie" resultClass="movieVO">
 	    <![CDATA[
-	        SELECT title_kr AS titleKr, title_er AS titleEr, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
+	        SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
 	        FROM movie_page
-	        WHERE movie_id = #id#
+	        WHERE movie_id = #movieId#
 	    ]]>
 	</select>
 </sqlMap>

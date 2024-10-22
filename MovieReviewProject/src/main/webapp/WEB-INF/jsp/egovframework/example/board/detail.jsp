@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Clone - Content Detail</title>
+    <title>Film Report</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/detailStyle.css">
     <script src="${pageContext.request.contextPath}/js/detailScript.js"></script>
     
@@ -100,7 +100,7 @@
         <input type="hidden" name="seriesPosterPath" value="${collectionData.posterPath}">
         <input type="hidden" name="seriesOverview" value="${collectionData.overview}">
         <c:forEach items="${actorData}" var="actor">
-		    <input type="hidden" name="actorIdList" value="${actor.actorId}"/>
+		    <input type="hidden" name="actorIdList" value="${actor.id}"/>
 		    <input type="hidden" name="actNameList" value="${actor.name}"/>
 		    <input type="hidden" name="actProfilePathList" value="${actor.profile_path}"/>
 		</c:forEach>

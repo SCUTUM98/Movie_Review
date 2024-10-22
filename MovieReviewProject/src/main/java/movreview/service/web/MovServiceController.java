@@ -246,6 +246,8 @@ public class MovServiceController {
 	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		MovieVO selectVO = new MovieVO();
 	    selectVO.setMovieId(id);
+	    movService.selectMovie(selectVO);
+	    LOGGER.debug("장르: " + movService.selectMovie(selectVO).getGenreDB());
 	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
 	    
 		LOGGER.debug("ID Value: " + id);
@@ -347,12 +349,17 @@ public class MovServiceController {
 	        actorVO.setActorId(actorIds[i]);
 	        actorVO.setActName(actorNames[i]);
 	        actorVO.setProfilePath(actorProfilePaths[i]);
+	        LOGGER.debug("Actor ID: " + actorVO.getActorId() + "\nActor Name: " + actorVO.getActName());
 	        
 	        movService.insertActor(actorVO);
 	    }
 	    
 	    status.setComplete();
-	    return "redirect:/detail.do";
+	    
+	    MovieVO detailVO = new MovieVO();
+	    detailVO.setMovieId(movieId);
+	    
+	    return "redirect:/localDetail.do";
 	}
 
 }

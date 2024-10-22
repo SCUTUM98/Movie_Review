@@ -46,7 +46,7 @@ public class MovieServiceImpl implements MovieService {
 	}
 	//영화 상세 페이지
 	@Override
-	public String selectMovie(MovieVO vo) throws Exception {
+	public MovieVO selectMovie(MovieVO vo) throws Exception {
 		return movDAO.selectMovie(vo);
 	}
 
