@@ -66,8 +66,8 @@
             <ul>
                 <li><a href="#">홈</a></li>
                 <li><a href="#">영화</a></li>
-                <li><a href="#">TV 프로그램</a></li>
-                <li><a href="#">내 목록</a></li>
+                <li><a href="#">시리즈</a></li>
+                <li><a href="#">검색</a></li>
                 <li><a href="#">설정</a></li>
             </ul>
         </nav>
