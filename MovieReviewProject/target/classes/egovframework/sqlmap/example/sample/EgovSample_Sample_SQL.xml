@@ -138,11 +138,13 @@
 			INSERT INTO collection( id
 									, cname
 									, poster_path
-									, backdrop_path )
+									, backdrop_path
+									, overview )
 			VALUES ( #id#
 					, #name#
 					, #posterPath#
-					, #backdropPath# )
+					, #backdropPath#
+					, #overview# )
 		]]>
 	</insert>
 	<!-- 연기자 삽입 -->
@@ -163,6 +165,7 @@
 					, cname AS name
 					, poster_path AS posterPath
 					, backdrop_path AS backdropPath
+					, overview
 			FROM collection
 			WHERE id = #id#
 		]]>
@@ -195,6 +198,17 @@
 	        FROM movie_page
 	        WHERE movie_id = #movieId#
 	    ]]>
+	</select>
+	<!-- 시리즈 정보 불러오기 -->
+	<select id="movDAO.selectCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+			FROM collection
+			WHERE id = #id#
+		]]>
 	</select>
 	
 	

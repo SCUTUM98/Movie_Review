@@ -262,10 +262,13 @@ public class MovServiceController {
 	@RequestMapping(value="/localDetail.do")
 	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		MovieVO selectVO = new MovieVO();
+		CollectionVO collectVO = new CollectionVO();
 	    selectVO.setMovieId(id);
 	    movService.selectMovie(selectVO);
-	    LOGGER.debug("장르: " + movService.selectMovie(selectVO).getGenreDB());
+	    collectVO.setId(movService.selectMovie(selectVO).getCollectionId());
+
 	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
+	    model.addAttribute("collectionData", movService.checkCollection(collectVO));
 	    
 		LOGGER.debug("ID Value: " + id);
 		

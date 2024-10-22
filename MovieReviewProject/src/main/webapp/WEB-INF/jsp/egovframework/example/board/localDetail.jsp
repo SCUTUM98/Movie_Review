@@ -132,18 +132,18 @@
 		</div>
 		
 		<c:if test="${not empty collectionData.name }">
-			<div class="collection-detail" style="background-image: url('http://image.tmdb.org/t/p/w500${detailData.backdropPath }');">
+			<div class="collection-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${collectionData.backdropPath }');">
 			    <div class="collection-overlay">
 		            <div class="collection-info">
 		            	<c:if test="${collectionData.posterPath == null}">
 		            		<img src="${pageContext.request.contextPath}/images/profile.png" alt="${collectionData.name}" alt="Movie Poster" class="collection-poster">
 		            	</c:if>
 			            <c:if test="${not empty collectionData.posterPath}">
-			                <img src="http://image.tmdb.org/t/p/w500${collectionData.posterPath}" alt="${collectionData.name}"alt="Movie Poster" class="collection-poster">
+			                <img src="http://image.tmdb.org/t/p/w780${collectionData.posterPath}" alt="${collectionData.name}"alt="Movie Poster" class="collection-poster">
 			            </c:if>
 		                <div class="collection-details">
 		                    <h1>${collectionData.name }</h1>
-		                    <p>${overviewData.overview }</p>
+		                    <p>${collectionData.overview }</p>
 		                </div>
 		            </div>
 		            <button class="register-button">시리즈 보러가기</button>

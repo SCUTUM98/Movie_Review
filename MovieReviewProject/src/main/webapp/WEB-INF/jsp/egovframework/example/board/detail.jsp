@@ -98,7 +98,7 @@
         <input type="hidden" name="seriesName" value="${collectionData.name}">
         <input type="hidden" name="seriesDropPath" value="${collectionData.backdropPath}">
         <input type="hidden" name="seriesPosterPath" value="${collectionData.posterPath}">
-        <input type="hidden" name="seriesOverview" value="${collectionData.overview}">
+        <input type="hidden" name="seriesOverview" value="${overviewData.overview}">
         <c:forEach items="${actorData}" var="actor">
 		    <input type="hidden" name="actorIdList" value="${actor.id}"/>
 		    <input type="hidden" name="actNameList" value="${actor.name}"/>
@@ -165,7 +165,6 @@
                             <p>${overviewData.overview }</p>
                         </div>
                     </div>
-                    <button type="button" class="register-button" onclick="">시리즈 보러가기</button>
                 </div>
             </div>
         </c:if>
