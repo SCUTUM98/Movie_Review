@@ -341,7 +341,7 @@ public class MovServiceController {
 	    movieVO.setOverview(overview);
 	    movieVO.setBackdropPath(backdropPath);
 	    movieVO.setPosterPath(posterPath);
-	    movieVO.setCollectionId(collectionId);
+	    movieVO.setCollectionId(seriesId);
 	    movieVO.setStatus(movieStatus);
 	    movieVO.setTagline(tagline);
 	    
