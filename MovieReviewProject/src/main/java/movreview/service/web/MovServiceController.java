@@ -126,15 +126,23 @@ public class MovServiceController {
 	    model.addAttribute("searchList", searchList);
 		
 		String suggestData = tmdbService.suggestMovie(apiKey);
+		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
 		
 		if (suggestData == null || suggestData.isEmpty()) {
             throw new RuntimeException("Received null or empty response from the API");
+        }
+
+        if (searchResult == null || searchResult.isEmpty()) {
+        	throw new RuntimeException("Received null or empty response from the API");
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(suggestData);
             JsonNode resultsNode = jsonNode.get("results");
+            JsonNode searchNode = objectMapper.readTree(searchResult);
+            JsonNode searchResultNode = searchNode.get("results");
+            
             if (resultsNode == null || !resultsNode.isArray()) {
                 throw new RuntimeException("No results found in the response");
             }
@@ -143,16 +151,22 @@ public class MovServiceController {
                 resultsNode,
                 new TypeReference<List<MovieVO>>() {}
             );
+            
+            List<MovieVO> resultVO = objectMapper.convertValue(
+            		searchResultNode, 
+            		new TypeReference<List<MovieVO>> () {});
 
             model.addAttribute("suggestData", suggestVO);
             model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
             model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
+            model.addAttribute("resultData", resultVO);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error processing the API response: " + e.getMessage());
         }
-		
+        
+
 		return "board/searchResult";
 	}
 	
@@ -314,11 +328,10 @@ public class MovServiceController {
 	                        @RequestParam("seriesDropPath") String seriesDropPath,
 	                        @RequestParam("seriesPosterPath") String seriesPosterPath,
 	                        @RequestParam("seriesOverview") String seriesOverview,
-	                        @RequestParam("actorIdList") String[] actorIds, // 배열로 수신
-	                        @RequestParam("actNameList") String[] actorNames, // 배열로 수신
+	                        @RequestParam("actorIdList") String[] actorIds,
+	                        @RequestParam("actNameList") String[] actorNames,
 	                        @RequestParam("actProfilePathList") String[] actorProfilePaths) throws Exception {
 	    
-	    // MovieVO 생성 및 설정
 	    MovieVO movieVO = new MovieVO();
 	    movieVO.setMovieId(movieId);
 	    movieVO.setTitleKr(titleKr);
@@ -332,7 +345,6 @@ public class MovServiceController {
 	    movieVO.setStatus(movieStatus);
 	    movieVO.setTagline(tagline);
 	    
-	    // CollectionVO 생성 및 설정
 	    CollectionVO collectionVO = new CollectionVO();
 	    collectionVO.setId(seriesId);
 	    collectionVO.setName(seriesName);
@@ -340,11 +352,19 @@ public class MovServiceController {
 	    collectionVO.setPosterPath(seriesPosterPath);
 	    collectionVO.setOverview(seriesOverview);
 	    
-	    // Movie, Collection 데이터 삽입
-	    movService.insertMovie(movieVO);
-	    movService.insertCollection(collectionVO);
+	    CollectionVO checkCollection = movService.checkCollection(collectionVO);
+	    LOGGER.debug("check collection: " + checkCollection);
 	    
-	    // Actor 데이터 삽입
+	    if(checkCollection == null) {
+	    	LOGGER.debug("collection info is null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	    	movService.insertMovie(movieVO);
+		    movService.insertCollection(collectionVO);
+	    }
+	    else if (checkCollection != null) {
+	    	LOGGER.debug("collection info is not null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	    	movService.insertMovie(movieVO);
+	    }
+	    
 	    for (int i = 0; i < actorIds.length; i++) {
 	        ActorVO actorVO = new ActorVO();
 	        actorVO.setActorId(actorIds[i]);
@@ -352,7 +372,16 @@ public class MovServiceController {
 	        actorVO.setProfilePath(actorProfilePaths[i]);
 	        LOGGER.debug("Actor ID: " + actorVO.getActorId() + "\nActor Name: " + actorVO.getActName());
 	        
-	        movService.insertActor(actorVO);
+	        ActorVO checkActor = movService.checkActor(actorVO);
+	        
+	        if(checkActor == null) {
+		    	LOGGER.debug("Actor info is null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		    	movService.insertActor(actorVO);
+	        }
+		    else if (checkActor != null) {
+		    	LOGGER.debug("Actor info is not null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		    }
+	        
 	    }
 	    
 	    status.setComplete();
@@ -360,7 +389,7 @@ public class MovServiceController {
 	    MovieVO detailVO = new MovieVO();
 	    detailVO.setMovieId(movieId);
 	    
-	    return "redirect:/localDetail.do";
+	    return "redirect:/localDetail.do?id=" + id;
 	}
 
 }

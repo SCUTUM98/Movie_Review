@@ -156,6 +156,27 @@
 					, #profilePath# )
 		]]>
 	</insert>
+	<!-- 시리즈 중복 확인 -->
+	<select id="movDAO.checkCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+			FROM collection
+			WHERE id = #id#
+		]]>
+	</select>
+	<!-- 배우 중복 확인 -->
+	<select id="movDAO.checkActor" resultClass="actorVO">
+		<![CDATA[
+			SELECT actor_id AS actorId
+					, act_name AS actorName
+					, profile_path AS profilePath
+			FROM actor
+			WHERE actor_id = #actorId#
+		]]>
+	</select>
 	
 	<!-- 상세페이지 -->
 	<!-- 영화 정보 불러오기 -->
@@ -175,4 +196,6 @@
 	        WHERE movie_id = #movieId#
 	    ]]>
 	</select>
+	
+	
 </sqlMap>

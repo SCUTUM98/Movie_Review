@@ -49,5 +49,15 @@ public class MovieServiceImpl implements MovieService {
 	public MovieVO selectMovie(MovieVO vo) throws Exception {
 		return movDAO.selectMovie(vo);
 	}
+	// 시리즈 중복 확인
+	@Override
+	public CollectionVO checkCollection(CollectionVO vo) throws Exception {
+		return movDAO.checkCollection(vo);
+	}
+	// 연기자 중복 확인
+	@Override
+	public ActorVO checkActor(ActorVO vo) throws Exception {
+		return movDAO.checkActor(vo);
+	}
 
 }
