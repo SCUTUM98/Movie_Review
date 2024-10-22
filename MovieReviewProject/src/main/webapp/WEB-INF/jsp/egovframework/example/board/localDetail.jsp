@@ -64,10 +64,10 @@
         <img src="${pageContext.request.contextPath}/images/logo.png" alt="Platform Logo" class="logo">
         <nav class="navbar">
             <ul>
-                <li><a href="#">홈</a></li>
+                <li><a href="/main.do">홈</a></li>
                 <li><a href="#">영화</a></li>
                 <li><a href="#">시리즈</a></li>
-                <li><a href="#">검색</a></li>
+                <li><a href="/search.do">검색</a></li>
                 <li><a href="#">설정</a></li>
             </ul>
         </nav>
