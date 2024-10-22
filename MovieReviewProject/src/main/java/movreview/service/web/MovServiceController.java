@@ -269,27 +269,6 @@ public class MovServiceController {
             model.addAttribute("recommendData", recList);
         }
         
-            
-		/*
-		 * String collectionData = tmdbService.collectionDetail(apiKey,
-		 * collectionVO.getName()); LOGGER.debug("CollectionData: " + collectionData);
-		 * JsonNode overviewNode = objectMapper.readTree(collectionData); CollectionVO
-		 * resultVO = objectMapper.convertValue(overviewNode, CollectionVO.class);
-		 * resultVO.setOverview(overviewNode.findPath("overview").asText());
-		 * model.addAttribute("overviewData", resultVO);
-		 * 
-		 * int movieId = jsonNode.path("id").asInt(); String actorData =
-		 * tmdbService.searchActor(apiKey, movieId);
-		 * 
-		 * if (actorData != null && !actorData.isEmpty()) { JsonNode actorNode =
-		 * objectMapper.readTree(actorData); JsonNode castNode = actorNode.path("cast");
-		 * 
-		 * // JsonNode를 List로 변환하여 모델에 추가 List<Map<String, Object>> actorList = new
-		 * ArrayList<>(); for (JsonNode actor : castNode) { Map<String, Object> actorMap
-		 * = objectMapper.convertValue(actor, Map.class); actorList.add(actorMap); }
-		 * LOGGER.debug("Actor List: " + actorList); model.addAttribute("actorData",
-		 * actorList); }
-		 */
         
 		return "board/localDetail";
 	}
