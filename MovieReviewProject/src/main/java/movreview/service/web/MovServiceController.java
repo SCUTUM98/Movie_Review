@@ -53,6 +53,11 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/main.do")
 	public String mainPage(Model model) throws Exception {
+		MovieVO recentVO = new MovieVO();
+		CollectionVO seriesVO = new CollectionVO();
+		model.addAttribute("recentlyAdded", movService.recentlyAdded(recentVO));
+		model.addAttribute("recentlyCollected", movService.recentlyCollected(seriesVO));
+		
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		
 		if (suggestData == null || suggestData.isEmpty()) {

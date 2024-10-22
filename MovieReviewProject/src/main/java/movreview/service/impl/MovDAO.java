@@ -51,4 +51,12 @@ public class MovDAO extends EgovAbstractDAO {
 	public ActorVO checkActor(ActorVO vo) throws Exception {
 		return (ActorVO) select("movDAO.checkActor", vo);
 	}
+	// 최근 등록 영화
+	public List<?> recentlyAdded(MovieVO vo) throws Exception {
+		return list("movDAO.recentlyAdded", vo);
+	}
+	// 최근 등록 시리즈
+	public List<?> recentlyCollected(CollectionVO vo) throws Exception {
+		return list("movDAO.recentlyCollected", vo);
+	}
 }

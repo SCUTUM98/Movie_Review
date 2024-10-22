@@ -53,6 +53,19 @@
 	        const offset = -currentIndex * 100; // 슬라이드 이동 거리
 	        sliderContainer.style.transform = `translateX(${offset}%)`;
 	    }
+	    
+	    function movieSelect(id) {
+			console.log(id);
+	    	document.listForm.id.value = id;
+	       	document.listForm.action = "<c:url value='/detail.do'/>";
+	       	document.listForm.submit();
+	       	}
+		function localMovieSelect(id) {
+			console.log(id);
+			document.listForm.id.value = id;
+			document.listForm.action = "<c:url value='/localDetail.do'/>";
+			document.listForm.submit();
+		}
 
     </script>
 </head>
@@ -70,42 +83,92 @@
         </nav>
     </div>
     
-    <div class="movie-slider">
-        <div class="slider-container">
-        	<c:if test="${not empty movieData}">
-        		<c:forEach items="${movieData}" var="movie">
-        			<c:if test="${not empty movie.backdropPath }">
-        				<div class="slide" style="background-image: url('http://image.tmdb.org/t/p/w500${movie.backdropPath}')">
-            				<div class="slide-title">${movie.titleEn}</div>
-        				</div>
-        			</c:if>
-        		</c:forEach>
-        	</c:if>
-        </div>
-        <button class="scroll-btn" onclick="javascript:scrollLeft(event)">◀</button>
-        <button class="scroll-btn" onclick="javascript:scrollRight(event)">▶</button>
-    </div>
+    <form action="addMovie.do" id="listForm" name="listForm" method="post">
+    	<input type="hidden" name="id" value="">
     
-    <div class="movie-section">
-        <h2>추천 영화</h2>
-        <div class="movie-container">
-            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
-            <div class="movie-list">
-                <c:forEach items="${movieData}" var="movie">
-                    <div class="movie-item">
-                        <c:if test="${empty movie.posterPath}">
-                            <img src="${pageContext.request.contextPath}/images/profile.png" alt="${movie.titleEn}" class="movie-poster">
-                        </c:if>
-                        <c:if test="${not empty movie.posterPath}">
-                            <img src="http://image.tmdb.org/t/p/w500${movie.posterPath}" alt="${movie.titleEn}" class="movie-poster">
-                        </c:if>
-                        <div class="movie-info">
-                            <p class="movie-name">${movie.titleEn}</p>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
-            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
-        </div>
-    </div>
+	    <div class="movie-slider">
+	        <div class="slider-container">
+	        	<c:if test="${not empty movieData}">
+	        		<c:forEach items="${movieData}" var="movie">
+	        			<c:if test="${not empty movie.backdropPath }">
+	        				<div class="slide" style="background-image: url('http://image.tmdb.org/t/p/w1280${movie.backdropPath}')">
+	            				<div class="slide-title">${movie.titleEn}</div>
+	        				</div>
+	        			</c:if>
+	        		</c:forEach>
+	        	</c:if>
+	        </div>
+	        <button class="scroll-btn" onclick="javascript:scrollLeft(event)">◀</button>
+	        <button class="scroll-btn" onclick="javascript:scrollRight(event)">▶</button>
+	    </div>
+	    
+	    <div class="movie-section">
+	        <h2> 최근 등록 영화</h2>
+	        <div class="movie-container">
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+	            <div class="movie-list">
+	                <c:forEach items="${recentlyAdded}" var="movie">
+	                    <div class="movie-item">
+	                        <c:if test="${empty movie.posterPath}">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:localMovieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+	                        </c:if>
+	                        <c:if test="${not empty movie.posterPath}">
+	                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" onclick="javascript:localMovieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+	                        </c:if>
+	                        <div class="movie-info">
+	                            <p class="movie-name">${movie.titleEn}</p>
+	                        </div>
+	                    </div>
+	                </c:forEach>
+	            </div>
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+	        </div>
+	    </div>
+	    
+	    <div class="movie-section">
+	        <h2> 최근 등록 시리즈</h2>
+	        <div class="movie-container">
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+	            <div class="movie-list">
+	                <c:forEach items="${recentlyCollected}" var="series">
+	                    <div class="movie-item">
+	                        <c:if test="${empty series.posterPath}">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
+	                        </c:if>
+	                        <c:if test="${not empty series.posterPath}">
+	                            <img src="http://image.tmdb.org/t/p/w780${series.posterPath}" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
+	                        </c:if>
+	                        <div class="movie-info">
+	                            <p class="movie-name">${series.name}</p>
+	                        </div>
+	                    </div>
+	                </c:forEach>
+	            </div>
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+	        </div>
+	    </div>
+	    
+	    <div class="movie-section">
+	        <h2>추천 영화</h2>
+	        <div class="movie-container">
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+	            <div class="movie-list">
+	                <c:forEach items="${movieData}" var="movie">
+	                    <div class="movie-item">
+	                        <c:if test="${empty movie.posterPath}">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" alt="${movie.titleEn}" class="movie-poster">
+	                        </c:if>
+	                        <c:if test="${not empty movie.posterPath}">
+	                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" alt="${movie.titleEn}" class="movie-poster">
+	                        </c:if>
+	                        <div class="movie-info">
+	                            <p class="movie-name">${movie.titleEn}</p>
+	                        </div>
+	                    </div>
+	                </c:forEach>
+	            </div>
+	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+	        </div>
+	    </div>
+	</form>
 </body>

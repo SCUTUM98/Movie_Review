@@ -32,17 +32,11 @@ h1 {
 
 /* HEADER */
 header {
-  padding: 20px 20px 0 20px;
-  position: fixed;
-  top: 0;
-  display: grid;  
-  grid-gap:5px;
-  grid-template-columns: 1fr 4fr 1fr;
-  grid-template-areas: 
-   "nt mn mn sb . . . "; 
-  background-color: var(--primary);
-  width: 100%;
-  margin-bottom: 0px;  
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #141414;
 }
 
 .filmLogo {
@@ -59,11 +53,11 @@ header {
   width: 150px; /* 이 부분은 그대로 유지 */
 }
 
-#logo {
-  color: #E50914;  
-  margin: 0; 
-  padding: 0; 
-  width: 150px; /* .logo와 동일하게 설정 */
+.logo {
+    width: 150px;
+    
+    padding-left: 30px;
+  	padding-top: 10px; 
 }
 
 

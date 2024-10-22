@@ -91,7 +91,36 @@
 	</select>
 	
 	<!-- MAIN -->
-	<!-- 영화 리스트 출력 -->
+	<!-- 최근 등록 영화 -->
+	<select id="movDAO.recentlyAdded" resultClass="movieVO">
+		<![CDATA[
+			SELECT movie_id AS movieId
+					, title_kr AS titleKr
+					, title_er AS titleEr
+					, backdrop_path AS backdropPath
+					, poster_path AS posterPath
+					, collection_id AS collectionId
+					, genre AS genreDB
+					, submit_date
+			FROM movie_page
+			ORDER BY submit_date DESC
+			LIMIT 10
+		]]>
+	</select>
+	<!-- 최근 등록 시리즈 -->
+	<select id="movDAO.recentlyCollected" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+					, submit_date
+			FROM collection
+			ORDER BY submit_date DESC
+			LIMIT 10
+		]]>
+	</select>
 	
 	<!-- SEARCH -->
 	<!-- 영화 검색 -->
@@ -117,7 +146,8 @@
 									, poster_path
 									, collection_id
 									, status
-									, tagline )
+									, tagline
+									, submit_date )
 			VALUES ( #movieId#
 					, #titleKr#
 					, #titleEn#
@@ -128,7 +158,8 @@
 					, #posterPath#
 					, #collectionId#
 					, #status#
-					, #tagline# )
+					, #tagline#
+					, CURRENT_TIMESTAMP )
 					
 		]]>
 	</insert>
@@ -139,12 +170,14 @@
 									, cname
 									, poster_path
 									, backdrop_path
-									, overview )
+									, overview
+									, submit_date )
 			VALUES ( #id#
 					, #name#
 					, #posterPath#
 					, #backdropPath#
-					, #overview# )
+					, #overview#
+					, CURRENT_TIMESTAMP )
 		]]>
 	</insert>
 	<!-- 연기자 삽입 -->
