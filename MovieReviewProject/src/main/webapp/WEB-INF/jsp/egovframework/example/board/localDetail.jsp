@@ -78,7 +78,12 @@
 	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${selectMovie.backdropPath }');">
             <div class="overlay">
                 <div class="info">
-                    <img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
+                    <c:if test="${empty selectMovie.posterPath }">
+                		<img src="${pageContext.request.contextPath}/images/profile.png" alt="Movie Poster" class="poster">
+                	</c:if>
+                	<c:if test="${not empty selectMovie.posterPath }">
+                		<img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
+                	</c:if>
                     <div class="details">
                         <h1>${selectMovie.titleEn }</h1>
                         <h2><strong>${selectMovie.tagline }</strong></h2>

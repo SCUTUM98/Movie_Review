@@ -109,7 +109,13 @@
         <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${detailData.backdropPath }');">
             <div class="overlay">
                 <div class="info">
-                    <img src="http://image.tmdb.org/t/p/w780${detailData.posterPath }" alt="Movie Poster" class="poster">
+                	<c:if test="${empty detailData.posterPath }">
+                		<img src="${pageContext.request.contextPath}/images/profile.png" alt="Movie Poster" class="poster">
+                	</c:if>
+                	<c:if test="${not empty detailData.posterPath }">
+                		<img src="http://image.tmdb.org/t/p/w780${detailData.posterPath }" alt="Movie Poster" class="poster">
+                	</c:if>
+                    
                     <div class="details">
                         <h1>${detailData.titleEn }</h1>
                         <h2><strong>${detailData.tagline }</strong></h2>
@@ -174,7 +180,7 @@
             <div class="rec-container">
                 <button type="button" class="scroll-btn left" onclick="javascript:rec_scrollLeft(event)">◀</button>
                 <div class="rec-list">
-                    <c:forEach items="${recommendData}" var="rec">
+                    <c:forEach items="${recommendData}" var="rec" >
                         <div class="cast-item">
                             <c:if test="${empty rec.poster_path}">
                                 <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:moveToDetail('${rec.id }')" alt="${rec.title}" class="actor-photo">

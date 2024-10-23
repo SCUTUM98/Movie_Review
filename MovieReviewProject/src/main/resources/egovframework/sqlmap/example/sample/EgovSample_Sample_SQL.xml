@@ -96,7 +96,7 @@
 		<![CDATA[
 			SELECT movie_id AS movieId
 					, title_kr AS titleKr
-					, title_er AS titleEr
+					, title_er AS titleEn
 					, backdrop_path AS backdropPath
 					, poster_path AS posterPath
 					, collection_id AS collectionId

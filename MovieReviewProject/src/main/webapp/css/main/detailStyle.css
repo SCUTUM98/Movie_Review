@@ -69,7 +69,8 @@ body {
 .poster {
     width: 300px;
     height: auto;
-    margin-right: 40px; /* 포스터와 텍스트 간격 조정 (기존 30px에서 40px로 변경) */
+    margin-right: 40px;
+    border-radius: 10px;
 }
 
 .details {
@@ -119,8 +120,9 @@ body {
 }
 
 .actor-photo {
-    width: 150px; /* 원하는 크기로 조정 */
+    width: 150px;
     height: auto;
+    border-radius: 10px;
 }
 
 .actor-info {
@@ -227,7 +229,8 @@ body {
 .collection-poster {
     width: 300px;
     height: auto;
-    margin-right: 40px; /* 포스터와 텍스트 간격 조정 (기존 30px에서 40px로 변경) */
+    margin-right: 40px;
+    border-radius: 10px;
 }
 
 .collection-details {
@@ -281,8 +284,9 @@ body {
 }
 
 .rec-photo {
-    width: 150px; /* 원하는 크기로 조정 */
+    width: 150px;
     height: auto;
+    border-radius: 10px;
 }
 
 .rec-info {
@@ -298,7 +302,7 @@ body {
 }
 
 .rec-item:hover .actor-info {
-    opacity: 1; /* 마우스 오버 시 표시 */
+    opacity: 1;
 }
 
 .rec-section h2 {

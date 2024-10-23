@@ -47,6 +47,24 @@
 	        currentIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
 	        updateSlider();
 	    }
+	    
+	    function colScrollLeft(event) {
+	    	event.preventDefault();
+	        const container = document.querySelector('.collection-list');
+	        container.scrollBy({
+	            left: -150,
+	            behavior: 'smooth'
+	        });
+	    }
+	
+	    function colScrollRight(event) {
+	    	event.preventDefault();
+	        const container = document.querySelector('.collection-list');
+	        container.scrollBy({
+	            left: 150,
+	            behavior: 'smooth'
+	        });
+	    }
 	
 	    function updateSlider() {
 	        const sliderContainer = document.querySelector('.slider-container');
@@ -128,23 +146,24 @@
 	    <div class="movie-section">
 	        <h2> 최근 등록 시리즈</h2>
 	        <div class="movie-container">
-	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
-	            <div class="movie-list">
+	            <button type="button" class="scroll-btn" onclick="javascript:colScrollLeft(event)">◀</button>
+	            <div class="collection-list">
 	                <c:forEach items="${recentlyCollected}" var="series">
 	                    <div class="movie-item">
-	                        <c:if test="${empty series.posterPath}">
+	                        <c:if test="${empty series.posterPath && series.id != 0}">
 	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
 	                        </c:if>
-	                        <c:if test="${not empty series.posterPath}">
+	                        <c:if test="${not empty series.posterPath && series.id != 0}">
 	                            <img src="http://image.tmdb.org/t/p/w780${series.posterPath}" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
 	                        </c:if>
+	                        
 	                        <div class="movie-info">
 	                            <p class="movie-name">${series.name}</p>
 	                        </div>
 	                    </div>
 	                </c:forEach>
 	            </div>
-	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+	            <button type="button" class="scroll-btn" onclick="javascript:colScrollRight(event)">▶</button>
 	        </div>
 	    </div>
 	    

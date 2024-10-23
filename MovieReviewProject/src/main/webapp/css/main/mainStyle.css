@@ -94,16 +94,30 @@ body {
     overflow: hidden; /* 스크롤바 숨기기 */
 }
 
+.collection-list {
+    display: flex;
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
+    scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    overflow: hidden; /* 스크롤바 숨기기 */
+}
+
 .movie-item {
     position: relative;
     margin: 0 10px;
+    flex: 0 0 auto;
 }
 
 .movie-poster {
     width: 150px; /* 포스터 크기 조정 */
     height: auto;
+    border-radius: 10px;
 }
 
 .movie-info {
     text-align: center;
+}
+
+.movie-item:hover .movie-info {
+    opacity: 1;
 }
