@@ -20,6 +20,8 @@ public interface MovieService {
 	CollectionVO checkCollection(CollectionVO vo) throws Exception;
 	//연기자 중복확인
 	ActorVO checkActor(ActorVO vo) throws Exception;
+	// 영화 중복확인
+	int checkMovie(MovieVO vo) throws Exception;
 	// 최근 등록 영화
 	List<?> recentlyAdded(MovieVO vo) throws Exception;
 	// 최근 등록 시리즈

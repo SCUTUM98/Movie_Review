@@ -35,7 +35,7 @@ public class MovDAO extends EgovAbstractDAO {
 	public String insertCollection(CollectionVO vo) throws Exception {
 		return (String) insert("movDAO.insertCollection", vo);
 	}
-	// 연기자 삽닙
+	// 연기자 삽입
 	public String insertActor(ActorVO vo) throws Exception {
 		return (String) insert("movDAO.insertActor", vo);
 	}
@@ -54,6 +54,10 @@ public class MovDAO extends EgovAbstractDAO {
 	// 연기자 중복 확인
 	public ActorVO checkActor(ActorVO vo) throws Exception {
 		return (ActorVO) select("movDAO.checkActor", vo);
+	}
+	// 영화 중복 확인
+	public int checkMovie(MovieVO vo) throws Exception {
+		return (int) select("movDAO.checkMovie", vo);
 	}
 	// 최근 등록 영화
 	public List<?> recentlyAdded(MovieVO vo) throws Exception {

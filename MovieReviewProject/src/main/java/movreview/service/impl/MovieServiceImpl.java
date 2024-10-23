@@ -64,6 +64,11 @@ public class MovieServiceImpl implements MovieService {
 	public ActorVO checkActor(ActorVO vo) throws Exception {
 		return movDAO.checkActor(vo);
 	}
+	// 영화 중복 확인
+	@Override
+	public int checkMovie(MovieVO vo) throws Exception {
+		return movDAO.checkMovie(vo);
+	}
 	// 최근 등록 영화
 	@Override
 	public List<?> recentlyAdded(MovieVO vo) throws Exception {
