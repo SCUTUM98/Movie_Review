@@ -84,6 +84,12 @@
 			document.listForm.action = "<c:url value='/localDetail.do'/>";
 			document.listForm.submit();
 		}
+		function seriesDetail(id) {
+			console.log(id);
+			document.listForm.collectionId.value = id;
+			document.listForm.action = "<c:url value='/seriesDetail.do'/>";
+			document.listForm.submit();
+		}
 
     </script>
 </head>
@@ -103,6 +109,7 @@
     
     <form action="addMovie.do" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
+    	<input type="hidden" name="collectionId" value="">
     
 	    <div class="movie-slider">
 	        <div class="slider-container">
@@ -151,10 +158,10 @@
 	                <c:forEach items="${recentlyCollected}" var="series">
 	                    <div class="movie-item">
 	                        <c:if test="${empty series.posterPath && series.id != 0}">
-	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:seriesDetail('${series.id }')" alt="${series.name}" class="movie-poster">
 	                        </c:if>
 	                        <c:if test="${not empty series.posterPath && series.id != 0}">
-	                            <img src="http://image.tmdb.org/t/p/w780${series.posterPath}" onclick="javascript:localMovieSelect('${series.id }')" alt="${series.name}" class="movie-poster">
+	                            <img src="http://image.tmdb.org/t/p/w780${series.posterPath}" onclick="javascript:seriesDetail('${series.id }')" alt="${series.name}" class="movie-poster">
 	                        </c:if>
 	                        
 	                        <div class="movie-info">

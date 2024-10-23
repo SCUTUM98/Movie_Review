@@ -49,6 +49,11 @@ public class MovieServiceImpl implements MovieService {
 	public MovieVO selectMovie(MovieVO vo) throws Exception {
 		return movDAO.selectMovie(vo);
 	}
+	// 시리즈 상세 페이지
+	@Override
+	public CollectionVO selectCollection(CollectionVO vo) throws Exception {
+		return movDAO.selectCollection(vo);
+	}
 	// 시리즈 중복 확인
 	@Override
 	public CollectionVO checkCollection(CollectionVO vo) throws Exception {
@@ -68,6 +73,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public List<?> recentlyCollected(CollectionVO vo) throws Exception {
 		return movDAO.recentlyCollected(vo);
+	}
+	// 시리즈 소속 영화
+	@Override
+	public List<?> collectionMovie(MovieVO vo) throws Exception {
+		return movDAO.collectionMovie(vo);
 	}
 
 }

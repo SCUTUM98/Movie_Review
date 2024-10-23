@@ -43,6 +43,10 @@ public class MovDAO extends EgovAbstractDAO {
 	public MovieVO selectMovie(MovieVO vo) throws Exception {
 		return (MovieVO) select("movDAO.selectMovie", vo);
 	}
+	// 시리즈 상세 페이지
+	public CollectionVO selectCollection(CollectionVO vo) throws Exception {
+		return (CollectionVO) select("movDAO.selectCollection", vo);
+	}
 	// 시리즈 중복 확인
 	public CollectionVO checkCollection(CollectionVO vo) throws Exception {
 		return (CollectionVO) select("movDAO.checkCollection", vo);
@@ -58,5 +62,9 @@ public class MovDAO extends EgovAbstractDAO {
 	// 최근 등록 시리즈
 	public List<?> recentlyCollected(CollectionVO vo) throws Exception {
 		return list("movDAO.recentlyCollected", vo);
+	}
+	// 시리즈 소속 영화
+	public List<?> collectionMovie(MovieVO vo) throws Exception {
+		return list("movDAO.collectionMovie", vo);
 	}
 }

@@ -43,11 +43,15 @@ body {
     width: 40%;
     text-align: center;
     padding: 20px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../../images/oldframe-background.png);
+    background-size: cover;
+    background-position: center;
 }
 
 .right-panel {
     width: 60%;
     padding: 20px;
+    background-color: #686868;
 }
 
 .poster {

@@ -14,6 +14,8 @@ public interface MovieService {
 	String insertActor(ActorVO vo) throws Exception;
 	//영화 상세 페이지
 	MovieVO selectMovie(MovieVO vo) throws Exception;
+	// 시리즈 상세 페이지
+	CollectionVO selectCollection(CollectionVO vo) throws Exception;
 	//시리즈 중복확인
 	CollectionVO checkCollection(CollectionVO vo) throws Exception;
 	//연기자 중복확인
@@ -22,4 +24,6 @@ public interface MovieService {
 	List<?> recentlyAdded(MovieVO vo) throws Exception;
 	// 최근 등록 시리즈
 	List<?> recentlyCollected(CollectionVO vo) throws Exception;
+	// 시리즈 소속 영화
+	List<?> collectionMovie(MovieVO vo) throws Exception;
 }

@@ -239,10 +239,27 @@
 					, cname AS name
 					, poster_path AS posterPath
 					, backdrop_path AS backdropPath
+					, overview
 			FROM collection
 			WHERE id = #id#
 		]]>
 	</select>
-	
+	<!-- 시리즈 소속 영화 불러오기 -->
+	<select id="movDAO.collectionMovie" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
+	        FROM movie_page
+	        WHERE movie_id = #collectionId#
+	    ]]>
+	</select>
 	
 </sqlMap>

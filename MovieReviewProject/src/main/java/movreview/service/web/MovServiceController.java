@@ -401,7 +401,16 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="/seriesDetail.do")
-	public String seriesDetail(Model model) throws Exception {
+	public String seriesDetail(@RequestParam("collectionId") int collectionId, Model model) throws Exception {
+		CollectionVO collectionVO  = new CollectionVO();
+		collectionVO.setId(collectionId);
+		MovieVO movieVO = new MovieVO();
+		movieVO.setCollectionId(collectionId);
+		
+		model.addAttribute("collectionList", movService.selectCollection(collectionVO));
+		model.addAttribute("movieList", movService.collectionMovie(movieVO));
+		
+		
 		return "board/seriesDetail";
 	}
 
