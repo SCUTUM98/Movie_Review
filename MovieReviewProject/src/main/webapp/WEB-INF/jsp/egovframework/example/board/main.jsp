@@ -16,7 +16,7 @@
     <script type="text/javascript">
 	    function sug_scrollLeft(event) {
 	    	event.preventDefault();
-	        const container = document.querySelector('.movie-list');
+	        const container = document.querySelector('.reco-list');
 	        container.scrollBy({
 	            left: -150,
 	            behavior: 'smooth'
@@ -25,7 +25,7 @@
 	
 	    function sug_scrollRight(event) {
 	    	event.preventDefault();
-	        const container = document.querySelector('.movie-list');
+	        const container = document.querySelector('.reco-list');
 	        container.scrollBy({
 	            left: 150,
 	            behavior: 'smooth'
@@ -171,14 +171,14 @@
 	        <h2>추천 영화</h2>
 	        <div class="movie-container">
 	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
-	            <div class="movie-list">
+	            <div class="reco-list">
 	                <c:forEach items="${movieData}" var="movie">
 	                    <div class="movie-item">
 	                        <c:if test="${empty movie.posterPath}">
-	                            <img src="${pageContext.request.contextPath}/images/profile.png" alt="${movie.titleEn}" class="movie-poster">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
 	                        </c:if>
 	                        <c:if test="${not empty movie.posterPath}">
-	                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" alt="${movie.titleEn}" class="movie-poster">
+	                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
 	                        </c:if>
 	                        <div class="movie-info">
 	                            <p class="movie-name">${movie.titleEn}</p>

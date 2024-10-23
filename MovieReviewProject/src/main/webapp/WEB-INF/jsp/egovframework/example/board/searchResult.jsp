@@ -37,11 +37,11 @@
 	    <header>
 	        <img src="${pageContext.request.contextPath}/images/logo.png" alt="Platform Logo" class="logo">
 	        <nav class="main-nav">
-	                <a href="#">홈</a>
-	                <a href="#">영화</a>
-	                <a href="#">TV 프로그램</a>
-	                <a href="#">내 목록</a>
-	                <a href="#">설정</a>
+		        <a href="/main.do">홈</a>
+	            <a href="#">영화</a>
+	            <a href="#">시리즈</a>
+	            <a href="/search.do">검색</a>
+	            <a href="#">설정</a>
 	        </nav>     
 	    </header>
 	    <!-- END OF HEADER -->

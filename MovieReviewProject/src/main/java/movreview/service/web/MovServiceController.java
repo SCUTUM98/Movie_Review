@@ -399,5 +399,10 @@ public class MovServiceController {
 	    
 	    return "redirect:/localDetail.do?id=" + id;
 	}
+	
+	@RequestMapping(value="/seriesDetail.do")
+	public String seriesDetail(Model model) throws Exception {
+		return "board/seriesDetail";
+	}
 
 }

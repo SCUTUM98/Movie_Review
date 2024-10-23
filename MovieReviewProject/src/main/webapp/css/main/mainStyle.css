@@ -121,3 +121,11 @@ body {
 .movie-item:hover .movie-info {
     opacity: 1;
 }
+
+.reco-list {
+    display: flex;
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
+    scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    overflow: hidden; /* 스크롤바 숨기기 */
+}
