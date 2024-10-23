@@ -12,17 +12,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Clone - Content Detail</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/detailStyle.css">
-    <script src="${pageContext.request.contextPath}/js/detailScript.js"></script>
     
     <script type="text/javascript">
-	    function scrollLeft(event) {
-	    	event.preventDefault();
-	        const container = document.querySelector('.cast-list');
-	        container.scrollBy({
-	            left: -150,
-	            behavior: 'smooth'
-	        });
-	    }
+    function act_scrollLeft(event) {
+    	event.preventDefault();
+        const container = document.querySelector('.cast-list');
+        container.scrollBy({
+            left: -150,
+            behavior: 'smooth'
+        });
+    }
 	
 	    function scrollRight(event) {
 	    	event.preventDefault();
@@ -111,7 +110,7 @@
 		    <h2>출연 배우</h2>
 		    
 		        <div class="cast-container">
-		            <button type="button" class="scroll-btn left" onclick="javascript:scrollLeft(event)">◀</button>
+		            <button type="button" class="scroll-btn left" onclick="javascript:act_scrollLeft(event)">◀</button>
 		            <div class="cast-list">
 		                <c:forEach items="${actorData}" var="actor">
 		                    <div class="cast-item">
