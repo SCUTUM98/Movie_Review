@@ -57,6 +57,13 @@
 	    	document.listForm.submit();
 	    }
 	    
+	    function moveToLocalDetail(id){
+	    	document.listForm.id.value = id;
+	    	console.log(document.listForm.id.value);
+	    	document.listForm.action = "<c:url value='/localDetail.do'/>";
+	    	document.listForm.submit();
+	    }
+	    
 	    function moveToSeries(id){
 	    	document.listForm.collectionId.value = id;
 	    	console.log(document.listForm.collectionId.value);
@@ -169,6 +176,19 @@
 		        <div class="rec-container">
 		            <button type="button" class="scroll-btn left" onclick="javascript:rec_scrollLeft(event)">◀</button>
 		            <div class="rec-list">
+			            <c:forEach items="${notUniqueData}" var="dupRec">
+		                <div class="cast-item">
+		                    <c:if test="${empty dupRec.poster_path}">
+		                        <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:moveToLocalDetail('${dupRec.id}')" alt="${dupRec.title}" class="actor-photo">
+		                    </c:if>
+		                    <c:if test="${not empty dupRec.poster_path}">
+		                        <img src="http://image.tmdb.org/t/p/w780${dupRec.poster_path}" onclick="javascript:moveToLocalDetail('${dupRec.id}')" alt="${dupRec.title}" class="actor-photo">
+		                    </c:if>
+		                    <div class="actor-info">
+		                        <p class="actor-name">${dupRec.title}</p>
+		                    </div>
+		                </div>
+		            </c:forEach>
 		                <c:forEach items="${recommendData}" var="rec">
 		                    <div class="cast-item">
 		                        <c:if test="${empty rec.poster_path}">

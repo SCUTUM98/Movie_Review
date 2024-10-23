@@ -176,7 +176,6 @@ public class MovServiceController {
             model.addAttribute("suggestData", suggestVO);
             model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
             model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
-            //model.addAttribute("resultData", resultVO);
             model.addAttribute("resultData", uniqueMovies);
 
         } catch (Exception e) {
@@ -189,92 +188,112 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
-		LOGGER.debug("ID Value: " + id);
-		
-		String detailData = tmdbService.movieDetail(apiKey, id);
-		String recommendData = tmdbService.movieRecommend(apiKey, id);
-		
-		if (detailData == null || detailData.isEmpty()) {
-            throw new RuntimeException("Received null or empty response from the API");
-        }
+	    LOGGER.debug("ID Value: " + id);
+	    
+	    String detailData = tmdbService.movieDetail(apiKey, id);
+	    String recommendData = tmdbService.movieRecommend(apiKey, id);
+	    
+	    if (detailData == null || detailData.isEmpty()) {
+	        throw new RuntimeException("Received null or empty response from the API");
+	    }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode jsonNode = objectMapper.readTree(detailData);            
-            MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
-            
-            if (recommendData != null && !recommendData.isEmpty()) {
-                JsonNode recommendNode = objectMapper.readTree(recommendData);
-                JsonNode recNode = recommendNode.path("results");
-                
-                List<Map<String, Object>> recList = new ArrayList<>();
-                for (JsonNode actor : recNode) {
-                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
-                    recList.add(actorMap);
-                }
-                LOGGER.debug("Recommend List: " + recList);
-                model.addAttribute("recommendData", recList);
-            }
-            
-            model.addAttribute("detailData", detailVO);
-            
-            List<String> genres = new ArrayList<>();
-            for (JsonNode genreNode : jsonNode.path("genres")) {
-                genres.add(genreNode.path("name").asText());
-            }
-            detailVO.setGenre(genres);
-            LOGGER.debug("Genre list: " + detailVO.getGenre());
-            
-            if (jsonNode.has("belongs_to_collection")) {
-                JsonNode collectionNode = jsonNode.path("belongs_to_collection");
-                CollectionVO collectionVO = new CollectionVO();
-                collectionVO.setId(collectionNode.path("id").asInt());
-                collectionVO.setName(collectionNode.path("name").asText());
-                collectionVO.setPosterPath(collectionNode.path("poster_path").asText());
-                collectionVO.setBackdropPath(collectionNode.path("backdrop_path").asText());
-                
-                String collectionData = tmdbService.collectionDetail(apiKey, collectionVO.getName());
-                LOGGER.debug("CollectionData: " + collectionData);
-                JsonNode overviewNode = objectMapper.readTree(collectionData);
-                CollectionVO resultVO = objectMapper.convertValue(overviewNode, CollectionVO.class);
-                resultVO.setOverview(overviewNode.findPath("overview").asText());
-                model.addAttribute("overviewData", resultVO);
-                
-                if (overviewNode.has("results")) {
-                	JsonNode resultNode = overviewNode.findPath("result");
-                    collectionVO.setOverview(resultNode.path("overview").asText());
-                    LOGGER.debug("Collection Id: " + collectionVO.getId());
-                    LOGGER.debug("Collection Poster Path: " + collectionVO.getPosterPath());
-                    LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
-                    LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
-                    model.addAttribute("collectionData", collectionVO);
-                }
-                
-            }
-            
-            int movieId = jsonNode.path("id").asInt();
-            String actorData = tmdbService.searchActor(apiKey, movieId);
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        JsonNode jsonNode = objectMapper.readTree(detailData);            
+	        MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
+	        
+	        if (recommendData != null && !recommendData.isEmpty()) {
+	            JsonNode recommendNode = objectMapper.readTree(recommendData);
+	            JsonNode recNode = recommendNode.path("results");
+	            
+	            List<Map<String, Object>> recList = new ArrayList<>();
+	            for (JsonNode actor : recNode) {
+	                Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+	                recList.add(actorMap);
+	            }
+	            LOGGER.debug("Recommend List: " + recList);
 
-            if (actorData != null && !actorData.isEmpty()) {
-                JsonNode actorNode = objectMapper.readTree(actorData);
-                JsonNode castNode = actorNode.path("cast");
-                
-                List<Map<String, Object>> actorList = new ArrayList<>();
-                for (JsonNode actor : castNode) {
-                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
-                    actorList.add(actorMap);
-                }
-                LOGGER.debug("Actor List: " + actorList);
-                model.addAttribute("actorData", actorList);
-            }
+	            List<Map<String, Object>> uniqueRecList = new ArrayList<>();
+	            List<Map<String, Object>> notUniqueRecList = new ArrayList<>();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error processing the API response: " + e.getMessage());
-        }
-        
-		return "board/detail";
+	            for (Map<String, Object> recMovie : recList) {
+	                int movieId = (Integer) recMovie.get("id");
+
+	                MovieVO movieVO = new MovieVO();
+	                movieVO.setMovieId(movieId);
+	                
+	                int count = movService.checkMovie(movieVO);
+
+	                if (count == 0) {
+	                    uniqueRecList.add(recMovie);
+	                }
+	                else {
+	                	notUniqueRecList.add(recMovie);
+	                }
+	            }
+	            model.addAttribute("recommendData", uniqueRecList);
+	            model.addAttribute("notUniqueData", notUniqueRecList);
+	        }
+	        
+	        model.addAttribute("detailData", detailVO);
+	        
+	        List<String> genres = new ArrayList<>();
+	        for (JsonNode genreNode : jsonNode.path("genres")) {
+	            genres.add(genreNode.path("name").asText());
+	        }
+	        detailVO.setGenre(genres);
+	        LOGGER.debug("Genre list: " + detailVO.getGenre());
+	        
+	        if (jsonNode.has("belongs_to_collection")) {
+	            JsonNode collectionNode = jsonNode.path("belongs_to_collection");
+	            CollectionVO collectionVO = new CollectionVO();
+	            collectionVO.setId(collectionNode.path("id").asInt());
+	            collectionVO.setName(collectionNode.path("name").asText());
+	            collectionVO.setPosterPath(collectionNode.path("poster_path").asText());
+	            collectionVO.setBackdropPath(collectionNode.path("backdrop_path").asText());
+	            
+	            String collectionData = tmdbService.collectionDetail(apiKey, collectionVO.getName());
+	            LOGGER.debug("CollectionData: " + collectionData);
+	            JsonNode overviewNode = objectMapper.readTree(collectionData);
+	            CollectionVO resultVO = objectMapper.convertValue(overviewNode, CollectionVO.class);
+	            resultVO.setOverview(overviewNode.findPath("overview").asText());
+	            model.addAttribute("overviewData", resultVO);
+	            
+	            if (overviewNode.has("results")) {
+	                JsonNode resultNode = overviewNode.findPath("result");
+	                collectionVO.setOverview(resultNode.path("overview").asText());
+	                LOGGER.debug("Collection Id: " + collectionVO.getId());
+	                LOGGER.debug("Collection Poster Path: " + collectionVO.getPosterPath());
+	                LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
+	                model.addAttribute("collectionData", collectionVO);
+	            }
+	        }
+	        
+	        int movieId = jsonNode.path("id").asInt();
+	        String actorData = tmdbService.searchActor(apiKey, movieId);
+
+	        if (actorData != null && !actorData.isEmpty()) {
+	            JsonNode actorNode = objectMapper.readTree(actorData);
+	            JsonNode castNode = actorNode.path("cast");
+	            
+	            List<Map<String, Object>> actorList = new ArrayList<>();
+	            for (JsonNode actor : castNode) {
+	                Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+	                actorList.add(actorMap);
+	            }
+	            LOGGER.debug("Actor List: " + actorList);
+	            model.addAttribute("actorData", actorList);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
+	    }
+	    
+	    return "board/detail";
 	}
+
+
 	
 	@RequestMapping(value="/localDetail.do")
 	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
@@ -309,18 +328,37 @@ public class MovServiceController {
             }
         	
         	if (recommendData != null && !recommendData.isEmpty()) {
-                JsonNode recommendNode = objectMapper.readTree(recommendData);
-                JsonNode recNode = recommendNode.path("results");
-                
-                // JsonNode를 List로 변환하여 모델에 추가
-                List<Map<String, Object>> recList = new ArrayList<>();
-                for (JsonNode actor : recNode) {
-                    Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
-                    recList.add(actorMap);
-                }
-                LOGGER.debug("Recommend List: " + recList);
-                model.addAttribute("recommendData", recList);
-            }
+	            JsonNode recommendNode = objectMapper.readTree(recommendData);
+	            JsonNode recNode = recommendNode.path("results");
+	            
+	            List<Map<String, Object>> recList = new ArrayList<>();
+	            for (JsonNode actor : recNode) {
+	                Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+	                recList.add(actorMap);
+	            }
+	            LOGGER.debug("Recommend List: " + recList);
+
+	            List<Map<String, Object>> uniqueRecList = new ArrayList<>();
+	            List<Map<String, Object>> notUniqueRecList = new ArrayList<>();
+
+	            for (Map<String, Object> recMovie : recList) {
+	                int movieid = (Integer) recMovie.get("id");
+
+	                MovieVO movieVO = new MovieVO();
+	                movieVO.setMovieId(movieid);
+	                
+	                int count = movService.checkMovie(movieVO);
+
+	                if (count == 0) {
+	                    uniqueRecList.add(recMovie);
+	                }
+	                else {
+	                	notUniqueRecList.add(recMovie);
+	                }
+	            }
+	            model.addAttribute("recommendData", uniqueRecList);
+	            model.addAttribute("notUniqueData", notUniqueRecList);
+	        }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error processing the API response: " + e.getMessage());
