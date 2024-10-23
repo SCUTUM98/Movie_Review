@@ -160,18 +160,30 @@ public class MovServiceController {
             List<MovieVO> resultVO = objectMapper.convertValue(
             		searchResultNode, 
             		new TypeReference<List<MovieVO>> () {});
+            
+            List<MovieVO> uniqueMovies = new ArrayList<>();
+
+            for (MovieVO movie : resultVO) {
+                int count = movService.checkMovie(movie);
+                if (count == 0) {
+                    uniqueMovies.add(movie);
+                }
+                else {
+                	continue;
+                }
+            }
 
             model.addAttribute("suggestData", suggestVO);
             model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
             model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
-            model.addAttribute("resultData", resultVO);
+            //model.addAttribute("resultData", resultVO);
+            model.addAttribute("resultData", uniqueMovies);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error processing the API response: " + e.getMessage());
         }
         
-
 		return "board/searchResult";
 	}
 	

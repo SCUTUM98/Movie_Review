@@ -213,6 +213,14 @@
 			WHERE actor_id = #actorId#
 		]]>
 	</select>
+	<!-- 영화 중복 확인 -->
+	<select id="movDAO.checkMovie" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(movie_id)
+			FROM movie_page
+			WHERE movie_id = #movieId#
+		]]>
+	</select>
 	
 	<!-- 상세페이지 -->
 	<!-- 영화 정보 불러오기 -->
@@ -259,7 +267,7 @@
 	        		, tagline
 	        FROM movie_page
 	        WHERE collection_id = #collectionId#
-	        ORDER BY title_er
+	        ORDER BY release_date
 	    ]]>
 	</select>
 	

@@ -91,6 +91,11 @@ header {
   color: var(--dark);
 }
 
+.movie-poster {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+}
 
 /* MAIN CONTIANER */
 .main-container {

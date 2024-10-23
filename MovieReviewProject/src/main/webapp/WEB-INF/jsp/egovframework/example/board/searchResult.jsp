@@ -9,7 +9,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Netflix</title>
+  <title>검색결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
 
@@ -57,7 +57,7 @@
           	  <input type="hidden" name="id" value="">
 	          <div class="box">
 		      	<c:forEach items="${searchList }" var="search" varStatus="status">
-		      		<a href="javascript:localMovieSelect('${search.movieId}')"><img src="http://image.tmdb.org/t/p/w500${search.posterPath }" alt="${search.titleKr }"></a>
+		      		<a href="javascript:localMovieSelect('${search.movieId}')"><img src="http://image.tmdb.org/t/p/w500${search.posterPath }" alt="${search.titleKr }" class="movie-poster"></a>
 		      	</c:forEach>            
 		      </div>
 		  </form:form>
@@ -69,45 +69,20 @@
 		  <input type="hidden" name="id" value="">
 		  <div class="box">
 			 <c:forEach items="${resultData }" var="result" varStatus="status">
-			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }"></a>
+			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }" class="movie-poster"></a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>
 		  
-      
-      
       <h1 id="trendingMovie">Trending Now</h1>
       <form:form commandName="movieVO" name="listForm" method="post">
       	  <input type="hidden" name="id" value="">
 	      <div class="box">
 	      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
-	      		<a href="javascript:movieSelect('${trending.movieId}')"><img src="http://image.tmdb.org/t/p/w500${trending.posterPath }" alt="${trending.titleKr }"></a>
+	      		<a href="javascript:movieSelect('${trending.movieId}')"><img src="http://image.tmdb.org/t/p/w500${trending.posterPath }" alt="${trending.titleKr }" class="movie-poster"></a>
 	      	</c:forEach>            
 	      </div>
 	  </form:form>
-      
-
-      <h1 id="movies">Blockbuster Action & Adventure</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m6.PNG?raw=true" alt=""></a>                
-      </div>
-
-      <h1 id="originals">Netflix Originals</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o6.PNG?raw=true" alt=""></a>                
-      </div>
-     
-    <!-- END OF MAIN CONTAINER -->
 
     <!-- LINKS -->
     <section class="link">
