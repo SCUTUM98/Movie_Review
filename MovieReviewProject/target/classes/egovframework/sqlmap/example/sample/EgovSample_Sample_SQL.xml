@@ -258,7 +258,8 @@
 	        		, release_date AS releaseDate
 	        		, tagline
 	        FROM movie_page
-	        WHERE movie_id = #collectionId#
+	        WHERE collection_id = #collectionId#
+	        ORDER BY title_er
 	    ]]>
 	</select>
 	

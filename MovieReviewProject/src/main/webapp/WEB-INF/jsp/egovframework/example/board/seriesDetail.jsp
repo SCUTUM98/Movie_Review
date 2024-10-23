@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영화 컬렉션</title>
+    <title>Film Report ${collectionList.name }</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/detail/detailStyle.css">
 </head>
 <body>
@@ -29,26 +29,42 @@
     
     <div class="container">
         <div class="left-panel">
-            <img src="movie-poster.jpg" alt="영화 포스터" class="poster">
-            <h2 class="series-title">시리즈 제목</h2>
+            <c:if test="${empty collectionList.posterPath && collectionList.id != 0}">
+            	<img src="${pageContext.request.contextPath}/images/profile.png" alt="${collectionList.name}" class="poster">
+	        </c:if>
+	        <c:if test="${not empty collectionList.posterPath && collectionList.id != 0}">
+	        	<img src="http://image.tmdb.org/t/p/w780${collectionList.posterPath}"alt="${collectionList.name}" class="poster">
+	        </c:if>
+            <h2 class="series-title">${collectionList.name }</h2>
         </div>
+        
         <div class="right-panel">
+        	<div class="overview-section">
             <h2>개요</h2>
-            <p>여기에 영화 시리즈의 개요가 들어갑니다. 이곳에 스토리라인이나 주요 테마 등을 설명할 수 있습니다.</p>
+            <p>${collectionList.overview }</p></div>
             
-            <h3>배우 정보</h3>
-            <ul>
-                <li>배우 1</li>
-                <li>배우 2</li>
-                <li>배우 3</li>
-            </ul>
-            
-            <h3>시리즈에 포함된 영화들</h3>
-            <div class="included-movies">
-                <img src="included-movie1.jpg" alt="포스터1" class="included-poster">
-                <img src="included-movie2.jpg" alt="포스터2" class="included-poster">
-                <img src="included-movie3.jpg" alt="포스터3" class="included-poster">
-            </div>
+            <div class="movie-section">
+	        	<h2>Series</h2>
+		        <div class="movie-container">
+		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+		            <div class="movie-list">
+		                <c:forEach items="${movieList}" var="movie">
+		                    <div class="movie-item">
+		                        <c:if test="${empty movie.posterPath}">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+		                        </c:if>
+		                        <c:if test="${not empty movie.posterPath}">
+		                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+		                        </c:if>
+		                        <div class="movie-info">
+		                            <p class="movie-name">${movie.titleEn}</p>
+		                        </div>
+		                    </div>
+		                </c:forEach>
+		            </div>
+		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+		        </div>
+	    	</div>
         </div>
     </div>
     <script src="script.js"></script>

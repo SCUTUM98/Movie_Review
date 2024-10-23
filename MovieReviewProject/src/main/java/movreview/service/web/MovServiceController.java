@@ -406,9 +406,10 @@ public class MovServiceController {
 		collectionVO.setId(collectionId);
 		MovieVO movieVO = new MovieVO();
 		movieVO.setCollectionId(collectionId);
+		List<?> movieList = movService.collectionMovie(movieVO);
 		
 		model.addAttribute("collectionList", movService.selectCollection(collectionVO));
-		model.addAttribute("movieList", movService.collectionMovie(movieVO));
+		model.addAttribute("movieList", movieList);
 		
 		
 		return "board/seriesDetail";

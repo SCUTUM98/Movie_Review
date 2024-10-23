@@ -55,8 +55,10 @@ body {
 }
 
 .poster {
-    width: 100%;
+    width: 300px;
     height: auto;
+    margin-right: 40px;
+    border-radius: 10px;
 }
 
 .series-title {
@@ -80,4 +82,55 @@ h2, h3 {
 ul {
     list-style-type: none;
     padding: 0;
+}
+
+.overview-section {
+	position: relative;
+    background-color: #4c4c4c;
+    padding: 10px;
+}
+
+.movie-section {
+    position: relative;
+    background-color: #4c4c4c;
+    padding: 10px;
+}
+
+.movie-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.movie-item {
+    position: relative;
+    margin: 0 10px;
+    flex: 0 0 auto;
+}
+
+.movie-list {
+    display: flex;
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
+    scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    overflow: hidden; /* 스크롤바 숨기기 */
+}
+
+.movie-poster {
+    width: 150px; /* 포스터 크기 조정 */
+    height: auto;
+    border-radius: 10px;
+}
+
+.movie-info {
+    text-align: center;
+}
+
+.scroll-btn {
+    background-color: transparent;
+    color: #ff0000;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1; /* 버튼이 다른 요소 위에 표시되도록 설정 */
 }

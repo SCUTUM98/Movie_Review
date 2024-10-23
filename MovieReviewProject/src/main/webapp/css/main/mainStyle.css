@@ -109,7 +109,7 @@ body {
 }
 
 .movie-poster {
-    width: 150px; /* 포스터 크기 조정 */
+    width: 150px;
     height: auto;
     border-radius: 10px;
 }
