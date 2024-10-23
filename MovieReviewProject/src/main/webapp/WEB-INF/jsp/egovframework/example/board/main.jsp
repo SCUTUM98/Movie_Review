@@ -14,25 +14,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/mainStyle.css">
     
     <script type="text/javascript">
-	    function sug_scrollLeft(event) {
-	    	event.preventDefault();
-	        const container = document.querySelector('.reco-list');
-	        container.scrollBy({
-	            left: -150,
-	            behavior: 'smooth'
-	        });
-	    }
-	
-	    function sug_scrollRight(event) {
-	    	event.preventDefault();
-	        const container = document.querySelector('.reco-list');
-	        container.scrollBy({
-	            left: 150,
-	            behavior: 'smooth'
-	        });
-	    }
-    
-	    let currentIndex = 0;
+    	let currentIndex = 0;
 	
 	    function scrollLeft(event) {
 	        console.log("Left button clicked");
@@ -60,6 +42,42 @@
 	    function colScrollRight(event) {
 	    	event.preventDefault();
 	        const container = document.querySelector('.collection-list');
+	        container.scrollBy({
+	            left: 150,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function sug_scrollLeft(event) {
+	    	console.log("Left button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.reco-list');
+	        container.scrollBy({
+	            left: -150,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function sug_scrollRight(event) {
+	    	console.log("Right button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.reco-list');
+	        container.scrollBy({
+	            left: 150,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function rec_scrollLeft(event) {
+	    	console.log("Left button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.movie-list');
+	        container.scrollBy({
+	            left: -150,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function rec_scrollRight(event) {
+	    	console.log("Right button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.movie-list');
 	        container.scrollBy({
 	            left: 150,
 	            behavior: 'smooth'
@@ -130,7 +148,7 @@
 	    <div class="movie-section">
 	        <h2> 최근 등록 영화</h2>
 	        <div class="movie-container">
-	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+	            <button type="button" class="scroll-btn" onclick="javascript:rec_scrollLeft(event)">◀</button>
 	            <div class="movie-list">
 	                <c:forEach items="${recentlyAdded}" var="movie">
 	                    <div class="movie-item">
@@ -146,7 +164,7 @@
 	                    </div>
 	                </c:forEach>
 	            </div>
-	            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+	            <button type="button" class="scroll-btn" onclick="javascript:rec_scrollRight(event)">▶</button>
 	        </div>
 	    </div>
 	    

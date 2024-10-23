@@ -71,7 +71,7 @@ body {
     border: none;
     cursor: pointer;
     font-size: 24px;
-    z-index: 1; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+    z-index: 10; /* 버튼이 다른 요소 위에 표시되도록 설정 */
 }
 
 .movie-section {

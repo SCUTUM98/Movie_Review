@@ -56,6 +56,13 @@
 	    	document.listForm.action = "<c:url value='/detail.do'/>";
 	    	document.listForm.submit();
 	    }
+	    
+	    function moveToSeries(id){
+	    	document.listForm.collectionId.value = id;
+	    	console.log(document.listForm.collectionId.value);
+	    	document.listForm.action = "<c:url value='/seriesDetail.do'/>";
+	    	document.listForm.submit();
+	    }
     </script>
 </head>
 <body>
@@ -74,6 +81,7 @@
     
     <form action="" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
+    	<input type="hidden" name="collectionId" value="">
 	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${selectMovie.backdropPath }');">
             <div class="overlay">
                 <div class="info">
@@ -150,7 +158,7 @@
 		                    <p>${collectionData.overview }</p>
 		                </div>
 		            </div>
-		            <button class="register-button">시리즈 보러가기</button>
+		            <button class="register-button" onclick="javascript:moveToSeries('${collectionData.id}')">시리즈 보러가기</button>
 		        </div>
 			</div>
 		</c:if>
