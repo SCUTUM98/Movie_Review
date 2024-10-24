@@ -35,6 +35,7 @@ import movreview.service.MovieVO;
 import movreview.service.CollectionVO;
 import movreview.service.LoginVO;
 import movreview.service.ActorVO;
+import movreview.service.VideoVO;
 
 @Configuration
 @PropertySource("classpath:api.properties")
@@ -192,6 +193,7 @@ public class MovServiceController {
 	    
 	    String detailData = tmdbService.movieDetail(apiKey, id);
 	    String recommendData = tmdbService.movieRecommend(apiKey, id);
+	    String videoData = tmdbService.getVideo(apiKey, id);
 	    
 	    if (detailData == null || detailData.isEmpty()) {
 	        throw new RuntimeException("Received null or empty response from the API");
@@ -199,7 +201,10 @@ public class MovServiceController {
 
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    try {
-	        JsonNode jsonNode = objectMapper.readTree(detailData);            
+	        JsonNode jsonNode = objectMapper.readTree(detailData);
+	        JsonNode videoNode = objectMapper.readTree(videoData);
+	        JsonNode vidNode = videoNode.path("results");
+	        
 	        MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
 	        
 	        if (recommendData != null && !recommendData.isEmpty()) {
@@ -226,9 +231,8 @@ public class MovServiceController {
 
 	                if (count == 0) {
 	                    uniqueRecList.add(recMovie);
-	                }
-	                else {
-	                	notUniqueRecList.add(recMovie);
+	                } else {
+	                    notUniqueRecList.add(recMovie);
 	                }
 	            }
 	            model.addAttribute("recommendData", uniqueRecList);
@@ -237,6 +241,7 @@ public class MovServiceController {
 	        
 	        model.addAttribute("detailData", detailVO);
 	        
+	        // 장르 설정
 	        List<String> genres = new ArrayList<>();
 	        for (JsonNode genreNode : jsonNode.path("genres")) {
 	            genres.add(genreNode.path("name").asText());
@@ -244,6 +249,7 @@ public class MovServiceController {
 	        detailVO.setGenre(genres);
 	        LOGGER.debug("Genre list: " + detailVO.getGenre());
 	        
+	        // 컬렉션 데이터 처리
 	        if (jsonNode.has("belongs_to_collection")) {
 	            JsonNode collectionNode = jsonNode.path("belongs_to_collection");
 	            CollectionVO collectionVO = new CollectionVO();
@@ -263,12 +269,11 @@ public class MovServiceController {
 	                JsonNode resultNode = overviewNode.findPath("result");
 	                collectionVO.setOverview(resultNode.path("overview").asText());
 	                LOGGER.debug("Collection Id: " + collectionVO.getId());
-	                LOGGER.debug("Collection Poster Path: " + collectionVO.getPosterPath());
-	                LOGGER.debug("Collection Overview: " + collectionVO.getOverview());
 	                model.addAttribute("collectionData", collectionVO);
 	            }
 	        }
 	        
+	        // 배우 데이터 처리
 	        int movieId = jsonNode.path("id").asInt();
 	        String actorData = tmdbService.searchActor(apiKey, movieId);
 
@@ -285,6 +290,17 @@ public class MovServiceController {
 	            model.addAttribute("actorData", actorList);
 	        }
 
+	        // 비디오 데이터 처리
+	        if (vidNode.isArray()) {
+	            for (JsonNode video : vidNode) {
+	                VideoVO videoVO = objectMapper.convertValue(video, VideoVO.class);
+	                LOGGER.debug("VIDEO KEY: " + videoVO.getKey());
+	                model.addAttribute("videoData", videoVO);
+	            }
+	        } else {
+	            LOGGER.warn("No video data found or not an array");
+	        }
+
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
@@ -292,7 +308,6 @@ public class MovServiceController {
 	    
 	    return "board/detail";
 	}
-
 
 	
 	@RequestMapping(value="/localDetail.do")
@@ -311,9 +326,13 @@ public class MovServiceController {
 		String recommendData = tmdbService.movieRecommend(apiKey, id);
 		int movieId = id;
         String actorData = tmdbService.searchActor(apiKey, movieId);
+        String videoData = tmdbService.getVideo(apiKey, id);
         
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+        	JsonNode videoNode = objectMapper.readTree(videoData);
+	        JsonNode vidNode = videoNode.path("results");
+        	
         	if (actorData != null && !actorData.isEmpty()) {
                 JsonNode actorNode = objectMapper.readTree(actorData);
                 JsonNode castNode = actorNode.path("cast");
@@ -326,6 +345,17 @@ public class MovServiceController {
                 LOGGER.debug("Actor List: " + actorList);
                 model.addAttribute("actorData", actorList);
             }
+        	
+        	// 비디오 데이터 처리
+	        if (vidNode.isArray()) {
+	            for (JsonNode video : vidNode) {
+	                VideoVO videoVO = objectMapper.convertValue(video, VideoVO.class);
+	                LOGGER.debug("VIDEO KEY: " + videoVO.getKey());
+	                model.addAttribute("videoData", videoVO);
+	            }
+	        } else {
+	            LOGGER.warn("No video data found or not an array");
+	        }
         	
         	if (recommendData != null && !recommendData.isEmpty()) {
 	            JsonNode recommendNode = objectMapper.readTree(recommendData);
@@ -460,7 +490,6 @@ public class MovServiceController {
 		
 		model.addAttribute("collectionList", movService.selectCollection(collectionVO));
 		model.addAttribute("movieList", movieList);
-		
 		
 		return "board/seriesDetail";
 	}

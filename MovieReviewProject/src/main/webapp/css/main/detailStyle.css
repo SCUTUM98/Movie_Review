@@ -42,7 +42,7 @@ body {
 
 .content-detail {
     position: relative;
-    height: 100vh;
+    height: 80vh;
     background-size: cover;
     background-position: center;
 }
@@ -91,6 +91,44 @@ body {
 .details p {
     line-height: 1.8; /* 줄 간격 증가 */
     margin: 5px 0;
+}
+
+.video-section {
+    position: relative;
+    padding: 50px;
+    background-color: #141414;
+}
+.video-section h2{
+	font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
+
+.video-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.video-item {
+    flex: 0 0 auto;
+    margin-right: 0;
+}
+
+.background-image {
+    flex: 1;
+    height: 405px;
+    background-image: url('http://image.tmdb.org/t/p/w1280${detailData.backdropPath}');
+    background-size: cover;
+    background-position: center;
+    margin-left: 0;
+}
+
+.video-list {
+    display: flex;
+    overflow-x: auto;
+    width: calc(100% - 80px);
+    scroll-behavior: smooth;
+    overflow: hidden;
 }
 
 .cast-section {
@@ -247,9 +285,9 @@ body {
 }
 
 .collection-detail h2 {
-    font-size: 24px; /* 태그라인 크기 (기존보다 작게 조정) */
-    font-weight: normal; /* 태그라인 두께 조정 */
-    margin-bottom: 15px; /* 태그라인 아래 여백 */
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 15px;
 }
 
 .collection p {

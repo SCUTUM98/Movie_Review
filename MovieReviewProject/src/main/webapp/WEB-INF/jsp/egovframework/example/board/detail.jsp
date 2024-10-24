@@ -138,6 +138,18 @@
             </div>
         </div>
         
+        <c:if test="${not empty videoData.key }">
+		    <div class="video-section">
+		        <h2>예고편</h2>
+		        <div class="video-container">
+		            <div class="video-item">
+		                <iframe width="720" height="405" src="https://www.youtube.com/embed/${videoData.key }" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		            </div>
+		            <div class="background-image" style="background-image: url('http://image.tmdb.org/t/p/w1280${detailData.backdropPath}');"></div>
+		        </div>
+		    </div>
+		</c:if>
+       
         <div class="cast-section">
             <h2>출연 배우</h2>
             <div class="cast-container">
