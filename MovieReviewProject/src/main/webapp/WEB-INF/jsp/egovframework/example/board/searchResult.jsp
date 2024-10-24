@@ -35,6 +35,12 @@
 			document.actorForm.action = "<c:url value='/actorDetail.do'/>";
 			document.actorForm.submit();
 		}
+		function collectionSelect(id) {
+			console.log(id);
+			document.collectionForm.id.value = id;
+			document.collectionForm.action = "<c:url value='/seriesDetail.do'/>";
+			document.collectionForm.submit();
+		}
   </script>
 </head>
 <body>
@@ -83,8 +89,8 @@
 	  <form:form commandName="collectionVO" name="collectionForm" method="post">
 		  <input type="hidden" name="id" value="">
 		  <div class="box">
-			 <c:forEach items="${resultData }" var="result" varStatus="status">
-			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }" class="movie-poster"></a>
+			 <c:forEach items="${collectionList }" var="collection" varStatus="status">
+			 	<a href="javascript:movieSelect('${collection.id}')"><img src="http://image.tmdb.org/t/p/w500${collection.posterPath }" alt="${collection.name }" class="movie-poster"></a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>

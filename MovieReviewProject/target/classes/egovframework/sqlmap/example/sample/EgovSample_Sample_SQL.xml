@@ -148,6 +148,18 @@
 			WHERE (act_name ILIKE '%' || #actName# || '%')
 		]]>
 	</select>
+	<!-- 시리즈 검색 -->
+	<select id="movDAO.searchCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+			FROM collection
+			WHERE (cname ILIKE '%' || #name# || '%')
+		]]>
+	</select>
 
 	<!-- 등록 -->
 	<!-- 영화 삽입 -->

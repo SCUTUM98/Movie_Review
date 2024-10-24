@@ -35,6 +35,11 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> searchActor(ActorVO vo) throws Exception {
 		return movDAO.searchActor(vo);
 	}
+	// 시리즈 검색
+	@Override
+	public List<?> searchCollection(CollectionVO vo) throws Exception {
+		return movDAO.searchCollection(vo);
+	}
 	//영화 삽입
 	@Override
 	public String insertMovie(MovieVO vo) throws Exception{

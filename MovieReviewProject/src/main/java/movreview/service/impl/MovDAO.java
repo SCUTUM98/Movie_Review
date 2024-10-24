@@ -37,6 +37,15 @@ public class MovDAO extends EgovAbstractDAO {
 	        throw e;
 	    }
 	}
+	// 시리즈 검색
+	public List<?> searchCollection(CollectionVO vo) throws Exception {
+		try {
+	        return list("movDAO.searchCollection", vo);
+	    } catch (Exception e) {
+	        LOGGER.error("Error executing searchMovie query", e);
+	        throw e;
+	    }
+	}
 	// 영화 삽입
 	public String insertMovie(MovieVO vo) throws Exception {
 		return (String) insert("movDAO.insertMovie", vo);

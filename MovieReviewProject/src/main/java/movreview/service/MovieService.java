@@ -8,6 +8,8 @@ public interface MovieService {
 	List<?> searchMovie(MovieVO vo) throws Exception;
 	// 연기자 검색
 	List<?> searchActor(ActorVO vo) throws Exception;
+	// 시리즈 검색
+	List<?> searchCollection(CollectionVO vo) throws Exception;
 	//영화 등록
 	String insertMovie(MovieVO vo) throws Exception;
 	//시리즈 등록

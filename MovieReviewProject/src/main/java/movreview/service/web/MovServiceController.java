@@ -126,14 +126,18 @@ public class MovServiceController {
 	public String searchResult(@RequestParam("searchKeyword") String searchKeyword, HttpServletRequest request, Model model) throws Exception {
 		MovieVO searchVO = new MovieVO();
 		ActorVO actorVO = new ActorVO();
+		CollectionVO collectionVO = new CollectionVO();
 	    searchVO.setTitleEn(searchKeyword);
 	    actorVO.setActName(searchKeyword);
+	    collectionVO.setName(searchKeyword);
 
 	    List<?> searchList = movService.searchMovie(searchVO);
 	    List<?> actorList = movService.searchActor(actorVO);
+	    List<?> collectionList = movService.searchCollection(collectionVO);
 	    
 	    model.addAttribute("searchList", searchList);
 	    model.addAttribute("actorList", actorList);
+	    model.addAttribute("collectionList", collectionList);
 		
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
