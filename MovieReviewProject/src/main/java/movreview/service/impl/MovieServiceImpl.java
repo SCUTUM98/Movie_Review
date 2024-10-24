@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
+import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
 import movreview.service.MovieService;
@@ -29,6 +30,11 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> searchMovie(MovieVO vo) throws Exception {
 		return movDAO.searchMovie(vo);
 	}
+	// 연기자 검색
+	@Override
+	public List<?> searchActor(ActorVO vo) throws Exception {
+		return movDAO.searchActor(vo);
+	}
 	//영화 삽입
 	@Override
 	public String insertMovie(MovieVO vo) throws Exception{
@@ -44,6 +50,11 @@ public class MovieServiceImpl implements MovieService {
 	public String insertActor(ActorVO vo) throws Exception {
 		return movDAO.insertActor(vo);
 	}
+	// 연기자 sns 삽입
+	@Override
+	public String insertSns(ActorSnsVO vo) throws Exception {
+		return movDAO.insertSns(vo);
+	}
 	//영화 상세 페이지
 	@Override
 	public MovieVO selectMovie(MovieVO vo) throws Exception {
@@ -53,6 +64,15 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public CollectionVO selectCollection(CollectionVO vo) throws Exception {
 		return movDAO.selectCollection(vo);
+	}
+	// 연기자 상세 페이지
+	@Override
+	public ActorVO actorDetail(ActorVO vo) throws Exception {
+		return movDAO.actorDetail(vo);
+	}
+	@Override
+	public ActorSnsVO snsDetail(ActorSnsVO vo) throws Exception {
+		return movDAO.snsDetail(vo);
 	}
 	// 시리즈 중복 확인
 	@Override

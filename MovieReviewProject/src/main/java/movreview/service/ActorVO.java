@@ -1,5 +1,7 @@
 package movreview.service;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,12 +13,18 @@ public class ActorVO {
 	private int gender;
 	@JsonProperty("name")
 	private String actName;
-	@JsonProperty("original_name")
-	private String originalName;
-	@JsonProperty("porfile_path")
+	@JsonProperty("also_known_as")
+	private List<String> knownAs;
+	@JsonProperty("profile_path")
 	private String profilePath;
 	@JsonProperty("character")
 	private String character;
+	private String birthday;
+	private String deathday;
+	@JsonProperty("known_for_department")
+	private String status;
+	@JsonProperty("place_of_birth")
+	private String homeplace;
 	
 	public String getActorId() {
 		return actorId;
@@ -39,11 +47,11 @@ public class ActorVO {
 		this.actName = actName;
 	}
 	
-	public String getOriginalName() {
-		return originalName;
+	public List<String> getKnownAs() {
+		return knownAs;
 	}
-	public void setOriginalName(String originalName) {
-		this.originalName = originalName;
+	public void setKnownAs(List<String> knownAs) {
+		this.knownAs = knownAs;
 	}
 	
 	public String getProfilePath() {
@@ -58,5 +66,33 @@ public class ActorVO {
 	}
 	public void setCharacter(String character) {
 		this.character = character;
+	}
+	
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	
+	public String getDeathday() {
+		return deathday;
+	}
+	public void setDeathday(String deathday) {
+		this.deathday = deathday;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getHomeplace() {
+		return homeplace;
+	}
+	public void setHomeplace(String homeplace) {
+		this.homeplace = homeplace;
 	}
 }

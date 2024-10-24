@@ -323,7 +323,7 @@ body {
 
 .rec-photo {
     width: 150px;
-    height: auto;
+    height: 230px;
     border-radius: 10px;
 }
 
@@ -337,6 +337,7 @@ body {
     text-align: center;
     opacity: 0; /* 처음에는 숨김 */
     transition: opacity 0.3s;
+    width: 150px;
 }
 
 .rec-item:hover .actor-info {

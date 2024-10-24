@@ -110,12 +110,13 @@ body {
 
 .movie-poster {
     width: 150px;
-    height: auto;
+    height: 230px;;
     border-radius: 10px;
 }
 
 .movie-info {
     text-align: center;
+    width: 150px;
 }
 
 .movie-item:hover .movie-info {

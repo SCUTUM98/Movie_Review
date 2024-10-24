@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Clone - Content Detail</title>
+    <title>Film Report: ${selectMovie.titleEn }</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/detailStyle.css">
     
     <script type="text/javascript">
@@ -61,6 +61,13 @@
 	    	document.listForm.id.value = id;
 	    	console.log(document.listForm.id.value);
 	    	document.listForm.action = "<c:url value='/localDetail.do'/>";
+	    	document.listForm.submit();
+	    }
+	    
+	    function moveToActorDetail(id){
+	    	document.listForm.actorId.value = id;
+	    	console.log(document.listForm.actorId.value);
+	    	document.listForm.action = "<c:url value='/actorDetail.do'/>";
 	    	document.listForm.submit();
 	    }
 	    
@@ -139,13 +146,14 @@
 		        <div class="cast-container">
 		            <button type="button" class="scroll-btn left" onclick="javascript:act_scrollLeft(event)">◀</button>
 		            <div class="cast-list">
+		            <input type="hidden" name="actorId" value="">
 		                <c:forEach items="${actorData}" var="actor">
 		                    <div class="cast-item">
 		                        <c:if test="${empty actor.profile_path}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" alt="${actor.original_name}" class="actor-photo">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:moveToActorDetail('${actor.id}')" alt="${actor.original_name}" class="actor-photo">
 		                        </c:if>
 		                        <c:if test="${not empty actor.profile_path}">
-		                            <img src="http://image.tmdb.org/t/p/w500${actor.profile_path}" alt="${actor.original_name}" class="actor-photo">
+		                            <img src="http://image.tmdb.org/t/p/w500${actor.profile_path}" onclick="javascript:moveToActorDetail('${actor.id}')" alt="${actor.original_name}" class="actor-photo">
 		                        </c:if>
 		                        <div class="actor-info">
 		                            <p class="actor-name">${actor.name}</p>

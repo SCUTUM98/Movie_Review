@@ -41,11 +41,15 @@ body {
 
 .left-panel {
     width: 40%;
-    text-align: center;
     padding: 20px;
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../../images/oldframe-background.png);
     background-size: cover;
     background-position: center;
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    margin-top: 100px; /* 헤더와의 간격 조정 */
 }
 
 .right-panel {
@@ -57,12 +61,14 @@ body {
 .poster {
     width: 300px;
     height: auto;
-    margin-right: 40px;
     border-radius: 10px;
 }
 
 .series-title {
     margin-top: 10px;
+}
+.series-title h2, h3 {
+	margin-top: 10px;
 }
 
 .included-movies {
@@ -118,12 +124,13 @@ ul {
 
 .movie-poster {
     width: 150px; /* 포스터 크기 조정 */
-    height: auto;
+    height: 230px;
     border-radius: 10px;
 }
 
 .movie-info {
     text-align: center;
+    width: 150px;
 }
 
 .scroll-btn {

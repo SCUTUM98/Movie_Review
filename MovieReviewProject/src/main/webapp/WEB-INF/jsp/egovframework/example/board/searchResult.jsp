@@ -29,6 +29,12 @@
 			document.searchForm.action = "<c:url value='/localDetail.do'/>";
 			document.searchForm.submit();
 		}
+		function actorSelect(id) {
+			console.log(id);
+			document.actorForm.actorId.value = id;
+			document.actorForm.action = "<c:url value='/actorDetail.do'/>";
+			document.actorForm.submit();
+		}
   </script>
 </head>
 <body>
@@ -62,7 +68,6 @@
 		      </div>
 		  </form:form>
       </div>
-      
 
       <h1 id="unregistered">Unregistered Movie</h1>
 	  <form:form commandName="movieVO" name="tmdbForm" method="post">
@@ -70,6 +75,26 @@
 		  <div class="box">
 			 <c:forEach items="${resultData }" var="result" varStatus="status">
 			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }" class="movie-poster"></a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+	  
+	  <h1 id="unregistered">Series</h1>
+	  <form:form commandName="collectionVO" name="collectionForm" method="post">
+		  <input type="hidden" name="id" value="">
+		  <div class="box">
+			 <c:forEach items="${resultData }" var="result" varStatus="status">
+			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }" class="movie-poster"></a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+	  
+	  <h1 id="unregistered">Actor</h1>
+	  <form:form commandName="actorVO" name="actorForm" method="post">
+		  <input type="hidden" name="actorId" value="">
+		  <div class="box">
+			 <c:forEach items="${actorList }" var="actor" varStatus="status">
+			 	<a href="javascript:actorSelect('${actor.actorId}')"><img src="http://image.tmdb.org/t/p/w500${actor.profilePath }" alt="${actor.actName }" class="movie-poster"></a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>

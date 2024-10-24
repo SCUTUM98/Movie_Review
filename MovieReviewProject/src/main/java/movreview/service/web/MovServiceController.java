@@ -36,6 +36,7 @@ import movreview.service.CollectionVO;
 import movreview.service.LoginVO;
 import movreview.service.ActorVO;
 import movreview.service.VideoVO;
+import movreview.service.ActorSnsVO;
 
 @Configuration
 @PropertySource("classpath:api.properties")
@@ -108,14 +109,15 @@ public class MovServiceController {
 	@RequestMapping(value="/movieSearch.do", method=RequestMethod.POST)
 	public String movieSearch( @RequestParam("searchKeyword") String title, Model model) throws Exception {
 	    MovieVO searchVO = new MovieVO();
-		LOGGER.debug("Title: " + title);
+	    ActorVO actorVO = new ActorVO();
 		searchVO.setTitleEn(title);
-	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
+		actorVO.setActName(title);
 	    
 	    List<?> searchList = movService.searchMovie(searchVO);
-	    System.out.println("올포랜드 : " + searchList);
+	    List<?> actorList = movService.searchActor(actorVO);
 	    
 	    model.addAttribute("searchList", searchList);
+	    model.addAttribute("actorList", actorList);
 	    
 	    return "redirect:/result.do";
 	}
@@ -123,13 +125,15 @@ public class MovServiceController {
 	@RequestMapping(value="/result.do", method=RequestMethod.POST)
 	public String searchResult(@RequestParam("searchKeyword") String searchKeyword, HttpServletRequest request, Model model) throws Exception {
 		MovieVO searchVO = new MovieVO();
-	    LOGGER.debug("Title: " + searchKeyword);
+		ActorVO actorVO = new ActorVO();
 	    searchVO.setTitleEn(searchKeyword);
-	    LOGGER.debug("movieVO title: " + searchVO.getTitleEn());
+	    actorVO.setActName(searchKeyword);
 
 	    List<?> searchList = movService.searchMovie(searchVO);
+	    List<?> actorList = movService.searchActor(actorVO);
 	    
 	    model.addAttribute("searchList", searchList);
+	    model.addAttribute("actorList", actorList);
 		
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
@@ -441,15 +445,12 @@ public class MovServiceController {
 	    collectionVO.setOverview(seriesOverview);
 	    
 	    CollectionVO checkCollection = movService.checkCollection(collectionVO);
-	    LOGGER.debug("check collection: " + checkCollection);
 	    
 	    if(checkCollection == null) {
-	    	LOGGER.debug("collection info is null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    	movService.insertMovie(movieVO);
 		    movService.insertCollection(collectionVO);
 	    }
 	    else if (checkCollection != null) {
-	    	LOGGER.debug("collection info is not null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    	movService.insertMovie(movieVO);
 	    }
 	    
@@ -458,17 +459,34 @@ public class MovServiceController {
 	        actorVO.setActorId(actorIds[i]);
 	        actorVO.setActName(actorNames[i]);
 	        actorVO.setProfilePath(actorProfilePaths[i]);
-	        LOGGER.debug("Actor ID: " + actorVO.getActorId() + "\nActor Name: " + actorVO.getActName());
 	        
 	        ActorVO checkActor = movService.checkActor(actorVO);
 	        
 	        if(checkActor == null) {
-		    	LOGGER.debug("Actor info is null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		    	movService.insertActor(actorVO);
+		    	String actorData = tmdbService.getActorDetail(apiKey, Integer.parseInt(actorIds[i]));
+		    	String snsData = tmdbService.getActorSns(apiKey, Integer.parseInt(actorIds[i]));
+		    	
+		    	ObjectMapper objectMapper = new ObjectMapper();
+		    	try {
+		    		JsonNode actorNode = objectMapper.readTree(actorData);
+		    		JsonNode snsNode = objectMapper.readTree(snsData);
+		    		ActorVO actorDetail = objectMapper.convertValue(actorNode, ActorVO.class);
+		    		ActorSnsVO snsVO = objectMapper.convertValue(snsNode, ActorSnsVO.class);
+		    		
+					/*
+					 * List<String> knownAs = new ArrayList<>(); for (JsonNode known :
+					 * actorNode.path("also_knwon_as")) { knownAs.add(known.asText()); }
+					 * actorDetail.setKnownAs(knownAs);
+					 */
+		    		movService.insertActor(actorDetail);
+		    		movService.insertSns(snsVO);
+		    		
+		    	} catch (Exception e) {
+		            e.printStackTrace();
+		            throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		    	}
+		    	
 	        }
-		    else if (checkActor != null) {
-		    	LOGGER.debug("Actor info is not null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		    }
 	        
 	    }
 	    
@@ -492,6 +510,45 @@ public class MovServiceController {
 		model.addAttribute("movieList", movieList);
 		
 		return "board/seriesDetail";
+	}
+	
+	@RequestMapping(value="/actorDetail.do")
+	public String actorDetail(@RequestParam("actorId") int actorId, Model model) throws Exception {
+		ActorVO actorVO = new ActorVO();
+		ActorSnsVO snsVO = new ActorSnsVO();
+		
+		String movieCredits = tmdbService.movieCredits(apiKey, actorId);
+		
+		actorVO.setActorId(String.valueOf(actorId));
+		snsVO.setActorId(actorId);
+		
+		System.out.println("actorId: " + actorVO.getActorId());
+		
+		ActorVO tmp = movService.actorDetail(actorVO);
+		System.out.println(tmp.getActorId());
+
+		model.addAttribute("actorData", movService.actorDetail(actorVO));
+		model.addAttribute("snsData", movService.snsDetail(snsVO));
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+        try {
+        	JsonNode creditNode = objectMapper.readTree(movieCredits);
+	        JsonNode credits = creditNode.path("cast");
+	        
+	        if (credits != null && !credits.isEmpty()) {
+	        	List<Map<String, Object>> creditList = new ArrayList<>();
+	        	for (JsonNode credit : credits) {
+	        		Map<String, Object> creditMap = objectMapper.convertValue(credit, Map.class);
+	        		creditList.add(creditMap);
+	        	}
+	        	model.addAttribute("creditData", creditList);
+	        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error processing the API response: " + e.getMessage());
+        }
+		
+		return "board/actorDetail";
 	}
 
 }

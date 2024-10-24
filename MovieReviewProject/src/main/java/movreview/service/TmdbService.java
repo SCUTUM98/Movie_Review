@@ -137,4 +137,49 @@ public class TmdbService {
         
         return response.getBody();
     }
+    
+    public String getActorDetail(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/person/%s?language=ko-KR", id);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String getActorSns(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/person/%s/external_ids", id);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String movieCredits(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/person/%s/movie_credits?language=ko-KR", id);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
 }
