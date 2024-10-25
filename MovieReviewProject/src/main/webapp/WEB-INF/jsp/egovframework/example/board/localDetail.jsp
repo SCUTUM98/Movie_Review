@@ -86,17 +86,17 @@
 	    		
 	    	}
 	    	else if (provider == 'Disney Plus'){
-	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	    		url = 'https://www.disneyplus.com/ko-kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
 	    	else if (provider == 'Netflix'){
-	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	    		url = 'https://www.netflix.com/kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
 	    	else if (provider == 'Netflix basic with Ads'){
-	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	    		url = 'https://www.netflix.com/kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
