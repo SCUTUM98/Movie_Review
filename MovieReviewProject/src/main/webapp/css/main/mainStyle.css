@@ -88,45 +88,57 @@ body {
 
 .movie-list {
     display: flex;
-    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-x: visible; /* 수평 스크롤 가능 */
     width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
     scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-    overflow: hidden; /* 스크롤바 숨기기 */
 }
 
 .collection-list {
     display: flex;
-    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-x: visible; /* 수평 스크롤 가능 */
     width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
     scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-    overflow: hidden; /* 스크롤바 숨기기 */
+
 }
 
 .movie-item {
     position: relative;
     margin: 0 10px;
     flex: 0 0 auto;
+    transition: transform 0.3s ease;
 }
 
 .movie-poster {
     width: 150px;
-    height: 230px;;
+    height: 230px;
     border-radius: 10px;
+    transition: transform 0.3s ease;
+    position: relative; /* 부모에 대해 상대 위치 유지 */
 }
 
 .movie-info {
     text-align: center;
     width: 150px;
+    opacity: 1; /* 항상 보이도록 설정 */
+    transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
 }
 
-.movie-item:hover .movie-info {
-    opacity: 1;
+.movie-item:hover {
+    z-index: 10; /* 호버된 아이템을 다른 아이템보다 위에 표시 */
+}
+
+.movie-item:hover .movie-poster {
+    transition: transform 0.3s;
+    transform: scale(1.4); /* 포스터 크기 확대 */
+    position: absolute; /* 포스터를 절대 위치로 설정 */
+    top: -20px; /* 위로 이동 */
+    left: -10px; /* 왼쪽으로 이동 */
+    z-index: 20; /* 확대된 포스터를 가장 위에 표시 */
 }
 
 .reco-list {
     display: flex;
-    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-x: visible; /* 수평 스크롤 가능 */
     width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
     scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-    overflow: hidden; /* 스크롤바 숨기기 */
 }

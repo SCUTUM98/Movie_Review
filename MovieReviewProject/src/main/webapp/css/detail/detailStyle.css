@@ -39,17 +39,65 @@ body {
     height: calc(100vh - 60px); /* 헤더 높이만큼 제외 */
 }
 
+.sns-section {
+    width: 30%;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.sns-item {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.sns-logo {
+    width: 30px; /* 로고 크기 조정 */
+    height: 30px;
+    margin-right: 10px;
+}
+
+a:link {
+  color : white;
+  text-decoration: none;
+}
+a:visited {
+  color : white;
+  text-decoration: none;
+}
+a:hover {
+  color : white;
+  text-decoration: none;
+}
+a:active {
+  color : white;
+  text-decoration: none;
+}
+
+.container {
+    display: flex;
+    height: auto; /* 헤더 높이만큼 제외 */
+    overflow: hidden; /* 내용이 넘칠 때 숨기기 */
+}
+
+.left-panel, .right-panel {
+    flex: 1; /* 각 패널의 너비를 동일하게 설정 */
+    padding: 20px;
+}
+
 .left-panel {
     width: 40%;
     padding: 20px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../../images/oldframe-background.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../../images/background.jpg);
     background-size: cover;
     background-position: center;
     display: flex; /* Flexbox 사용 */
     flex-direction: column; /* 수직 정렬 */
     align-items: center; /* 중앙 정렬 */
-    justify-content: center; /* 수직 중앙 정렬 */
-    margin-top: 100px; /* 헤더와의 간격 조정 */
 }
 
 .right-panel {

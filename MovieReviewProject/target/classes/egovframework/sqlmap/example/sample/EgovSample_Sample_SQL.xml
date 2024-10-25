@@ -128,7 +128,7 @@
 	<!-- 영화 검색 -->
 	<select id="movDAO.searchMovie" resultClass="movieVO">
 	    <![CDATA[
-	        SELECT movie_id AS movieId, title_kr AS titleKr, title_er AS titleEr, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
+	        SELECT movie_id AS movieId, title_kr AS titleKr, title_er AS titleEn, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
 	        FROM movie_page
 	        WHERE (title_kr ILIKE '%' || #titleEn# || '%' OR title_er ILIKE '%' || #titleEn# || '%')
 	    ]]>

@@ -69,7 +69,10 @@
           	  <input type="hidden" name="id" value="">
 	          <div class="box">
 		      	<c:forEach items="${searchList }" var="search" varStatus="status">
-		      		<a href="javascript:localMovieSelect('${search.movieId}')"><img src="http://image.tmdb.org/t/p/w500${search.posterPath }" alt="${search.titleKr }" class="movie-poster"></a>
+		      		<a href="javascript:localMovieSelect('${search.movieId}')">
+		      			<img src="http://image.tmdb.org/t/p/w780${search.posterPath }" alt="${search.titleKr }" class="movie-poster">
+		      			<p class="movie-title">${search.titleEn}</p> 
+		      		</a>
 		      	</c:forEach>            
 		      </div>
 		  </form:form>
@@ -80,7 +83,10 @@
 		  <input type="hidden" name="id" value="">
 		  <div class="box">
 			 <c:forEach items="${resultData }" var="result" varStatus="status">
-			 	<a href="javascript:movieSelect('${result.movieId}')"><img src="http://image.tmdb.org/t/p/w500${result.posterPath }" alt="${result.titleKr }" class="movie-poster"></a>
+			 	<a href="javascript:movieSelect('${result.movieId}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${result.posterPath }" alt="${result.titleKr }" class="movie-poster">
+			 		<p class="movie-title">${result.titleEn}</p>
+			 	</a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>
@@ -90,7 +96,10 @@
 		  <input type="hidden" name="id" value="">
 		  <div class="box">
 			 <c:forEach items="${collectionList }" var="collection" varStatus="status">
-			 	<a href="javascript:movieSelect('${collection.id}')"><img src="http://image.tmdb.org/t/p/w500${collection.posterPath }" alt="${collection.name }" class="movie-poster"></a>
+			 	<a href="javascript:movieSelect('${collection.id}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${collection.posterPath }" alt="${collection.name }" class="movie-poster">
+			 		<p class="movie-title">${collection.name}</p>
+			 	</a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>
@@ -100,7 +109,10 @@
 		  <input type="hidden" name="actorId" value="">
 		  <div class="box">
 			 <c:forEach items="${actorList }" var="actor" varStatus="status">
-			 	<a href="javascript:actorSelect('${actor.actorId}')"><img src="http://image.tmdb.org/t/p/w500${actor.profilePath }" alt="${actor.actName }" class="movie-poster"></a>
+			 	<a href="javascript:actorSelect('${actor.actorId}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${actor.profilePath }" alt="${actor.actName }" class="movie-poster">
+			 		<p class="movie-title">${actor.actName}</p>
+			 	</a>
 			 </c:forEach>
 		  </div>    
 	  </form:form>
@@ -110,7 +122,10 @@
       	  <input type="hidden" name="id" value="">
 	      <div class="box">
 	      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
-	      		<a href="javascript:movieSelect('${trending.movieId}')"><img src="http://image.tmdb.org/t/p/w500${trending.posterPath }" alt="${trending.titleKr }" class="movie-poster"></a>
+	      		<a href="javascript:movieSelect('${trending.movieId}')">
+	      			<img src="http://image.tmdb.org/t/p/w780${trending.posterPath }" alt="${trending.titleKr }" class="movie-poster">
+	      			<p class="movie-title">${trending.titleEn}</p>
+	      		</a>
 	      	</c:forEach>            
 	      </div>
 	  </form:form>
