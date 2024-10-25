@@ -32,6 +32,7 @@ import movreview.service.MovieService;
 import movreview.service.TmdbService;
 import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
+import movreview.service.ProviderVO;
 import movreview.service.CollectionVO;
 import movreview.service.LoginVO;
 import movreview.service.ActorVO;
@@ -322,6 +323,7 @@ public class MovServiceController {
 	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
 		MovieVO selectVO = new MovieVO();
 		CollectionVO collectVO = new CollectionVO();
+		
 	    selectVO.setMovieId(id);
 	    movService.selectMovie(selectVO);
 	    collectVO.setId(movService.selectMovie(selectVO).getCollectionId());
@@ -335,6 +337,7 @@ public class MovServiceController {
 		int movieId = id;
         String actorData = tmdbService.searchActor(apiKey, movieId);
         String videoData = tmdbService.getVideo(apiKey, id);
+        String providersData = tmdbService.movieProviders(apiKey, movieId);
         
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -343,7 +346,14 @@ public class MovServiceController {
         	
         	if (actorData != null && !actorData.isEmpty()) {
                 JsonNode actorNode = objectMapper.readTree(actorData);
+                JsonNode providersNode = objectMapper.readTree(providersData);
+                
                 JsonNode castNode = actorNode.path("cast");
+                JsonNode proResultsNode = providersNode.path("results");
+                JsonNode koreaNode = proResultsNode.path("KR");
+                JsonNode buyNode = koreaNode.findPath("buy");
+                JsonNode rentNode = koreaNode.findPath("rent");
+                JsonNode streamNode = koreaNode.findPath("flatrate");
                 
                 List<Map<String, Object>> actorList = new ArrayList<>();
                 for (JsonNode actor : castNode) {
@@ -352,6 +362,29 @@ public class MovServiceController {
                 }
                 LOGGER.debug("Actor List: " + actorList);
                 model.addAttribute("actorData", actorList);
+                
+                List<Map<String, Object>> buyList = new ArrayList<>();
+                List<Map<String, Object>> rentList = new ArrayList<>();
+                List<Map<String, Object>> streamList = new ArrayList<>();
+                for (JsonNode buy : buyNode) {
+                	Map<String, Object> buyMap = objectMapper.convertValue(buy, Map.class);
+                	buyList.add(buyMap);
+                }
+                for (JsonNode rent : rentNode) {
+                	Map<String, Object> rentMap = objectMapper.convertValue(rent, Map.class);
+                	rentList.add(rentMap);
+                }
+                for (JsonNode stream : streamNode) {
+                	Map<String, Object> streamMap = objectMapper.convertValue(stream, Map.class);
+                	streamList.add(streamMap);
+                }
+                model.addAttribute("buyList", buyList);
+                LOGGER.debug("Buy List: " + buyList);
+                System.out.println("Buy List: " + buyList);
+                model.addAttribute("rentList", rentList);
+                model.addAttribute("streamList", streamList);
+                LOGGER.debug("Stream List: " + streamList);
+                System.out.println("Stream List: " + streamList);
             }
         	
         	// 비디오 데이터 처리

@@ -77,6 +77,35 @@
 	    	document.listForm.action = "<c:url value='/seriesDetail.do'/>";
 	    	document.listForm.submit();
 	    }
+	    
+	    function moveToProvider(provider, name){
+	    	if (provider == 'Google Play Movies'){
+	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	            console.log(url);
+	            window.open(url);
+	    		
+	    	}
+	    	else if (provider == 'Disney Plus'){
+	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	            console.log(url);
+	            window.open(url);
+	    	}
+	    	else if (provider == 'Netflix'){
+	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	            console.log(url);
+	            window.open(url);
+	    	}
+	    	else if (provider == 'Netflix basic with Ads'){
+	    		url = 'https://play.google.com/store/search?q=' + encodeURIComponent(name) + '&c=movies&hl=en&gl=KR';
+	            console.log(url);
+	            window.open(url);
+	    	}
+	    	else if (provider == 'wavve'){
+	    		url = 'https://www.wavve.com/search?searchWord=' + encodeURIComponent(name);
+	            console.log(url);
+	            window.open(url);
+	    	}
+	    }
     </script>
 </head>
 <body>
@@ -99,33 +128,63 @@
 	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${selectMovie.backdropPath }');">
             <div class="overlay">
                 <div class="info">
-                    <c:if test="${empty selectMovie.posterPath }">
-                		<img src="${pageContext.request.contextPath}/images/profile.png" alt="Movie Poster" class="poster">
-                	</c:if>
-                	<c:if test="${not empty selectMovie.posterPath }">
-                		<img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
-                	</c:if>
-                    <div class="details">
-                        <h1>${selectMovie.titleEn }</h1>
-                        <h2><strong>${selectMovie.tagline }</strong></h2>
-                        <p>${selectMovie.overview }</p>
-                        <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
-                        <p><strong>장르: </strong>
-						    <script type="text/javascript">
-						        var genreString = '${selectMovie.genreDB}';
-						        genreString = genreString.replace(/[\[\]']/g, '');
-						
-						        var genres = genreString.split(",").map(function(item) {
-						            return item.trim();
-						        });
-						
-						        document.write(genres.join(", "));
-						    </script>
-						</p>
-                    </div>
-                </div>
-	            <button class="play-button">보러가기</button>
-	        </div>
+				    <c:if test="${empty selectMovie.posterPath }">
+				        <img src="${pageContext.request.contextPath}/images/profile.png" alt="Movie Poster" class="poster">
+				    </c:if>
+				    <c:if test="${not empty selectMovie.posterPath }">
+				        <img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
+				    </c:if>
+				    <div class="details">
+				        <h1>${selectMovie.titleEn }</h1>
+				        <h2><strong>${selectMovie.tagline }</strong></h2>
+				        <p>${selectMovie.overview }</p>
+				        <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
+				        <p><strong>장르: </strong>
+				            <script type="text/javascript">
+				                var genreString = '${selectMovie.genreDB}';
+				                genreString = genreString.replace(/[\[\]']/g, '');
+				                var genres = genreString.split(",").map(function(item) {
+				                    return item.trim();
+				                });
+				                document.write(genres.join(", "));
+				            </script>
+				        </p>
+				        
+				        <div class="providers">
+				            <div class="provider-category">
+				                <c:if test="${not empty buyList }"><h2>구매</h2></c:if>
+				                <c:forEach items="${buyList}" var="buyList">
+				                    <c:if test="${not empty buyList.provider_id}">
+				                    	<c:if test="${buyList.provider_name != 'Naver Store' }">
+				                        	<img src="http://image.tmdb.org/t/p/w780${buyList.logo_path}" onclick="javascript:moveToProvider('${buyList.provider_name}', '${selectMovie.titleEn }')" alt="${buyList.provider_name}" class="provider-icon">
+				                        </c:if>
+				                    </c:if>
+				                </c:forEach>
+				            </div>
+				            <div class="provider-category">
+				                <c:if test="${not empty rentList }"><h2>대여</h2></c:if>
+				                <c:forEach items="${rentList}" var="rentList">
+				                    <c:if test="${not empty rentList.provider_id}">
+				                    	<c:if test="${rentList.provider_name != 'Naver Store' }">
+				                        	<img src="http://image.tmdb.org/t/p/w780${rentList.logo_path}" alt="${rentList.provider_name}" class="provider-icon">
+				                        </c:if>
+				                    </c:if>
+				                </c:forEach>
+				            </div>
+				            <div class="provider-category">
+				                <c:if test="${not empty streamList }"><h2>스트리밍</h2></c:if>
+				                <c:forEach items="${streamList}" var="streamList">
+				                    <c:if test="${not empty streamList.provider_id}">
+				                    	<c:if test="${streamList.provider_name != 'Naver Store' }">
+				                        	<img src="http://image.tmdb.org/t/p/w780${streamList.logo_path}" alt="${streamList.provider_name}" class="provider-icon">
+				                        </c:if>
+				                    </c:if>
+				                </c:forEach>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+			</div>
 	    </div>
 	    
 	    <c:if test="${not empty videoData.key }">
