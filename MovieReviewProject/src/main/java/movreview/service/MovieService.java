@@ -37,4 +37,6 @@ public interface MovieService {
 	List<?> recentlyCollected(CollectionVO vo) throws Exception;
 	// 시리즈 소속 영화
 	List<?> collectionMovie(MovieVO vo) throws Exception;
+	// 회원 가입
+	MemberVO registerMember(MemberVO vo) throws Exception;
 }

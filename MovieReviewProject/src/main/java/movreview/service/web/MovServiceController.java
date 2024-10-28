@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +22,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
@@ -34,7 +39,7 @@ import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
 import movreview.service.ProviderVO;
 import movreview.service.CollectionVO;
-import movreview.service.LoginVO;
+import movreview.service.MemberVO;
 import movreview.service.ActorVO;
 import movreview.service.VideoVO;
 import movreview.service.ActorSnsVO;
@@ -54,8 +59,16 @@ public class MovServiceController {
 	@Autowired
 	private TmdbService tmdbService;
 	
+	@Inject
+	BCryptPasswordEncoder encoder;
+	
 	@RequestMapping(value="/main.do")
-	public String mainPage(Model model) throws Exception {
+	public String mainPage(Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+	    
 		MovieVO recentVO = new MovieVO();
 		CollectionVO seriesVO = new CollectionVO();
 		model.addAttribute("recentlyAdded", movService.recentlyAdded(recentVO));
@@ -93,7 +106,11 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="/search.do")
-	public String searchPage() throws Exception {
+	public String searchPage(HttpServletRequest request, Model model) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
 		
 		return "board/search";
 	}
@@ -125,6 +142,11 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/result.do", method=RequestMethod.POST)
 	public String searchResult(@RequestParam("searchKeyword") String searchKeyword, HttpServletRequest request, Model model) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+		
 		MovieVO searchVO = new MovieVO();
 		ActorVO actorVO = new ActorVO();
 		CollectionVO collectionVO = new CollectionVO();
@@ -198,7 +220,12 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
-	    LOGGER.debug("ID Value: " + id);
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+		
+		LOGGER.debug("ID Value: " + id);
 	    
 	    String detailData = tmdbService.movieDetail(apiKey, id);
 	    String recommendData = tmdbService.movieRecommend(apiKey, id);
@@ -321,6 +348,11 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/localDetail.do")
 	public String localDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+		
 		MovieVO selectVO = new MovieVO();
 		CollectionVO collectVO = new CollectionVO();
 		
@@ -440,6 +472,8 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/addMovie.do", method = RequestMethod.POST)
 	public String addMovie(SessionStatus status,
+							HttpServletRequest request,
+							Model model,
 	                        @RequestParam("id") int id,
 	                        @RequestParam("movieId") int movieId,
 	                        @RequestParam("titleKr") String titleKr,
@@ -460,8 +494,12 @@ public class MovServiceController {
 	                        @RequestParam("actorIdList") String[] actorIds,
 	                        @RequestParam("actNameList") String[] actorNames,
 	                        @RequestParam("actProfilePathList") String[] actorProfilePaths) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
 	    
-	    MovieVO movieVO = new MovieVO();
+		MovieVO movieVO = new MovieVO();
 	    movieVO.setMovieId(movieId);
 	    movieVO.setTitleKr(titleKr);
 	    movieVO.setTitleEn(titleEn);
@@ -510,11 +548,6 @@ public class MovServiceController {
 		    		ActorVO actorDetail = objectMapper.convertValue(actorNode, ActorVO.class);
 		    		ActorSnsVO snsVO = objectMapper.convertValue(snsNode, ActorSnsVO.class);
 		    		
-					/*
-					 * List<String> knownAs = new ArrayList<>(); for (JsonNode known :
-					 * actorNode.path("also_knwon_as")) { knownAs.add(known.asText()); }
-					 * actorDetail.setKnownAs(knownAs);
-					 */
 		    		movService.insertActor(actorDetail);
 		    		movService.insertSns(snsVO);
 		    		
@@ -536,7 +569,12 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="/seriesDetail.do")
-	public String seriesDetail(@RequestParam("collectionId") int collectionId, Model model) throws Exception {
+	public String seriesDetail(@RequestParam("collectionId") int collectionId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+		
 		CollectionVO collectionVO  = new CollectionVO();
 		collectionVO.setId(collectionId);
 		MovieVO movieVO = new MovieVO();
@@ -550,7 +588,12 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="/actorDetail.do")
-	public String actorDetail(@RequestParam("actorId") int actorId, Model model) throws Exception {
+	public String actorDetail(@RequestParam("actorId") int actorId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+		
 		ActorVO actorVO = new ActorVO();
 		ActorSnsVO snsVO = new ActorSnsVO();
 		
@@ -587,5 +630,70 @@ public class MovServiceController {
 		
 		return "board/actorDetail";
 	}
+	
+	@RequestMapping("/registerMember.do")
+	public String registerMember() throws Exception {
+		
+		return "board/signup";
+	}
+	
+	@RequestMapping(value="/insertMember.do", method=RequestMethod.POST)
+	public String insertMember(@RequestParam("id") String id
+								, @RequestParam("pass") String pass
+								, @RequestParam("name") String name
+								, @RequestParam("email") String email
+								, Model model
+								, SessionStatus status) throws Exception {
+		MemberVO memberVO = new MemberVO();
+		
+		String encodPW = encoder.encode(pass);
+		
+		memberVO.setId(id);
+		memberVO.setEmail(email);
+		memberVO.setName(name);
+		memberVO.setPass(encodPW);
+		
+		System.out.println("id: " + id);
+		
+		movService.registerMember(memberVO);
+		
+		status.setComplete();
+		
+		return "redirect:/home.do";
+	}
+	
+	@RequestMapping(value="/home.do", method=RequestMethod.GET)
+	public String home() throws Exception {
+		return "board/signin";
+	}
+	
+	@RequestMapping(value="/login_success.do", method=RequestMethod.GET)
+	public String login(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		session.setAttribute("username", username);
+		
+		return "redirect:/main.do";
+	}
+	
+	@RequestMapping(value="login_fail.do", method=RequestMethod.GET)
+	public String login_fail() throws Exception {
+		return "redirect:/home.do";
+	}
+	
+	@RequestMapping(value="logout_After.do", method = RequestMethod.GET)
+	public String logout(HttpServletRequest request) throws IOException {
+		HttpSession session = request.getSession(false);
+		
+		if(session != null) {
+			System.out.println("Server is still alived!");
+			session.invalidate();
+			
+			return "redirect:/main.do";
+		}
+		
+		return "redirect:/main.do";
+	}
+	
 
 }

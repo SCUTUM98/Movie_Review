@@ -12,7 +12,7 @@ import movreview.service.MovieVO;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
-import movreview.service.LoginVO;
+import movreview.service.MemberVO;
 
 @Repository("movDAO")
 public class MovDAO extends EgovAbstractDAO {
@@ -100,5 +100,9 @@ public class MovDAO extends EgovAbstractDAO {
 	// 시리즈 소속 영화
 	public List<?> collectionMovie(MovieVO vo) throws Exception {
 		return list("movDAO.collectionMovie", vo);
+	}
+	// 회원 가입
+	public MemberVO registerMember(MemberVO vo) throws Exception {
+		return (MemberVO) insert("movDAO.registerMember", vo);
 	}
 }

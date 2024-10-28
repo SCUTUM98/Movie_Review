@@ -14,9 +14,9 @@ import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
+import movreview.service.MemberVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
-import movreview.service.impl.MovDAO;
 
 @Service("movService")
 public class MovieServiceImpl implements MovieService {
@@ -108,6 +108,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public List<?> collectionMovie(MovieVO vo) throws Exception {
 		return movDAO.collectionMovie(vo);
+	}
+	// 회원 가입
+	@Override
+	public MemberVO registerMember(MemberVO vo) throws Exception {
+		return movDAO.registerMember(vo);
 	}
 
 }

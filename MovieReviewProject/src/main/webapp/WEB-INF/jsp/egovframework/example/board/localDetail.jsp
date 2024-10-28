@@ -110,6 +110,11 @@
 	    		console.log(url);
 	            window.open(url);
 	    	}
+	    	if (provider == 'Amazon Prime Video'){
+	    		url = 'https://www.primevideo.com/-/ko/offers/nonprimehomepage/ref=dv_web_force_root?language=ko';
+	    		console.log(url);
+	    		window.open(url);
+	    	}
 	    }
     </script>
 </head>
@@ -123,6 +128,8 @@
                 <li><a href="#">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
                 <li><a href="#">설정</a></li>
+                <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
+                <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
             </ul>
         </nav>
     </div>
