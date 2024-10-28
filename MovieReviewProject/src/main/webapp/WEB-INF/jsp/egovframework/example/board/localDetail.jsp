@@ -85,24 +85,29 @@
 	            window.open(url);
 	    		
 	    	}
-	    	else if (provider == 'Disney Plus'){
+	    	if (provider == 'Disney Plus'){
 	    		url = 'https://www.disneyplus.com/ko-kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
-	    	else if (provider == 'Netflix'){
+	    	if (provider == 'Netflix'){
 	    		url = 'https://www.netflix.com/kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
-	    	else if (provider == 'Netflix basic with Ads'){
+	    	if (provider == 'Netflix basic with Ads'){
 	    		url = 'https://www.netflix.com/kr';
 	            console.log(url);
 	            window.open(url);
 	    	}
-	    	else if (provider == 'wavve'){
+	    	if (provider == 'wavve'){
 	    		url = 'https://www.wavve.com/search?searchWord=' + encodeURIComponent(name);
 	            console.log(url);
+	            window.open(url);
+	    	}
+	    	if (provider == 'Watcha'){
+	    		url = 'https://watcha.com/search?query=' + encodeURIComponent(name) + '&domain=all';
+	    		console.log(url);
 	            window.open(url);
 	    	}
 	    }
@@ -166,7 +171,7 @@
 				                <c:forEach items="${rentList}" var="rentList">
 				                    <c:if test="${not empty rentList.provider_id}">
 				                    	<c:if test="${rentList.provider_name != 'Naver Store' }">
-				                        	<img src="http://image.tmdb.org/t/p/w780${rentList.logo_path}" alt="${rentList.provider_name}" class="provider-icon">
+				                        	<img src="http://image.tmdb.org/t/p/w780${rentList.logo_path}" onclick="javascript:moveToProvider('${rentList.provider_name}', '${selectMovie.titleEn }')" alt="${rentList.provider_name}" class="provider-icon">
 				                        </c:if>
 				                    </c:if>
 				                </c:forEach>
@@ -176,7 +181,7 @@
 				                <c:forEach items="${streamList}" var="streamList">
 				                    <c:if test="${not empty streamList.provider_id}">
 				                    	<c:if test="${streamList.provider_name != 'Naver Store' }">
-				                        	<img src="http://image.tmdb.org/t/p/w780${streamList.logo_path}" alt="${streamList.provider_name}" class="provider-icon">
+				                        	<img src="http://image.tmdb.org/t/p/w780${streamList.logo_path}" onclick="javascript:moveToProvider('${streamList.provider_name}', '${selectMovie.titleEn }')" alt="${streamList.provider_name}" class="provider-icon">
 				                        </c:if>
 				                    </c:if>
 				                </c:forEach>

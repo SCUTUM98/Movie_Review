@@ -32,37 +32,32 @@ h1 {
 
 /* HEADER */
 header {
-  padding: 20px 20px 0 20px;
-  position: fixed;
-  top: 0;
-  display: grid;  
-  grid-gap:5px;
-  grid-template-columns: 1fr 4fr 1fr;
-  grid-template-areas: 
-   "nt mn mn sb . . . "; 
-  background-color: var(--primary);
-  width: 100%;
-  margin-bottom: 0px;  
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #141414;
 }
 
-.netflixLogo {
+.filmLogo {
   grid-area: nt;
   object-fit: cover;
-  width: 100px;
+  width: 150px; /* 밑에 .logo와 동일하게 맞춤 */
   max-height: 100%;
   
   padding-left: 30px;
   padding-top: 0px;  
 }
 
-.netflixLogo img {  
-  height: 35px;     
+.filmLogo img {  
+  width: 150px; /* 이 부분은 그대로 유지 */
 }
 
-#logo {
-  color: #E50914;  
-  margin: 0; 
-  padding: 0; 
+.logo {
+    width: 150px;
+    
+    padding-left: 30px;
+  	padding-top: 10px; 
 }
 
 
@@ -96,6 +91,18 @@ header {
   color: var(--dark);
 }
 
+.movie-poster {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.movie-title {
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin-top: 5px; /* 포스터와 제목 사이의 간격 */
+    color: var(--light); /* 제목 색상 */
+    font-size: 14px; /* 제목 폰트 크기 조정 */
+}
 
 /* MAIN CONTIANER */
 .main-container {
@@ -105,7 +112,7 @@ header {
 .box {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(6, minmax(100px, 1fr));
+  grid-template-columns: repeat(8, minmax(100px, 1fr));
 }
 
 .box a {

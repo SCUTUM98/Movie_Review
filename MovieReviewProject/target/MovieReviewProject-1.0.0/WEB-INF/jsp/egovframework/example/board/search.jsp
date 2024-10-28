@@ -23,7 +23,7 @@
 <body>
 
     <div class="navbar">
-        <li class="logo"><img src="https://www.searchpng.com/wp-content/uploads/2019/02/Netflix-Logo-PNG-image-200x200.png"></li>
+        <li class="logo"><img src="${pageContext.request.contextPath}/images/logo.png"></li>
         <li class="buttons">Sign In</li>
     </div>
     <div class="main">
@@ -33,7 +33,7 @@
             </h1>
             <h3>Watch anywhere. Cancel anytime.</h3>
 
-            <form action="/api/searchMovies" method="get">
+            <form action="result.do" method="post">
                 <div class="search">
                     <input type="text" name="searchKeyword" class="box" placeholder="Search for a movie" required> 
                     <button type="submit" class="try">Search
@@ -42,25 +42,6 @@
                 </div>
             </form>
             <h4>Ready to watch? Enter your email to create or access your account</h4>
-        </div>
-    </div>
-
-    <!-- 나머지 HTML 구조는 동일 -->
-
-    <div class="footer">
-        <div class="footercon">
-            <div class="flex1">
-                <h5>Questions? Call 1-866-579-7172</h5>
-                <h5></h5>
-            </div>
-            <ul class="list1">
-                <li><a href="">FAQ</a></li>
-                <li><a href="">Investor Relation</a></li>
-                <li><a href="">Ways to Watch</a></li>
-                <li><a href="">Corporate Information</a></li>
-                <li><a href="">Netflix Originals</a></li>
-            </ul>
-            <!-- 나머지 리스트 -->
         </div>
     </div>
 

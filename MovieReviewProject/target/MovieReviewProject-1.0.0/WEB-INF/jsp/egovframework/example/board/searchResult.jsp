@@ -9,108 +9,126 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Netflix</title>
+  <title>검색결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
 
   <script src="main.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/search/main.css">
+  
+  <script type="text/javascript">
+		function movieSelect(id) {
+			console.log(id);
+	    	document.listForm.id.value = id;
+	       	document.listForm.action = "<c:url value='/detail.do'/>";
+	       	document.listForm.submit();
+	       	}
+		function localMovieSelect(id) {
+			console.log(id);
+			document.searchForm.id.value = id;
+			document.searchForm.action = "<c:url value='/localDetail.do'/>";
+			document.searchForm.submit();
+		}
+		function actorSelect(id) {
+			console.log(id);
+			document.actorForm.actorId.value = id;
+			document.actorForm.action = "<c:url value='/actorDetail.do'/>";
+			document.actorForm.submit();
+		}
+		function collectionSelect(id) {
+			console.log(id);
+			document.collectionForm.id.value = id;
+			document.collectionForm.action = "<c:url value='/seriesDetail.do'/>";
+			document.collectionForm.submit();
+		}
+  </script>
 </head>
 <body>
-  <div class="wrapper">
-
+  	<div class="header">
     <!-- HEADER -->
-    <header>
-      <div class="netflixLogo">
-        <a id="logo" href="#home"><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/logo.PNG?raw=true" alt="Logo Image"></a>
-      </div>      
-      <nav class="main-nav">                
-        <a href="#home">Home</a>
-        <a href="#tvShows">TV Shows</a>
-        <a href="#movies">Movies</a>
-        <a href="#originals">Originals</a>
-        <a href="#">Recently Added</a>
-        <a target="_blank" href="https://codepen.io/cb2307/full/NzaOrm">Portfolio</a>        
-      </nav>
-      <nav class="sub-nav">
-        <a href="#"><i class="fas fa-search sub-nav-logo"></i></a>
-        <a href="#"><i class="fas fa-bell sub-nav-logo"></i></a>
-        <a href="#">Account</a>        
-      </nav>      
-    </header>
-    <!-- END OF HEADER -->
+	    <header>
+	        <img src="${pageContext.request.contextPath}/images/logo.png" alt="Platform Logo" class="logo">
+	        <nav class="main-nav">
+		        <a href="/main.do">홈</a>
+	            <a href="#">영화</a>
+	            <a href="#">시리즈</a>
+	            <a href="/search.do">검색</a>
+	            <a href="#">설정</a>
+	        </nav>     
+	    </header>
+	    <!-- END OF HEADER -->
+	</div>
+
+    <div class="wrapper">
     
     <!-- MAIN CONTAINER -->
     <section class="main-container" >
       <div class="location" id="home">
-          <h1 id="home">Search Result</h1>
-          <div class="box">
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p1.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p2.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p3.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p4.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p5.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p6.PNG?raw=true" alt=""></a>
-    
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p7.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p8.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p9.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p10.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p11.PNG?raw=true" alt=""></a>
-            <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p12.PNG?raw=true" alt=""></a>        
-          </div>
-      </div>
-      
-
-      <h1 id="myList">Unregistered Movie</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/t6.PNG?raw=true" alt=""></a>                  
-      </div>
-      
-      <h1 id="tvShows">Trending Now</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv6.PNG?raw=true" alt=""></a>
-
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv7.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv8.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv9.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv10.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv11.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/tv12.PNG?raw=true" alt=""></a>              
-      </div>
-      
-
-      <h1 id="movies">Blockbuster Action & Adventure</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/m6.PNG?raw=true" alt=""></a>                
+          <h1 id="result">Search Result</h1>
+          <form:form commandName="movieVO" name="searchForm" method="post">
+          	  <input type="hidden" name="id" value="">
+	          <div class="box">
+		      	<c:forEach items="${searchList }" var="search" varStatus="status">
+		      		<a href="javascript:localMovieSelect('${search.movieId}')">
+		      			<img src="http://image.tmdb.org/t/p/w780${search.posterPath }" alt="${search.titleKr }" class="movie-poster">
+		      			<p class="movie-title">${search.titleEn}</p> 
+		      		</a>
+		      	</c:forEach>            
+		      </div>
+		  </form:form>
       </div>
 
-      <h1 id="originals">Netflix Originals</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o6.PNG?raw=true" alt=""></a>                
-      </div>
-     
-    <!-- END OF MAIN CONTAINER -->
+      <h1 id="unregistered">Unregistered Movie</h1>
+	  <form:form commandName="movieVO" name="tmdbForm" method="post">
+		  <input type="hidden" name="id" value="">
+		  <div class="box">
+			 <c:forEach items="${resultData }" var="result" varStatus="status">
+			 	<a href="javascript:movieSelect('${result.movieId}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${result.posterPath }" alt="${result.titleKr }" class="movie-poster">
+			 		<p class="movie-title">${result.titleEn}</p>
+			 	</a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+	  
+	  <h1 id="unregistered">Series</h1>
+	  <form:form commandName="collectionVO" name="collectionForm" method="post">
+		  <input type="hidden" name="id" value="">
+		  <div class="box">
+			 <c:forEach items="${collectionList }" var="collection" varStatus="status">
+			 	<a href="javascript:movieSelect('${collection.id}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${collection.posterPath }" alt="${collection.name }" class="movie-poster">
+			 		<p class="movie-title">${collection.name}</p>
+			 	</a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+	  
+	  <h1 id="unregistered">Actor</h1>
+	  <form:form commandName="actorVO" name="actorForm" method="post">
+		  <input type="hidden" name="actorId" value="">
+		  <div class="box">
+			 <c:forEach items="${actorList }" var="actor" varStatus="status">
+			 	<a href="javascript:actorSelect('${actor.actorId}')">
+			 		<img src="http://image.tmdb.org/t/p/w780${actor.profilePath }" alt="${actor.actName }" class="movie-poster">
+			 		<p class="movie-title">${actor.actName}</p>
+			 	</a>
+			 </c:forEach>
+		  </div>    
+	  </form:form>
+		  
+      <h1 id="trendingMovie">Trending Now</h1>
+      <form:form commandName="movieVO" name="listForm" method="post">
+      	  <input type="hidden" name="id" value="">
+	      <div class="box">
+	      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
+	      		<a href="javascript:movieSelect('${trending.movieId}')">
+	      			<img src="http://image.tmdb.org/t/p/w780${trending.posterPath }" alt="${trending.titleKr }" class="movie-poster">
+	      			<p class="movie-title">${trending.titleEn}</p>
+	      		</a>
+	      	</c:forEach>            
+	      </div>
+	  </form:form>
 
     <!-- LINKS -->
     <section class="link">

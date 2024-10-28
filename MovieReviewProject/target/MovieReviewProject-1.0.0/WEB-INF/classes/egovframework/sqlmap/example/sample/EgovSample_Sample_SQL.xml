@@ -5,7 +5,12 @@
 
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
-
+	<typeAlias  alias="actorVO" type="movreview.service.ActorVO"/>
+	<typeAlias  alias="collectionVO" type="movreview.service.CollectionVO"/>
+	<typeAlias  alias="loginVO" type="movreview.service.LoginVO"/>
+	<typeAlias  alias="movieVO" type="movreview.service.MovieVO"/>
+	<typeAlias  alias="actorSnsVO" type="movreview.service.ActorSnsVO"/>
+	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
 		<result property="name" column="name"/>
@@ -85,5 +90,271 @@
 				NAME LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
 	</select>
+	
+	<!-- MAIN -->
+	<!-- 최근 등록 영화 -->
+	<select id="movDAO.recentlyAdded" resultClass="movieVO">
+		<![CDATA[
+			SELECT movie_id AS movieId
+					, title_kr AS titleKr
+					, title_er AS titleEn
+					, backdrop_path AS backdropPath
+					, poster_path AS posterPath
+					, collection_id AS collectionId
+					, genre AS genreDB
+					, submit_date
+			FROM movie_page
+			ORDER BY submit_date DESC
+			LIMIT 10
+		]]>
+	</select>
+	<!-- 최근 등록 시리즈 -->
+	<select id="movDAO.recentlyCollected" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+					, submit_date
+			FROM collection
+			WHERE id != 0
+			ORDER BY submit_date DESC
+			LIMIT 10
+		]]>
+	</select>
+	
+	<!-- SEARCH -->
+	<!-- 영화 검색 -->
+	<select id="movDAO.searchMovie" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id AS movieId, title_kr AS titleKr, title_er AS titleEn, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
+	        FROM movie_page
+	        WHERE (title_kr ILIKE '%' || #titleEn# || '%' OR title_er ILIKE '%' || #titleEn# || '%')
+	    ]]>
+	</select>
+	<!-- 연기자 검색 -->
+	<select id="movDAO.searchActor" resultClass="actorVO">
+		<![CDATA[
+			SELECT actor_id AS actorId
+					, gender
+					, act_name AS actName
+					, profile_path AS profilePath
+					, birthday
+					, deathday
+					, status
+					, homeplace
+			FROM actor
+			WHERE (act_name ILIKE '%' || #actName# || '%')
+		]]>
+	</select>
+	<!-- 시리즈 검색 -->
+	<select id="movDAO.searchCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+			FROM collection
+			WHERE (cname ILIKE '%' || #name# || '%')
+		]]>
+	</select>
 
+	<!-- 등록 -->
+	<!-- 영화 삽입 -->
+	<insert id="movDAO.insertMovie" parameterClass="movieVO">
+		<![CDATA[
+			INSERT INTO movie_page( movie_id
+									, title_kr
+									, title_er
+									, genre
+									, release_date
+									, overview
+									, backdrop_path
+									, poster_path
+									, collection_id
+									, status
+									, tagline
+									, submit_date )
+			VALUES ( #movieId#
+					, #titleKr#
+					, #titleEn#
+					, #genreDB#
+					, #releaseDate#
+					, #overview#
+					, #backdropPath#
+					, #posterPath#
+					, #collectionId#
+					, #status#
+					, #tagline#
+					, CURRENT_TIMESTAMP )
+					
+		]]>
+	</insert>
+	<!-- 시리즈 삽입 -->
+	<insert id="movDAO.insertCollection" parameterClass="collectionVO">
+		<![CDATA[
+			INSERT INTO collection( id
+									, cname
+									, poster_path
+									, backdrop_path
+									, overview
+									, submit_date )
+			VALUES ( #id#
+					, #name#
+					, #posterPath#
+					, #backdropPath#
+					, #overview#
+					, CURRENT_TIMESTAMP )
+		]]>
+	</insert>
+	<!-- 연기자 삽입 -->
+	<insert id="movDAO.insertActor" parameterClass="actorVO">
+		<![CDATA[
+			INSERT INTO actor( actor_id
+								, act_name
+								, profile_path
+								
+								, birthday
+								, deathday
+								, gender
+								, status
+								, homeplace )
+			VALUES ( #actorId#
+					, #actName#
+					, #profilePath#
+					
+					, #birthday#
+					, #deathday#
+					, #gender#
+					, #status#
+					, #homeplace# )
+		]]>
+	</insert>
+	<!-- 연기자 SNS 계정 삽입 -->
+	<insert id="movDAO.insertSns" parameterClass="actorSnsVO">
+		<![CDATA[
+			INSERT INTO actor_sns( actor_id
+									, facebook
+									, instagram
+									, tiktok
+									, twitter
+									, youtube )
+			VALUES( #actorId#
+					, #facebook#
+					, #instagram#
+					, #tiktok#
+					, #twitter#
+					, #youtube# )
+		]]>
+	</insert>
+	<!-- 시리즈 중복 확인 -->
+	<select id="movDAO.checkCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+			FROM collection
+			WHERE id = #id#
+		]]>
+	</select>
+	<!-- 배우 중복 확인 -->
+	<select id="movDAO.checkActor" resultClass="actorVO">
+		<![CDATA[
+			SELECT actor_id AS actorId
+					, act_name AS actorName
+					, profile_path AS profilePath
+			FROM actor
+			WHERE actor_id = #actorId#
+		]]>
+	</select>
+	<!-- 영화 중복 확인 -->
+	<select id="movDAO.checkMovie" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(movie_id)
+			FROM movie_page
+			WHERE movie_id = #movieId#
+		]]>
+	</select>
+	
+	<!-- 상세페이지 -->
+	<!-- 영화 정보 불러오기 -->
+	<select id="movDAO.selectMovie" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
+	        FROM movie_page
+	        WHERE movie_id = #movieId#
+	    ]]>
+	</select>
+	<!-- 시리즈 정보 불러오기 -->
+	<select id="movDAO.selectCollection" resultClass="collectionVO">
+		<![CDATA[
+			SELECT id
+					, cname AS name
+					, poster_path AS posterPath
+					, backdrop_path AS backdropPath
+					, overview
+			FROM collection
+			WHERE id = #id# AND #id# != 0
+		]]>
+	</select>
+	<!-- 시리즈 소속 영화 불러오기 -->
+	<select id="movDAO.collectionMovie" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
+	        FROM movie_page
+	        WHERE collection_id = #collectionId#
+	        ORDER BY release_date
+	    ]]>
+	</select>
+	<!-- 연기자 정보 불러오기 -->
+	<select id="movDAO.actorDetail" resultClass="actorVO">
+		<![CDATA[
+			SELECT actor_id AS actorId
+					, gender
+					, act_name AS actName
+					, profile_path AS profilePath
+					, birthday
+					, deathday
+					, status
+					, homeplace
+			FROM actor
+			WHERE actor_id = #actorId#
+		]]>
+	</select>
+	<!-- 연기자 sns 불러오기 -->
+	<select id="movDAO.snsDetail" resultClass="actorSnsVO">
+		<![CDATA[
+			SELECT actor_id AS actorId
+					, facebook
+					, instagram
+					, tiktok
+					, twitter
+					, youtube
+			FROM actor_sns
+			WHERE actor_id = #actorId#
+		]]>
+	</select>
+	
 </sqlMap>
