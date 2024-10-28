@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영화 리뷰 사이트</title>
+    <title>Film Report</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/mainStyle.css">
     
     <script type="text/javascript">
@@ -146,7 +146,7 @@
 	    </div>
 	    
 	    <div class="movie-section">
-	        <h2> 최근 등록 영화</h2>
+	        <h2>최근 등록 영화</h2>
 	        <div class="movie-container">
 	            <button type="button" class="scroll-btn" onclick="javascript:rec_scrollLeft(event)">◀</button>
 	            <div class="movie-list">

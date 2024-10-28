@@ -78,6 +78,7 @@ body {
     position: relative;
     background-color: #141414; /* 배경 색상 설정 */
     padding: 10px;
+    z-index: 1;
 }
 
 .movie-container {
@@ -87,10 +88,11 @@ body {
 }
 
 .movie-list {
-    display: flex;
-    overflow-x: visible; /* 수평 스크롤 가능 */
+    display: flex; /* 수평으로 배치 */
+    overflow-x: hidden; /* 수평 스크롤바 숨기기 */
     width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
     scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    position: relative; /* 자식 요소의 절대 위치 조정 가능 */
 }
 
 .collection-list {
@@ -101,19 +103,27 @@ body {
 
 }
 
+.collection-list, .reco-list {
+    display: flex; /* 수평으로 배치 */
+    overflow-x: hidden; /* 수평 스크롤바 숨기기 */
+    width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
+    scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    position: relative; /* 자식 요소의 절대 위치 조정 가능 */
+}
+
 .movie-item {
     position: relative;
     margin: 0 10px;
-    flex: 0 0 auto;
+    flex: 0 0 auto; /* 고정 크기 유지 */
     transition: transform 0.3s ease;
+    z-index: 1; /* 기본 z-index 설정 */
 }
 
 .movie-poster {
-    width: 150px;
-    height: 230px;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-    position: relative; /* 부모에 대해 상대 위치 유지 */
+    width: 150px; /* 포스터 크기 */
+    height: 230px; /* 포스터 높이 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    transition: transform 0.3s ease; /* 부드러운 전환 효과 */
 }
 
 .movie-info {
@@ -128,17 +138,11 @@ body {
 }
 
 .movie-item:hover .movie-poster {
-    transition: transform 0.3s;
     transform: scale(1.4); /* 포스터 크기 확대 */
     position: absolute; /* 포스터를 절대 위치로 설정 */
-    top: -20px; /* 위로 이동 */
+    top: -40px; /* 위로 이동 (조정 필요) */
     left: -10px; /* 왼쪽으로 이동 */
     z-index: 20; /* 확대된 포스터를 가장 위에 표시 */
 }
 
-.reco-list {
-    display: flex;
-    overflow-x: visible; /* 수평 스크롤 가능 */
-    width: calc(100% - 80px); /* 버튼 너비를 제외한 너비 */
-    scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-}
+
