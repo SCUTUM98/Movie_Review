@@ -39,4 +39,10 @@ public interface MovieService {
 	List<?> collectionMovie(MovieVO vo) throws Exception;
 	// 회원 가입
 	MemberVO registerMember(MemberVO vo) throws Exception;
+	// 인증 랜덤 번호 저장
+	int updateMailKey(MemberVO vo) throws Exception;
+	// 메일 인증 업데이트
+	int updateMailAuth(MemberVO vo) throws Exception;
+	// 메일 인증 확인
+	int emailAuthFail(String id) throws Exception;
 }

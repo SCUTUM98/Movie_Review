@@ -26,10 +26,21 @@
 		<filter-name>HTMLTagFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-    
+	
+	<!--보안 절차를 위해서는 모든 요청이 spring security 필터를 걸쳐가도록 함-->
+	<filter>
+	    <filter-name>springSecurityFilterChain</filter-name>
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>springSecurityFilterChain</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!--spring 폴더안에 context- 로 시작하는 xml을 읽을 수 있게  -->
 	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:egovframework/spring/context-*.xml</param-value>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath*:egovframework/spring/context-*.xml</param-value>
 	</context-param>
     
 	<listener>
@@ -64,7 +75,7 @@
 	</servlet-mapping>
     
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>main.jsp</welcome-file>
 	</welcome-file-list>
     
 	<login-config>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpRequest;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,6 +62,9 @@ public class MovServiceController {
 	
 	@Inject
 	BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	@RequestMapping(value="/main.do")
 	public String mainPage(Model model, HttpServletRequest request) throws Exception {
@@ -647,15 +651,24 @@ public class MovServiceController {
 		MemberVO memberVO = new MemberVO();
 		
 		String encodPW = encoder.encode(pass);
+		String mailKey = new TempKey().getKey(30, false);
 		
 		memberVO.setId(id);
 		memberVO.setEmail(email);
 		memberVO.setName(name);
 		memberVO.setPass(encodPW);
+		memberVO.setMailKey(mailKey);
 		
 		System.out.println("id: " + id);
 		
 		movService.registerMember(memberVO);
+		
+		MailHandler sendMail = new MailHandler(mailSender);
+		sendMail.setSubject("[Film Report 인증메일 입니다.]");
+		sendMail.setText("test: " + mailKey);
+		sendMail.setFrom("ruastravel@gamil.com", "Film Report");
+		sendMail.setTo(memberVO.getEmail());
+		sendMail.send();
 		
 		status.setComplete();
 		

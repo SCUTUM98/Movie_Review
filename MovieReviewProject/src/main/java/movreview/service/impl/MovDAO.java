@@ -105,4 +105,16 @@ public class MovDAO extends EgovAbstractDAO {
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return (MemberVO) insert("movDAO.registerMember", vo);
 	}
+	// 인증 랜덤 번호 저장
+	public int updateMailKey(MemberVO vo) throws Exception{
+		return (int) update("movDAO.updateMailKey", vo);
+	}
+	// 메일 인증 업데이트
+	public int updateMailAuth(MemberVO vo) throws Exception{
+		return (int) update("movDAO.updateMailAuth", vo);
+	}
+	// 메일 인증 확인
+	public int emailAuthFail(String id) throws Exception{
+		return (int) select("movDAO.emailAuthFail", id);
+	}
 }

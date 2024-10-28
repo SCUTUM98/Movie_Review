@@ -7,6 +7,8 @@ public class MemberVO {
 	private String email;
 	private String levels;
 	private String enabled;
+	private String mailKey;
+	private String mailAuth;
 	
 	public String getId() {
 		return id;
@@ -48,5 +50,19 @@ public class MemberVO {
 	}
 	public void setEnabled(String enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String getMailKey() {
+		return mailKey;
+	}
+	public void setMailKey(String mailKey) {
+		this.mailKey = mailKey;
+	}
+	
+	public String getMailAuth() {
+		return mailAuth;
+	}
+	public void setMailAuth(String mailAuth) {
+		this.mailAuth = mailAuth;
 	}
 }

@@ -190,6 +190,18 @@
 	        <artifactId>spring-security-test</artifactId>
 	        <version>${security.version}</version>
 	    </dependency>
+	    
+	    <dependency>
+        	<groupId>javax.mail</groupId>
+        	<artifactId>javax.mail-api</artifactId>
+        	<version>1.6.2</version> 
+   		</dependency>
+   		
+	   	<dependency>
+    		<groupId>com.sun.mail</groupId>
+    		<artifactId>javax.mail</artifactId>
+    		<version>1.6.2</version>
+		</dependency>
 
         <!-- mysql이나 oracle DB 사용시 아래 설정 추가
         <dependency>

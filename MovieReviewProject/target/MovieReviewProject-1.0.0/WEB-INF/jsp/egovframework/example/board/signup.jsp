@@ -19,21 +19,6 @@
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
 	<meta name="author" content="FreeHTML5.co" />
 
-  <!-- 
-	//////////////////////////////////////////////////////
-
-	FREE HTML5 TEMPLATE 
-	DESIGNED & DEVELOPED by FreeHTML5.co
-		
-	Website: 		http://freehtml5.co/
-	Email: 			info@freehtml5.co
-	Twitter: 		http://twitter.com/fh5co
-	Facebook: 		https://www.facebook.com/fh5co
-
-	//////////////////////////////////////////////////////
-	 -->
-
-  	<!-- Facebook and Twitter integration -->
 	<meta property="og:title" content=""/>
 	<meta property="og:image" content=""/>
 	<meta property="og:url" content=""/>
@@ -73,38 +58,29 @@
 
 	</head>
 	<body>
-
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<ul class="menu">
-						<li class="active"><a href="index.html">Style 1</a></li>
-						<li><a href="index2.html">Style 2</a></li>
-						<li><a href="index3.html">Style 3</a></li>
-					</ul>
-				</div>
-			</div>
 			<div class="row">
 				<div class="col-md-4 col-md-offset-4">
-					
-
 					<!-- Start Sign In Form -->
-					<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+					<form action="insertMember.do" role="form" class="fh5co-form animate-box" data-animate-effect="fadeIn" method="post">
 						<h2>Sign Up</h2>
 						<div class="form-group">
 							<div class="alert alert-success" role="alert">Your info has been saved.</div>
 						</div>
 						<div class="form-group">
+							<label for="id" class="sr-only">ID</label>
+							<input type="text" class="form-control" id="id" name="id" placeholder="ID" autocomplete="off">
+						</div>
+						<div class="form-group">
 							<label for="name" class="sr-only">Name</label>
-							<input type="text" class="form-control" id="name" placeholder="Name" autocomplete="off">
+							<input type="text" class="form-control" id="name" name="name" placeholder="Name" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="email" class="sr-only">Email</label>
-							<input type="email" class="form-control" id="email" placeholder="Email" autocomplete="off">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="password" class="sr-only">Password</label>
-							<input type="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+							<input type="password" class="form-control" id="pass" name="pass" placeholder="Password" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="re-password" class="sr-only">Re-type Password</label>

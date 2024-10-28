@@ -370,5 +370,27 @@
 					, '1')
 		]]>
 	</insert>
+	<!-- 인증 랜덤 번호 저장 -->
+	<update id="movDAO.updateMailKey" parameterClass="memberVO">
+		<![CDATA[
+			UPDATE member set mail_key=#mailKey#
+			WHERE email = #email# AND id=#id#
+		]]>
+	</update>
+	<!-- 메일 인증 업데이트 -->
+	<update id="movDAO.updateMailAuth" parameterClass="memberVO">
+		<![CDATA[
+			UPDATE member set mail_auth=1
+			WHERE email = #email# AND mail_key=#mailKey#
+		]]>
+	</update>
+	<!-- 메일 인증 확인 -->
+	<select id="movDAO.emailAuthFail" parameterClass="String" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM member
+			WHERE id=#id# AND mail_auth=1
+		]]>
+	</select>
 	
 </sqlMap>

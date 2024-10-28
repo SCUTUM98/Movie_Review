@@ -7,7 +7,7 @@
 	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
 	<typeAlias  alias="actorVO" type="movreview.service.ActorVO"/>
 	<typeAlias  alias="collectionVO" type="movreview.service.CollectionVO"/>
-	<typeAlias  alias="loginVO" type="movreview.service.LoginVO"/>
+	<typeAlias  alias="memberVO" type="movreview.service.MemberVO"/>
 	<typeAlias  alias="movieVO" type="movreview.service.MovieVO"/>
 	<typeAlias  alias="actorSnsVO" type="movreview.service.ActorSnsVO"/>
 	
@@ -356,5 +356,19 @@
 			WHERE actor_id = #actorId#
 		]]>
 	</select>
+	
+	<!-- 계정 관리 -->
+	<!-- 회원 가입 -->
+	<insert id="movDAO.registerMember" parameterClass="memberVO">
+		<![CDATA[
+			INSERT INTO member (id, pass, name, email, levels, enabled)
+			VALUES ( #id#
+					, #pass#
+					, #name#
+					, #email#
+					, 'ROLE_USER'
+					, '1')
+		]]>
+	</insert>
 	
 </sqlMap>

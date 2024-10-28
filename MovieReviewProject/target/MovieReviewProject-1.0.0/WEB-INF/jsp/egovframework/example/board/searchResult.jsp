@@ -53,7 +53,8 @@
 	            <a href="#">영화</a>
 	            <a href="#">시리즈</a>
 	            <a href="/search.do">검색</a>
-	            <a href="#">설정</a>
+	            <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
+                <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
 	        </nav>     
 	    </header>
 	    <!-- END OF HEADER -->

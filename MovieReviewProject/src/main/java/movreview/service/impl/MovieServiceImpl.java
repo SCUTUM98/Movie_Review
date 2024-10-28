@@ -114,5 +114,20 @@ public class MovieServiceImpl implements MovieService {
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return movDAO.registerMember(vo);
 	}
+	// 인증 랜덤 번호 저장
+	@Override
+	public int updateMailKey(MemberVO vo) throws Exception{
+		return movDAO.updateMailKey(vo);
+	}
+	// 메일 인증 업데이트
+	@Override
+	public int updateMailAuth(MemberVO vo) throws Exception{
+		return movDAO.updateMailAuth(vo);
+	}
+	// 메일 인증 확인
+	@Override
+	public int emailAuthFail(String id) throws Exception{
+		return movDAO.emailAuthFail(id);
+	}
 
 }
