@@ -77,6 +77,10 @@
 	    	document.listForm.action = "<c:url value='/addMovie.do'/>";
 	    	document.listForm.submit();
 	    }
+	    
+	    function needLogin(){
+	    	alert('로그인 후 사용해주세요.');
+	    }
     </script>
 </head>
 <body>
@@ -142,7 +146,12 @@
                         </p>
                     </div>
                 </div>
-                <button type="button" id="submitBtn" class="register-button" onclick="javascript:movieSubmit('${detailData.movieId}')">영화 등록하기</button>
+                <c:if test="${not empty username }">
+                	<button type="button" id="submitBtn" class="register-button" onclick="javascript:movieSubmit('${detailData.movieId}')">영화 등록하기</button>
+                </c:if>
+                <c:if test="${empty username }">
+                	<button type="button" id="submitBtn" class="register-button" onclick="javascript:needLogin()">영화 등록하기</button>
+                </c:if>
             </div>
         </div>
         

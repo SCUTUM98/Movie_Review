@@ -667,12 +667,15 @@ public class MovServiceController {
 		
 		try {
 			mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", "접속 주소: " + url + "\n 인증번호: " + mailKey);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "FAIL";			
 		}
 		
 		status.setComplete();
+		
+		//model.addAttribute("errorMessage", "이메일로 인증번호와 링크가 전송되었습니다.\n인증 후 로그인 해주세요.");
 		
 		return "redirect:/home.do";
 	}
