@@ -134,5 +134,10 @@ public class MovieServiceImpl implements MovieService {
 	public int verify(MemberVO vo) throws Exception{
 		return movDAO.verify(vo);
 	}
+	// 인증 여부 확인
+	@Override
+	public int verifyCheck(String email) throws Exception {
+		return movDAO.verifyCheck(email);
+	}
 
 }

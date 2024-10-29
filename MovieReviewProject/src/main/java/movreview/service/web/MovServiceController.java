@@ -717,20 +717,29 @@ public class MovServiceController {
 	
 	@RequestMapping(value="verifyTest.do")
 	public String verifyTest(@RequestParam("email") String email, @RequestParam("mailKey") String mailKey, Model model) throws Exception {
-		MemberVO memberVO = new MemberVO();
-		
-		memberVO.setEmail(email);
-		memberVO.setMailKey(mailKey);
-		
-		int isTrue = movService.verify(memberVO);
-		
-		if (isTrue == 1) {
-			movService.updateMailAuth(memberVO);
-			return "redirect:/main.do";
-		}
-		else {
-			return "redirect:/verify.do";
-		}
+	    MemberVO memberVO = new MemberVO();
+	    
+	    memberVO.setEmail(email);
+	    memberVO.setMailKey(mailKey);
+	    
+	    int isTrue = movService.verify(memberVO);
+	    
+	    if (isTrue == 1) {
+	    	int isVerify = movService.verifyCheck(email);
+	    	System.out.println("isVerify: " + isVerify);
+	    	if (isVerify == 1) {
+	    		model.addAttribute("errorMessage", "이미 인증된 계정입니다.");
+		        return "forward:/verify.do";
+	    	}
+	    	else {
+	    		movService.updateMailAuth(memberVO);
+		        return "redirect:/main.do";
+	    	}
+	    } 
+	    else {
+	        model.addAttribute("errorMessage", "인증번호가 일치하지 않습니다. 다시 시도해 주세요.");
+	        return "forward:/verify.do";
+	    }
 	}
 
 }

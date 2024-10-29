@@ -402,4 +402,12 @@
 			WHERE email=#email# AND mail_key=#mailKey#
 		]]>
 	</select>
+	<!-- 인증 여부 확인 -->
+	<select id="movDAO.verifyCheck" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM member
+			WHERE email=#email# AND mail_auth = '1'
+		]]>
+	</select>
 </sqlMap>

@@ -121,4 +121,8 @@ public class MovDAO extends EgovAbstractDAO {
 	public int verify(MemberVO vo) throws Exception{
 		return (int) select("movDAO.verify", vo);
 	}
+	// 인증 여부 확인
+	public int verifyCheck(String email) throws Exception{
+		return (int) select("movDAO.verifyCheck", email);
+	}
 }
