@@ -70,6 +70,7 @@ public class MovServiceController {
 	public String mainPage(Model model, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 	    String username = (String) session.getAttribute("username");
+	    System.out.println("UserName: " + username);
 
 	    model.addAttribute("username", username);
 	    
@@ -499,6 +500,7 @@ public class MovServiceController {
 	                        @RequestParam("actNameList") String[] actorNames,
 	                        @RequestParam("actProfilePathList") String[] actorProfilePaths) throws Exception {
 		HttpSession session = request.getSession();
+		
 	    String username = (String) session.getAttribute("username");
 
 	    model.addAttribute("username", username);

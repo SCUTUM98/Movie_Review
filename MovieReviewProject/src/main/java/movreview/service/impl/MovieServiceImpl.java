@@ -17,6 +17,7 @@ import movreview.service.CollectionVO;
 import movreview.service.MemberVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
+import movreview.service.ReviewVO;
 
 @Service("movService")
 public class MovieServiceImpl implements MovieService {
@@ -108,6 +109,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public List<?> collectionMovie(MovieVO vo) throws Exception {
 		return movDAO.collectionMovie(vo);
+	}
+	// 관람평 작성
+	@Override
+	public ReviewVO insertReview(ReviewVO vo) throws Exception {
+		return movDAO.insertReview(vo);
 	}
 	// 회원 가입
 	@Override
