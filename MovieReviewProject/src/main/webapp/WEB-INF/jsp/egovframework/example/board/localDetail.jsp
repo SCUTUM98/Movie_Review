@@ -115,6 +115,13 @@
 	    		console.log(url);
 	    		window.open(url);
 	    	}
+	    	
+	    }
+	    
+	    function reviewSubmit(){
+	    	console.log("review submit clicked");
+	    	document.reviewForm.action = "<c:url value='/addReview.do'/>";
+	    	document.reviewForm.submit();
 	    }
     </script>
 </head>
@@ -236,11 +243,60 @@
 		            <button type="button" class="scroll-btn right" onclick="javascript:scrollRight(event)">▶</button>
 		        </div>
 		</div>
+		</form>
 		
 		<div class="review-section">
-			<h2> 리뷰 </h2>
-		</div>
+		    <h2>리뷰</h2>
+		    
+		    <div class="review-input">
+		        <form:form action="addReview.do" name="reviewForm" role="form" method="post">
+		            <div class="input-group">
+		            	<input type="hidden" name="movieId" value="${selectMovie.movieId }">
+		            	<input type="hidden" name="userId" value="${username }">
+		                <textarea name="detail" placeholder="리뷰를 작성하세요..." maxlength="1000" class="review-textarea"></textarea>
+		                <div class="btn-rating">
+		                	<div class="rating-input">
+			                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field"> / 5
+			                </div>
+			                <button type="submit" onclick="javascript:reviewSubmit()" class="review-button">등록</button>
+		                </div>
+		            </div>
+		        </form:form>
+		    </div>
 		
+		    <div class="review-list">
+			    <c:forEach items="${reviews}" var="review">
+			        <div class="review-item">
+			            <div class="review-header">
+			                <span class="review-author">${username}</span>
+			                <span class="review-date">${review.submitTime}</span>
+			            </div>
+			            <div class="review-content">
+			                <p>${review.detail}</p>
+			            </div>
+			            <div class="review-rating">
+			                <c:if test="${review.rate == '1' }"><span>⭐</span></c:if>
+		                    <c:if test="${review.rate == '2' }"><span>⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '3' }"><span>⭐⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '4' }"><span>⭐⭐⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '5' }"><span>⭐⭐⭐⭐⭐</span></c:if>
+			            </div>
+			        </div>
+			    </c:forEach>
+			</div>
+
+		
+		    <div class="pagination">
+		        <c:if test="${currentPage > 1}">
+		            <a href="reviewList.do?page=${currentPage - 1}" class="page-link">◀ 이전</a>
+		        </c:if>
+		        <span>Page ${currentPage} of ${totalPages}</span>
+		        <c:if test="${currentPage < totalPages}">
+		            <a href="reviewList.do?page=${currentPage + 1}" class="page-link">다음 ▶</a>
+		        </c:if>
+		    </div>
+		</div>
+
 		<c:if test="${not empty collectionData.name }">
 			<div class="collection-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${collectionData.backdropPath }');">
 			    <div class="collection-overlay">
@@ -299,7 +355,7 @@
 		    
 		</div>
 		
-	</form>
+	
 
 </body>
 </html>

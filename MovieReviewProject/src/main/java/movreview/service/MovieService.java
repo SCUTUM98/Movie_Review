@@ -37,8 +37,10 @@ public interface MovieService {
 	List<?> recentlyCollected(CollectionVO vo) throws Exception;
 	// 시리즈 소속 영화
 	List<?> collectionMovie(MovieVO vo) throws Exception;
-	// 관람평 작성
+	// 리뷰 작성
 	ReviewVO insertReview(ReviewVO vo) throws Exception;
+	// 리뷰 리스트 불러오기
+	List<?> selectReview(ReviewVO vo) throws Exception;
 	// 회원 가입
 	MemberVO registerMember(MemberVO vo) throws Exception;
 	// 인증 랜덤 번호 저장

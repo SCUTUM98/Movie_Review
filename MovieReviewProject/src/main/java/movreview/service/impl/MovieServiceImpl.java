@@ -110,10 +110,15 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> collectionMovie(MovieVO vo) throws Exception {
 		return movDAO.collectionMovie(vo);
 	}
-	// 관람평 작성
+	// 리뷰 작성
 	@Override
 	public ReviewVO insertReview(ReviewVO vo) throws Exception {
 		return movDAO.insertReview(vo);
+	}
+	// 리뷰 불러오기
+	@Override
+	public List<?> selectReview(ReviewVO vo) throws Exception {
+		return movDAO.selectReview(vo);
 	}
 	// 회원 가입
 	@Override

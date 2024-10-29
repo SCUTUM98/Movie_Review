@@ -10,6 +10,7 @@
 	<typeAlias  alias="memberVO" type="movreview.service.MemberVO"/>
 	<typeAlias  alias="movieVO" type="movreview.service.MovieVO"/>
 	<typeAlias  alias="actorSnsVO" type="movreview.service.ActorSnsVO"/>
+	<typeAlias  alias="reviewVO" type="movreview.service.ReviewVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -354,6 +355,35 @@
 					, youtube
 			FROM actor_sns
 			WHERE actor_id = #actorId#
+		]]>
+	</select>
+	<!-- 관람평 작성 -->
+	<insert id="movDAO.insertReview" parameterClass="reviewVO">
+		<![CDATA[
+			INSERT INTO review (movie_id, user_id, rate, detail, submit_time, like_cnt, dislike_cnt)
+			VALUES( #movieId#
+					, #userId#
+					, #rate#
+					, #detail#
+					, CURRENT_TIMESTAMP
+					, 0
+					, 0)
+		]]>
+	</insert>
+	<!-- 관람평 조회 -->
+	<select id="movDAO.selectReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT review_id AS reviewID
+					, movie_id AS movieId
+					, user_id AS userId
+					, rate
+					, detail
+					, submit_time AS submitTime
+					, like_cnt AS likeCnt
+					, dislike_cnt AS dislikeCnt
+			FROM review
+			WHERE movie_id = #movieId#
+			ORDER BY submit_time DESC
 		]]>
 	</select>
 	

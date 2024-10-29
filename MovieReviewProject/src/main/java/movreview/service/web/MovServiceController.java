@@ -39,6 +39,7 @@ import movreview.service.TmdbService;
 import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
 import movreview.service.ProviderVO;
+import movreview.service.ReviewVO;
 import movreview.service.CollectionVO;
 import movreview.service.MemberVO;
 import movreview.service.ActorVO;
@@ -360,13 +361,19 @@ public class MovServiceController {
 		
 		MovieVO selectVO = new MovieVO();
 		CollectionVO collectVO = new CollectionVO();
+		ReviewVO reviewVO = new ReviewVO();
 		
 	    selectVO.setMovieId(id);
 	    movService.selectMovie(selectVO);
 	    collectVO.setId(movService.selectMovie(selectVO).getCollectionId());
+	    reviewVO.setMovieId(id);
+	    
+	    List<?> reviewList = movService.selectReview(reviewVO);
 
 	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
 	    model.addAttribute("collectionData", movService.checkCollection(collectVO));
+	    model.addAttribute("reviews", reviewList);
+	    
 	    
 		LOGGER.debug("ID Value: " + id);
 		
@@ -473,6 +480,32 @@ public class MovServiceController {
         }
         
 		return "board/localDetail";
+	}
+	
+	@RequestMapping(value="/addReview.do", method = RequestMethod.POST)
+	public String addReview(SessionStatus status
+							, HttpServletRequest request
+							, Model model
+							, @RequestParam("movieId") int movieId
+							, @RequestParam("userId") String userId
+							, @RequestParam("rate") int rate
+							, @RequestParam("detail") String detail ) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+	    model.addAttribute("username", username);
+	    
+	    System.out.println("UserId: " + userId);
+		
+		ReviewVO reviewVO = new ReviewVO();
+		
+		reviewVO.setMovieId(movieId);
+		reviewVO.setUserId(userId);
+		reviewVO.setRate(rate);
+		reviewVO.setDetail(detail);
+		
+		movService.insertReview(reviewVO);
+		
+		return "redirect:/localDetail.do?id=" + movieId;
 	}
 	
 	@RequestMapping(value="/addMovie.do", method = RequestMethod.POST)

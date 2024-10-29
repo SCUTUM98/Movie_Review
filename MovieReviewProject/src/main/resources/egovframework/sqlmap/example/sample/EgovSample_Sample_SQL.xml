@@ -360,9 +360,8 @@
 	<!-- 관람평 작성 -->
 	<insert id="movDAO.insertReview" parameterClass="reviewVO">
 		<![CDATA[
-			INSERT INTO review (review_id, movie_id, user_id, rate, detail, submit_time, like_cnt, dislike_cnt)
-			VALUES( #reviewId#
-					, #movieId#
+			INSERT INTO review (movie_id, user_id, rate, detail, submit_time, like_cnt, dislike_cnt)
+			VALUES( #movieId#
 					, #userId#
 					, #rate#
 					, #detail#
@@ -371,6 +370,22 @@
 					, 0)
 		]]>
 	</insert>
+	<!-- 관람평 조회 -->
+	<select id="movDAO.selectReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT review_id AS reviewID
+					, movie_id AS movieId
+					, user_id AS userId
+					, rate
+					, detail
+					, submit_time AS submitTime
+					, like_cnt AS likeCnt
+					, dislike_cnt AS dislikeCnt
+			FROM review
+			WHERE movie_id = #movieId#
+			ORDER BY submit_time DESC
+		]]>
+	</select>
 	
 	<!-- 계정 관리 -->
 	<!-- 회원 가입 -->
