@@ -90,7 +90,7 @@
 							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
 						</div>
 						<div class="form-group">
-							<p>Already registered? <a href="index.html">Sign In</a></p>
+							<p>회원이신가요? <a href="/home.do">로그인</a></p>
 						</div>
 						<div class="form-group">
 							<input type="submit" value="Sign Up" class="btn btn-primary">
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 			<div class="row" style="padding-top: 60px; clear: both;">
-				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. Designed by <a href="https://freehtml5.co">FreeHTML5.co</a></small></p></div>
+				<div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼 </small></p></div>
 			</div>
 		</div>
 	</body>

@@ -92,7 +92,16 @@
 			<div class="row" style="padding-top: 60px; clear: both;">
 				<div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p></div>
 			</div>
-		</div>
+
+		<script>
+	        window.onload = function() {
+	            var errorMessage = "${errorMessage}";
+	            if (errorMessage) {
+	                alert(errorMessage);
+	                errorMessage = null;
+	            }
+	        };
+	    </script>
 	</body>
 </html>
 

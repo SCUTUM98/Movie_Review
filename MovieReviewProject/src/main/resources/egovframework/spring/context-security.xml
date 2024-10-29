@@ -33,7 +33,7 @@
 	<authentication-manager>
 		<authentication-provider>
 		<jdbc-user-service data-source-ref="dataSource" 
-		users-by-username-query="SELECT id, pass, enabled FROM member WHERE id = ?" 
+		users-by-username-query="SELECT id, pass, enabled, mail_auth FROM member WHERE id = ? AND mail_auth = '1'" 
 		authorities-by-username-query="SELECT id, levels FROM member WHERE id = ?" />
 		<password-encoder ref="bcryptPasswordEncoder" />
 	</authentication-provider>

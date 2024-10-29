@@ -686,14 +686,17 @@ public class MovServiceController {
 	public String login(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String username = request.getUserPrincipal().getName();
+		
 		session.setAttribute("username", username);
 		
 		return "redirect:/main.do";
 	}
 	
 	@RequestMapping(value="login_fail.do", method=RequestMethod.GET)
-	public String login_fail() throws Exception {
-		return "redirect:/home.do";
+	public String login_fail(Model model) throws Exception {
+		model.addAttribute("errorMessage", "아이디 비밀번호를 확인하십시오.");
+		
+		return "forward:/home.do";
 	}
 	
 	@RequestMapping(value="logout_After.do", method = RequestMethod.GET)
