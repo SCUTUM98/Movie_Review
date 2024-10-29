@@ -45,4 +45,6 @@ public interface MovieService {
 	int updateMailAuth(MemberVO vo) throws Exception;
 	// 메일 인증 확인
 	int emailAuthFail(String id) throws Exception;
+	// 인증 번호 확인
+	int verify(MemberVO vo) throws Exception;
 }

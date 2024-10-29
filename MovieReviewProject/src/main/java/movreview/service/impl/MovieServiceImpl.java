@@ -129,5 +129,10 @@ public class MovieServiceImpl implements MovieService {
 	public int emailAuthFail(String id) throws Exception{
 		return movDAO.emailAuthFail(id);
 	}
+	// 인증 번호 확인
+	@Override
+	public int verify(MemberVO vo) throws Exception{
+		return movDAO.verify(vo);
+	}
 
 }

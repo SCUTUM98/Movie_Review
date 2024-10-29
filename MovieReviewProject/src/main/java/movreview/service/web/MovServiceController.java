@@ -652,6 +652,8 @@ public class MovServiceController {
 		
 		String encodPW = encoder.encode(pass);
 		String mailKey = new TempKey().getKey(30, false);
+		System.out.println("난수: " + mailKey);
+		String url = "localhost:8080/verify.do";
 		
 		memberVO.setId(id);
 		memberVO.setEmail(email);
@@ -664,7 +666,7 @@ public class MovServiceController {
 		movService.registerMember(memberVO);
 		
 		try {
-			mailHandler.sendMail(email, "받아라", "스프링으로 구현해서 보내본다.\n파일없이 보낸다.");
+			mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", "접속 주소: " + url + "\n 인증번호: " + mailKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "FAIL";			
@@ -708,5 +710,27 @@ public class MovServiceController {
 		return "redirect:/main.do";
 	}
 	
+	@RequestMapping(value="verify.do")
+	public String verify() throws Exception {
+		return("board/verify");
+	}
+	
+	@RequestMapping(value="verifyTest.do")
+	public String verifyTest(@RequestParam("email") String email, @RequestParam("mailKey") String mailKey, Model model) throws Exception {
+		MemberVO memberVO = new MemberVO();
+		
+		memberVO.setEmail(email);
+		memberVO.setMailKey(mailKey);
+		
+		int isTrue = movService.verify(memberVO);
+		
+		if (isTrue == 1) {
+			movService.updateMailAuth(memberVO);
+			return "redirect:/main.do";
+		}
+		else {
+			return "redirect:/verify.do";
+		}
+	}
 
 }

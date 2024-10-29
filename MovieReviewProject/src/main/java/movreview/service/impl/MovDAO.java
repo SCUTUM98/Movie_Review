@@ -117,4 +117,8 @@ public class MovDAO extends EgovAbstractDAO {
 	public int emailAuthFail(String id) throws Exception{
 		return (int) select("movDAO.emailAuthFail", id);
 	}
+	// 인증 번호 확인
+	public int verify(MemberVO vo) throws Exception{
+		return (int) select("movDAO.verify", vo);
+	}
 }

@@ -361,13 +361,15 @@
 	<!-- 회원 가입 -->
 	<insert id="movDAO.registerMember" parameterClass="memberVO">
 		<![CDATA[
-			INSERT INTO member (id, pass, name, email, levels, enabled)
+			INSERT INTO member (id, pass, name, email, levels, enabled, mail_key, mail_auth)
 			VALUES ( #id#
 					, #pass#
 					, #name#
 					, #email#
 					, 'ROLE_USER'
-					, '1')
+					, '1'
+					, #mailKey#
+					,'0' )
 		]]>
 	</insert>
 	<!-- 인증 랜덤 번호 저장 -->
@@ -392,5 +394,12 @@
 			WHERE id=#id# AND mail_auth=1
 		]]>
 	</select>
-	
+	<!-- 인증번호 확인 -->
+	<select id="movDAO.verify" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM member
+			WHERE email=#email# AND mail_key=#mailKey#
+		]]>
+	</select>
 </sqlMap>
