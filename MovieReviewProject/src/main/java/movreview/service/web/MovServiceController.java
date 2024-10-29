@@ -64,7 +64,7 @@ public class MovServiceController {
 	BCryptPasswordEncoder encoder;
 	
 	@Autowired
-	JavaMailSender mailSender;
+	private MailHandler mailHandler;
 	
 	@RequestMapping(value="/main.do")
 	public String mainPage(Model model, HttpServletRequest request) throws Exception {
@@ -663,12 +663,12 @@ public class MovServiceController {
 		
 		movService.registerMember(memberVO);
 		
-		MailHandler sendMail = new MailHandler(mailSender);
-		sendMail.setSubject("[Film Report 인증메일 입니다.]");
-		sendMail.setText("test: " + mailKey);
-		sendMail.setFrom("ruastravel@gamil.com", "Film Report");
-		sendMail.setTo(memberVO.getEmail());
-		sendMail.send();
+		try {
+			mailHandler.sendMail(email, "받아라", "스프링으로 구현해서 보내본다.\n파일없이 보낸다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "FAIL";			
+		}
 		
 		status.setComplete();
 		
