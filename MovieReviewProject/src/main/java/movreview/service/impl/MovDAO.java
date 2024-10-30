@@ -12,6 +12,7 @@ import movreview.service.MovieVO;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
+import movreview.service.LikeVO;
 import movreview.service.MemberVO;
 import movreview.service.ReviewVO;
 
@@ -119,6 +120,18 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> selectReview(ReviewVO vo) throws Exception {
 		return list("movDAO.selectReview", vo);
 	}
+	// 즐겨찾기 추가
+	public LikeVO insertLike(LikeVO vo) throws Exception {
+		return (LikeVO) insert("movDAO.insertLike", vo);
+	}
+	// 즐겨찾기 제거
+	public void deleteLike(LikeVO vo) throws Exception {
+		delete("movDAO.deleteLike", vo);
+	}
+	// 즐겨찾기 확인
+	public int selectLike(LikeVO vo) throws Exception {
+		return (int) select("movDAO.selectLike", vo);
+	}
 	// 회원 가입
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return (MemberVO) insert("movDAO.registerMember", vo);
@@ -146,5 +159,9 @@ public class MovDAO extends EgovAbstractDAO {
 	// 최근 리뷰 확인
 	public List<?> checkReview(ReviewVO vo) throws Exception{
 		return list("movDAO.checkReview", vo);
+	}
+	// 즐겨찾기 리스트
+	public List<?> checkLike(LikeVO vo) throws Exception{
+		return list("movDAO.checkLike", vo);
 	}
 }

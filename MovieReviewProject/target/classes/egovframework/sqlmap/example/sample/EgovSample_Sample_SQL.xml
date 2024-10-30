@@ -11,6 +11,7 @@
 	<typeAlias  alias="movieVO" type="movreview.service.MovieVO"/>
 	<typeAlias  alias="actorSnsVO" type="movreview.service.ActorSnsVO"/>
 	<typeAlias  alias="reviewVO" type="movreview.service.ReviewVO"/>
+	<typeAlias  alias="likeVO" type="movreview.service.LikeVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -394,6 +395,28 @@
 			ORDER BY submit_time DESC
 		]]>
 	</select>
+	<!-- 즐겨찾기 등록 -->
+	<insert id="movDAO.insertLike" parameterClass="likeVO">
+		<![CDATA[
+			INSERT INTO movie_like (user_id, movie_id, submit_time)
+			VALUES( #userId#, #movieId#, CURRENT_TIMESTAMP)
+		]]>
+	</insert>
+	<!-- 즐겨찾기 제거 -->
+	<delete id="movDAO.deleteLike">
+		<![CDATA[
+			DELETE FROM movie_like
+			WHERE user_id = #userId# AND movie_id = #movieId#
+		]]>
+	</delete>
+	<!-- 즐겨찾기 확인 -->
+	<select id="movDAO.selectLike" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM movie_like
+			WHERE user_id = #userId# AND movie_id = #movieId#
+		]]>
+	</select>
 	
 	<!-- 계정 관리 -->
 	<!-- 회원 가입 -->
@@ -466,7 +489,22 @@
 			JOIN movie_page m ON r.movie_id = m.movie_id
 			WHERE r.user_id = #userId#
 			ORDER BY r.submit_time DESC
-			LIMIT 5;
+			LIMIT 3
+		]]>
+	</select>
+	<!-- 좋아요 영화 조회 -->
+	<select id="movDAO.checkLike" resultClass="likeVO">
+		<![CDATA[
+			SELECT l.like_id AS likeId
+				, l.user_id AS userId
+				, l.movie_id AS movieId
+				, l.submit_time AS submitTime
+				, m.poster_path AS posterPath
+				, m.titleEr AS title
+			FROM movie_like l JOIN movie_page m on l.movie_id = m.movie_id
+			WHERE l.user_id = #userId#
+			ORDER BY l.submit_time DESC
+			LIMIT 5
 		]]>
 	</select>
 </sqlMap>

@@ -14,6 +14,7 @@ import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
+import movreview.service.LikeVO;
 import movreview.service.MemberVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
@@ -125,6 +126,21 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> selectReview(ReviewVO vo) throws Exception {
 		return movDAO.selectReview(vo);
 	}
+	// 즐겨찾기 추가
+	@Override
+	public LikeVO insertLike(LikeVO vo) throws Exception {
+		return movDAO.insertLike(vo);
+	}
+	// 즐겨찾기 제거
+	@Override
+	public void deleteLike(LikeVO vo) throws Exception {
+		movDAO.deleteLike(vo);
+	}
+	// 즐겨찾기 확인
+	@Override 
+	public int selectLike(LikeVO vo) throws Exception {
+		return movDAO.selectLike(vo);
+	}
 	// 회원 가입
 	@Override
 	public MemberVO registerMember(MemberVO vo) throws Exception {
@@ -159,6 +175,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public List<?> checkReview(ReviewVO vo) throws Exception {
 		return movDAO.checkReview(vo);
+	}
+	// 즐겨찾기 리스트
+	@Override
+	public List<?> checkLike(LikeVO vo) throws Exception {
+		return movDAO.checkLike(vo);
 	}
 
 }

@@ -123,6 +123,21 @@
 	    	document.reviewForm.action = "<c:url value='/addReview.do'/>";
 	    	document.reviewForm.submit();
 	    }
+	    
+	    function disliked(id){
+	    	document.listForm.movieId.value = id;
+	    	console.log(document.listForm.movieId.value);
+	    	document.listForm.action = "<c:url value='/deleteLike.do'/>";
+	    	document.listForm.submit();
+	    }
+	    
+	    function liked(id){
+	    	document.listForm.movieId.value = id;
+	    	console.log(document.listForm.movieId.value);
+	    	document.listForm.action = "<c:url value='/addLike.do'/>";
+	    	document.listForm.submit();
+	    }
+	    
     </script>
 </head>
 <body>
@@ -143,6 +158,7 @@
     
     <form action="" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
+    	<input type="hidden" name="movieId" value="">
     	<input type="hidden" name="collectionId" value="">
 	    <div class="content-detail" style="background-image: url('http://image.tmdb.org/t/p/w1280${selectMovie.backdropPath }');">
             <div class="overlay">
@@ -154,54 +170,66 @@
 				        <img src="http://image.tmdb.org/t/p/w780${selectMovie.posterPath }" alt="Movie Poster" class="poster">
 				    </c:if>
 				    <div class="details">
-				        <h1>${selectMovie.titleEn }</h1>
-				        <h2><strong>${selectMovie.tagline }</strong></h2>
-				        <p>${selectMovie.overview }</p>
-				        <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
-				        <p><strong>장르: </strong>
-				            <script type="text/javascript">
-				                var genreString = '${selectMovie.genreDB}';
-				                genreString = genreString.replace(/[\[\]']/g, '');
-				                var genres = genreString.split(",").map(function(item) {
-				                    return item.trim();
-				                });
-				                document.write(genres.join(", "));
-				            </script>
-				        </p>
-				        
-				        <div class="providers">
-				            <div class="provider-category">
-				                <c:if test="${not empty buyList }"><h2>구매</h2></c:if>
-				                <c:forEach items="${buyList}" var="buyList">
-				                    <c:if test="${not empty buyList.provider_id}">
-				                    	<c:if test="${buyList.provider_name != 'Naver Store' }">
-				                        	<img src="http://image.tmdb.org/t/p/w780${buyList.logo_path}" onclick="javascript:moveToProvider('${buyList.provider_name}', '${selectMovie.titleEn }')" alt="${buyList.provider_name}" class="provider-icon">
-				                        </c:if>
-				                    </c:if>
-				                </c:forEach>
-				            </div>
-				            <div class="provider-category">
-				                <c:if test="${not empty rentList }"><h2>대여</h2></c:if>
-				                <c:forEach items="${rentList}" var="rentList">
-				                    <c:if test="${not empty rentList.provider_id}">
-				                    	<c:if test="${rentList.provider_name != 'Naver Store' }">
-				                        	<img src="http://image.tmdb.org/t/p/w780${rentList.logo_path}" onclick="javascript:moveToProvider('${rentList.provider_name}', '${selectMovie.titleEn }')" alt="${rentList.provider_name}" class="provider-icon">
-				                        </c:if>
-				                    </c:if>
-				                </c:forEach>
-				            </div>
-				            <div class="provider-category">
-				                <c:if test="${not empty streamList }"><h2>스트리밍</h2></c:if>
-				                <c:forEach items="${streamList}" var="streamList">
-				                    <c:if test="${not empty streamList.provider_id}">
-				                    	<c:if test="${streamList.provider_name != 'Naver Store' }">
-				                        	<img src="http://image.tmdb.org/t/p/w780${streamList.logo_path}" onclick="javascript:moveToProvider('${streamList.provider_name}', '${selectMovie.titleEn }')" alt="${streamList.provider_name}" class="provider-icon">
-				                        </c:if>
-				                    </c:if>
-				                </c:forEach>
-				            </div>
-				        </div>
-				    </div>
+					    <h1>${selectMovie.titleEn }</h1>
+					    <h2><strong>${selectMovie.tagline }</strong></h2>
+					    <p>${selectMovie.overview }</p>
+					    <p><strong>개봉일: </strong>${selectMovie.releaseDate }</p>
+					    <p><strong>장르: </strong>
+					        <script type="text/javascript">
+					            var genreString = '${selectMovie.genreDB}';
+					            genreString = genreString.replace(/[\[\]']/g, '');
+					            var genres = genreString.split(",").map(function(item) {
+					                return item.trim();
+					            });
+					            document.write(genres.join(", "));
+					        </script>
+					    </p>
+					    
+					    <div class="providers">
+					        <div class="provider-category">
+					            <c:if test="${not empty buyList }"><h2>구매</h2></c:if>
+					            <c:forEach items="${buyList}" var="buyList">
+					                <c:if test="${not empty buyList.provider_id}">
+					                    <c:if test="${buyList.provider_name != 'Naver Store' }">
+					                        <img src="http://image.tmdb.org/t/p/w780${buyList.logo_path}" onclick="javascript:moveToProvider('${buyList.provider_name}', '${selectMovie.titleEn }')" alt="${buyList.provider_name}" class="provider-icon">
+					                    </c:if>
+					                </c:if>
+					            </c:forEach>
+					        </div>
+					        <div class="provider-category">
+					            <c:if test="${not empty rentList }"><h2>대여</h2></c:if>
+					            <c:forEach items="${rentList}" var="rentList">
+					                <c:if test="${not empty rentList.provider_id}">
+					                    <c:if test="${rentList.provider_name != 'Naver Store' }">
+					                        <img src="http://image.tmdb.org/t/p/w780${rentList.logo_path}" onclick="javascript:moveToProvider('${rentList.provider_name}', '${selectMovie.titleEn }')" alt="${rentList.provider_name}" class="provider-icon">
+					                    </c:if>
+					                </c:if>
+					            </c:forEach>
+					        </div>
+					        <div class="provider-category">
+					            <c:if test="${not empty streamList }"><h2>스트리밍</h2></c:if>
+					            <c:forEach items="${streamList}" var="streamList">
+					                <c:if test="${not empty streamList.provider_id}">
+					                    <c:if test="${streamList.provider_name != 'Naver Store' }">
+					                        <img src="http://image.tmdb.org/t/p/w780${streamList.logo_path}" onclick="javascript:moveToProvider('${streamList.provider_name}', '${selectMovie.titleEn }')" alt="${streamList.provider_name}" class="provider-icon">
+					                    </c:if>
+					                </c:if>
+					            </c:forEach>
+					        </div>
+					        
+					        
+							<c:if test="${liked == 1 }">
+								<div class="favorite-section">
+								    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/liked.png" alt="Favorite" class="favorite-icon" onclick="javascript:disliked('${selectMovie.movieId}')">
+								</div>
+							</c:if>
+							<c:if test="${liked == 0 }">
+								<div class="favorite-section">
+								    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/unliked.png" alt="Favorite" class="favorite-icon" onclick="javascript:liked('${selectMovie.movieId}')">
+								</div>
+							</c:if>
+					    </div>
+					</div>
 				</div>
 			</div>
 	    </div>
@@ -354,9 +382,6 @@
 		        </div>
 		    
 		</div>
-		
-	
-
 </body>
 </html>
 

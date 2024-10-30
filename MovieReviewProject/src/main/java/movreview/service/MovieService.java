@@ -43,6 +43,12 @@ public interface MovieService {
 	ReviewVO insertReview(ReviewVO vo) throws Exception;
 	// 리뷰 리스트 불러오기
 	List<?> selectReview(ReviewVO vo) throws Exception;
+	// 즐겨찾기 추가
+	LikeVO insertLike(LikeVO vo) throws Exception;
+	// 즐겨찾기 제거
+	void deleteLike(LikeVO vo) throws Exception;
+	// 즐겨찾기 확인
+	int selectLike(LikeVO vo) throws Exception;
 	// 회원 가입
 	MemberVO registerMember(MemberVO vo) throws Exception;
 	// 인증 랜덤 번호 저장
@@ -57,4 +63,6 @@ public interface MovieService {
 	int verifyCheck(String email) throws Exception;
 	// 최근 리뷰 확인
 	List<?> checkReview(ReviewVO vo) throws Exception;
+	// 즐겨찾기 리스트
+	List<?> checkLike(LikeVO vo) throws Exception;
 }

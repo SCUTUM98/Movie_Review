@@ -45,6 +45,7 @@ import movreview.service.MovieVO;
 import movreview.service.ProviderVO;
 import movreview.service.ReviewVO;
 import movreview.service.CollectionVO;
+import movreview.service.LikeVO;
 import movreview.service.MemberVO;
 import movreview.service.ActorVO;
 import movreview.service.VideoVO;
@@ -395,20 +396,25 @@ public class MovServiceController {
 		MovieVO selectVO = new MovieVO();
 		CollectionVO collectVO = new CollectionVO();
 		ReviewVO reviewVO = new ReviewVO();
+		LikeVO likeVO = new LikeVO();
 		
 	    selectVO.setMovieId(id);
 	    movService.selectMovie(selectVO);
 	    collectVO.setId(movService.selectMovie(selectVO).getCollectionId());
 	    reviewVO.setMovieId(id);
+	    likeVO.setMovieId(id);
+	    likeVO.setUserId(username);
 	    
 	    List<?> reviewList = movService.selectReview(reviewVO);
+	    int liked = movService.selectLike(likeVO);
+	    
+	    System.out.println(liked);
 
 	    model.addAttribute("selectMovie", movService.selectMovie(selectVO));
 	    model.addAttribute("collectionData", movService.checkCollection(collectVO));
 	    model.addAttribute("reviews", reviewList);
+	    model.addAttribute("liked", liked);
 	    
-	    
-		LOGGER.debug("ID Value: " + id);
 		
 		String recommendData = tmdbService.movieRecommend(apiKey, id);
 		int movieId = id;
@@ -824,12 +830,48 @@ public class MovServiceController {
 		session.setAttribute("username", username);
 		
 		ReviewVO reviewVO = new ReviewVO();
+		LikeVO likeVO = new LikeVO();
 		reviewVO.setUserId(username);
+		likeVO.setUserId(username);
 		
 		List<?> reviewList = movService.checkReview(reviewVO);
+		List<?> likeList = movService.checkLike(likeVO);
 		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("likeList", likeList);
 		
 		return "board/mypage";
+	}
+	
+	@RequestMapping(value="/addLike.do", method=RequestMethod.POST)
+	public String addLike(@RequestParam("movieId") int movieId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		
+		session.setAttribute("username", username);
+		
+		LikeVO likeVO = new LikeVO();
+		likeVO.setMovieId(movieId);
+		likeVO.setUserId(username);
+		
+		movService.insertLike(likeVO);
+		
+		return "forward:/localDetail.do?movieId=" + movieId;
+	}
+	
+	@RequestMapping(value="/deleteLike.do", method=RequestMethod.POST)
+	public String deleteLike(@RequestParam("movieId") int movieId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		
+		session.setAttribute("username", username);
+		
+		LikeVO likeVO = new LikeVO();
+		likeVO.setMovieId(movieId);
+		likeVO.setUserId(username);
+		
+		movService.deleteLike(likeVO);
+		
+		return "forward:/localDetail.do?movieId=" + movieId;
 	}
 
 }

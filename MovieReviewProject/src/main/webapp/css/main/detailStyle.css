@@ -354,7 +354,7 @@ body {
 
 .providers {
     display: flex; /* 수평 배치 */
-    align-items: flex-start; /* 제목과 아이콘을 위쪽 정렬 */
+    align-items: center; /* 아이콘과 제목을 위쪽 정렬 */
     margin-top: 20px; /* 개요와의 간격 */
 }
 
@@ -377,6 +377,17 @@ body {
     height: auto; /* 비율 유지 */
     margin-right: 10px; /* 아이콘 간격 */
     border-radius: 10px;
+    cursor: pointer;
+}
+
+.favorite-section {
+    margin-left: auto; /* 오른쪽으로 밀기 */
+}
+
+.favorite-icon {
+    width: 40px; /* 아이콘 크기 조정 */
+    height: auto; /* 비율 유지 */
+    cursor: pointer; /* 커서 포인터로 변경 */
 }
 
 .review-section {
