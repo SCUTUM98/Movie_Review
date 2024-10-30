@@ -37,7 +37,7 @@
 		}
 		function collectionSelect(id) {
 			console.log(id);
-			document.collectionForm.id.value = id;
+			document.collectionForm.collectionId.value = id;
 			document.collectionForm.action = "<c:url value='/seriesDetail.do'/>";
 			document.collectionForm.submit();
 		}
@@ -53,6 +53,7 @@
 	            <a href="#">영화</a>
 	            <a href="#">시리즈</a>
 	            <a href="/search.do">검색</a>
+	            <c:if test="${not empty username }"><a href="/mypage.do">마이페이지</a></c:if>
 	            <c:if test="${empty username }"><a href="/home.do">로그인</a></c:if>
                 <c:if test="${not empty username }"><a href="/logout">로그아웃</a></c:if>
 	        </nav>     
@@ -65,6 +66,7 @@
     <!-- MAIN CONTAINER -->
     <section class="main-container" >
       <div class="location" id="home">
+      	<c:if test="${not empty searchList }">
           <h1 id="result">Search Result</h1>
           <form:form commandName="movieVO" name="searchForm" method="post">
           	  <input type="hidden" name="id" value="">
@@ -77,46 +79,72 @@
 		      	</c:forEach>            
 		      </div>
 		  </form:form>
+		</c:if>
       </div>
 
-      <h1 id="unregistered">Unregistered Movie</h1>
-	  <form:form commandName="movieVO" name="tmdbForm" method="post">
-		  <input type="hidden" name="id" value="">
-		  <div class="box">
-			 <c:forEach items="${resultData }" var="result" varStatus="status">
-			 	<a href="javascript:movieSelect('${result.movieId}')">
-			 		<img src="http://image.tmdb.org/t/p/w780${result.posterPath }" alt="${result.titleKr }" class="movie-poster">
-			 		<p class="movie-title">${result.titleEn}</p>
-			 	</a>
-			 </c:forEach>
-		  </div>    
-	  </form:form>
+      <c:if test="${not empty resultData }">
+	      <h1 id="unregistered">Unregistered Movie</h1>
+		  <form:form commandName="movieVO" name="tmdbForm" method="post">
+			  <input type="hidden" name="id" value="">
+			  <div class="box">
+				 <c:forEach items="${resultData }" var="result" varStatus="status">
+				 	<a href="javascript:movieSelect('${result.movieId}')">
+				 		<img src="http://image.tmdb.org/t/p/w780${result.posterPath }" alt="${result.titleKr }" class="movie-poster">
+				 		<p class="movie-title">${result.titleEn}</p>
+				 	</a>
+				 </c:forEach>
+			  </div>    
+		  </form:form>
+	  </c:if>
 	  
-	  <h1 id="unregistered">Series</h1>
-	  <form:form commandName="collectionVO" name="collectionForm" method="post">
-		  <input type="hidden" name="id" value="">
-		  <div class="box">
-			 <c:forEach items="${collectionList }" var="collection" varStatus="status">
-			 	<a href="javascript:movieSelect('${collection.id}')">
-			 		<img src="http://image.tmdb.org/t/p/w780${collection.posterPath }" alt="${collection.name }" class="movie-poster">
-			 		<p class="movie-title">${collection.name}</p>
-			 	</a>
-			 </c:forEach>
-		  </div>    
-	  </form:form>
+	  <c:if test="${not empty collectionList }">
+		  <h1 id="unregistered">Series</h1>
+		  <form:form commandName="collectionVO" name="collectionForm" method="post">
+			  <input type="hidden" name="collectionId" value="">
+			  <div class="box">
+				 <c:forEach items="${collectionList }" var="collection" varStatus="status">
+				 	<a href="javascript:collectionSelect('${collection.id}')">
+				 		<img src="http://image.tmdb.org/t/p/w780${collection.posterPath }" alt="${collection.name }" class="movie-poster">
+				 		<p class="movie-title">${collection.name}</p>
+				 	</a>
+				 </c:forEach>
+			  </div>    
+		  </form:form>
+	  </c:if>
 	  
-	  <h1 id="unregistered">Actor</h1>
-	  <form:form commandName="actorVO" name="actorForm" method="post">
-		  <input type="hidden" name="actorId" value="">
-		  <div class="box">
-			 <c:forEach items="${actorList }" var="actor" varStatus="status">
-			 	<a href="javascript:actorSelect('${actor.actorId}')">
-			 		<img src="http://image.tmdb.org/t/p/w780${actor.profilePath }" alt="${actor.actName }" class="movie-poster">
-			 		<p class="movie-title">${actor.actName}</p>
-			 	</a>
-			 </c:forEach>
-		  </div>    
-	  </form:form>
+	  <c:if test="${not empty actorList }">
+		  <h1 id="unregistered">Actor</h1>
+		  <form:form commandName="actorVO" name="actorForm" method="post">
+			  <input type="hidden" name="actorId" value="">
+			  <div class="box">
+				 <c:forEach items="${actorList }" var="actor" varStatus="status">
+				 	<a href="javascript:actorSelect('${actor.actorId}')">
+				 		<img src="http://image.tmdb.org/t/p/w780${actor.profilePath }" alt="${actor.actName }" class="movie-poster">
+				 		<p class="movie-title">${actor.actName}</p>
+				 	</a>
+				 </c:forEach>
+			  </div>    
+		  </form:form>
+	  </c:if>
+	  
+	  <c:if test="${not empty overviewList }">
+		  <h1 id="unregistered">관련영화</h1>
+		  <form:form commandName="movieVO" name="searchForm" method="post">
+			  <input type="hidden" name="id" value="">
+			  <div class="box">
+				 <c:forEach items="${newOverviewList }" var="overview" varStatus="status">
+				 	<a href="javascript:localMovieSelect('${overview.movieId}')">
+		      			<img src="http://image.tmdb.org/t/p/w780${overview.posterPath }" alt="${overview.titleKr }" class="movie-poster">
+		      			<p class="movie-title">${overview.titleEn}</p> 
+		      		</a>
+				 </c:forEach>
+			  </div>    
+		  </form:form>
+	  </c:if>
+	  
+	  <c:if test="${empty searchList && empty resultData && empty collectionList && empty actorList && empty newOverviewList }">
+	  	<div class="no-result"><p>검색결과가 없습니다.</p></div>
+	  </c:if>
 		  
       <h1 id="trendingMovie">Trending Now</h1>
       <form:form commandName="movieVO" name="listForm" method="post">

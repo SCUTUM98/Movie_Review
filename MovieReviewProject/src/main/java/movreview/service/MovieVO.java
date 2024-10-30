@@ -1,6 +1,7 @@
 package movreview.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -127,4 +128,18 @@ public class MovieVO {
 	public void setTagline(String tagline) {
 		this.tagline =  tagline;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    MovieVO movie = (MovieVO) obj;
+	    return Objects.equals(movieId, movie.movieId); // movieId를 기준으로 비교
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(movieId); // movieId를 기준으로 해시 코드 생성
+	}
+
 }

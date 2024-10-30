@@ -29,6 +29,15 @@ public class MovDAO extends EgovAbstractDAO {
 	        throw e;
 	    }
 	}
+	// 관련 영화 검색
+	public List<?> searchOverview(MovieVO vo) throws Exception {
+		try {
+			return list("movDAO.searchOverview", vo);
+		} catch (Exception e) {
+			LOGGER.error("Error executing searchMovie query", e);
+	        throw e;
+		}
+	}
 	// 연기자 검색
 	public List<?> searchActor(ActorVO vo) throws Exception {
 		try {
@@ -133,5 +142,9 @@ public class MovDAO extends EgovAbstractDAO {
 	// 인증 여부 확인
 	public int verifyCheck(String email) throws Exception{
 		return (int) select("movDAO.verifyCheck", email);
+	}
+	// 최근 리뷰 확인
+	public List<?> checkReview(ReviewVO vo) throws Exception{
+		return list("movDAO.checkReview", vo);
 	}
 }

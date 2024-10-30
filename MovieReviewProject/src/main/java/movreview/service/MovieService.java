@@ -6,6 +6,8 @@ public interface MovieService {
 	
 	//영화 검색
 	List<?> searchMovie(MovieVO vo) throws Exception;
+	// 관련 영화 검색
+	List<?> searchOverview(MovieVO vo) throws Exception;
 	// 연기자 검색
 	List<?> searchActor(ActorVO vo) throws Exception;
 	// 시리즈 검색
@@ -53,4 +55,6 @@ public interface MovieService {
 	int verify(MemberVO vo) throws Exception;
 	// 인증 여부 확인
 	int verifyCheck(String email) throws Exception;
+	// 최근 리뷰 확인
+	List<?> checkReview(ReviewVO vo) throws Exception;
 }

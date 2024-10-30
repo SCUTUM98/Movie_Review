@@ -134,6 +134,14 @@
 	        WHERE (title_kr ILIKE '%' || #titleEn# || '%' OR title_er ILIKE '%' || #titleEn# || '%')
 	    ]]>
 	</select>
+	<!-- 관련 영화 검색 -->
+	<select id="movDAO.searchOverview" resultClass="movieVO">
+	    <![CDATA[
+	        SELECT movie_id AS movieId, title_kr AS titleKr, title_er AS titleEn, backdrop_path AS backdropPath, poster_path AS posterPath, collection_id AS collectionId, genre AS genreDB
+	        FROM movie_page
+	        WHERE (overview ILIKE '%' || #titleEn# || '%')
+	    ]]>
+	</select>
 	<!-- 연기자 검색 -->
 	<select id="movDAO.searchActor" resultClass="actorVO">
 		<![CDATA[
@@ -438,6 +446,27 @@
 			SELECT COUNT(*)
 			FROM member
 			WHERE email=#email# AND mail_auth = '1'
+		]]>
+	</select>
+	
+	<!-- 마이페이지 -->
+	<!-- 최근 리뷰 확인 -->
+	<select id="movDAO.checkReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.movie_id AS movieId
+					, r.user_id AS userId
+					, r.rate
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, m.poster_path AS posterPath
+			FROM review r
+			JOIN movie_page m ON r.movie_id = m.movie_id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+			LIMIT 3;
 		]]>
 	</select>
 </sqlMap>

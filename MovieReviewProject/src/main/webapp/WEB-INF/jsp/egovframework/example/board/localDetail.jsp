@@ -134,7 +134,7 @@
                 <li><a href="#">영화</a></li>
                 <li><a href="#">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
-                <li><a href="#">설정</a></li>
+                <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
                 <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
             </ul>

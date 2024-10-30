@@ -10,6 +10,8 @@ public class ReviewVO {
 	private int likeCnt;
 	private int dislikeCnt;
 	
+	private String posterPath;
+	
 	public int getReviewId() {
 		return reviewId;
 	}
@@ -64,6 +66,13 @@ public class ReviewVO {
 	}
 	public void setDislikeCnt(int dislikeCnt) {
 		this.dislikeCnt = dislikeCnt;
+	}
+	
+	public String getPosterPath() {
+		return posterPath;
+	}
+	public void setPosterPath(String posterPath) {
+		this.posterPath = posterPath;
 	}
 	
 	

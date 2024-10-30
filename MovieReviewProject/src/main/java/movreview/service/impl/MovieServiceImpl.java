@@ -31,6 +31,11 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> searchMovie(MovieVO vo) throws Exception {
 		return movDAO.searchMovie(vo);
 	}
+	// 관련 영화 검색
+	@Override
+	public List<?> searchOverview(MovieVO vo) throws Exception {
+		return movDAO.searchOverview(vo);
+	}
 	// 연기자 검색
 	@Override
 	public List<?> searchActor(ActorVO vo) throws Exception {
@@ -149,6 +154,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public int verifyCheck(String email) throws Exception {
 		return movDAO.verifyCheck(email);
+	}
+	// 최근 리뷰 확인
+	@Override
+	public List<?> checkReview(ReviewVO vo) throws Exception {
+		return movDAO.checkReview(vo);
 	}
 
 }

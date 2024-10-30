@@ -25,8 +25,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -148,81 +152,110 @@ public class MovServiceController {
 	
 	@RequestMapping(value="/result.do", method=RequestMethod.POST)
 	public String searchResult(@RequestParam("searchKeyword") String searchKeyword, HttpServletRequest request, Model model) throws Exception {
-		HttpSession session = request.getSession();
+	    HttpSession session = request.getSession();
 	    String username = (String) session.getAttribute("username");
 
 	    model.addAttribute("username", username);
-		
-		MovieVO searchVO = new MovieVO();
-		ActorVO actorVO = new ActorVO();
-		CollectionVO collectionVO = new CollectionVO();
+	    
+	    MovieVO searchVO = new MovieVO();
+	    ActorVO actorVO = new ActorVO();
+	    CollectionVO collectionVO = new CollectionVO();
+	    MovieVO overviewVO = new MovieVO();
 	    searchVO.setTitleEn(searchKeyword);
 	    actorVO.setActName(searchKeyword);
 	    collectionVO.setName(searchKeyword);
+	    overviewVO.setTitleEn(searchKeyword);
 
 	    List<?> searchList = movService.searchMovie(searchVO);
 	    List<?> actorList = movService.searchActor(actorVO);
 	    List<?> collectionList = movService.searchCollection(collectionVO);
+	    List<?> overviewList = movService.searchOverview(overviewVO);
 	    
 	    model.addAttribute("searchList", searchList);
 	    model.addAttribute("actorList", actorList);
 	    model.addAttribute("collectionList", collectionList);
-		
-		String suggestData = tmdbService.suggestMovie(apiKey);
-		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
-		
-		if (suggestData == null || suggestData.isEmpty()) {
-            throw new RuntimeException("Received null or empty response from the API");
-        }
+	    model.addAttribute("overviewList", overviewList);
+	    
+	    // 새로운 리스트 생성
+	    List<MovieVO> newOverviewList = new ArrayList<>();
 
-        if (searchResult == null || searchResult.isEmpty()) {
-        	throw new RuntimeException("Received null or empty response from the API");
-        }
+	    // searchList의 MovieVO 객체를 Set으로 변환하여 중복 제거
+	    Set<MovieVO> searchSet = new HashSet<>();
+	    for (Object obj : searchList) {
+	        if (obj instanceof MovieVO) {
+	            searchSet.add((MovieVO) obj);
+	        }
+	    }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode jsonNode = objectMapper.readTree(suggestData);
-            JsonNode resultsNode = jsonNode.get("results");
-            JsonNode searchNode = objectMapper.readTree(searchResult);
-            JsonNode searchResultNode = searchNode.get("results");
-            
-            if (resultsNode == null || !resultsNode.isArray()) {
-                throw new RuntimeException("No results found in the response");
-            }
+	    // overviewList에서 searchList에 있는 항목 제외
+	    for (Object obj : overviewList) {
+	        if (obj instanceof MovieVO) {
+	            MovieVO movie = (MovieVO) obj;
+	            if (!searchSet.contains(movie)) {
+	                newOverviewList.add(movie); // 중복되지 않은 항목 추가
+	            }
+	        }
+	    }
 
-            List<MovieVO> suggestVO = objectMapper.convertValue(
-                resultsNode,
-                new TypeReference<List<MovieVO>>() {}
-            );
-            
-            List<MovieVO> resultVO = objectMapper.convertValue(
-            		searchResultNode, 
-            		new TypeReference<List<MovieVO>> () {});
-            
-            List<MovieVO> uniqueMovies = new ArrayList<>();
+	    model.addAttribute("newOverviewList", newOverviewList);
 
-            for (MovieVO movie : resultVO) {
-                int count = movService.checkMovie(movie);
-                if (count == 0) {
-                    uniqueMovies.add(movie);
-                }
-                else {
-                	continue;
-                }
-            }
+	    // API 요청 처리 및 결과 모델에 추가
+	    String suggestData = tmdbService.suggestMovie(apiKey);
+	    String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
+	    
+	    if (suggestData == null || suggestData.isEmpty()) {
+	        throw new RuntimeException("Received null or empty response from the API");
+	    }
 
-            model.addAttribute("suggestData", suggestVO);
-            model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
-            model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
-            model.addAttribute("resultData", uniqueMovies);
+	    if (searchResult == null || searchResult.isEmpty()) {
+	        throw new RuntimeException("Received null or empty response from the API");
+	    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error processing the API response: " + e.getMessage());
-        }
-        
-		return "board/searchResult";
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        // JSON 파싱 및 데이터 처리
+	        JsonNode jsonNode = objectMapper.readTree(suggestData);
+	        JsonNode resultsNode = jsonNode.get("results");
+	        JsonNode searchNode = objectMapper.readTree(searchResult);
+	        JsonNode searchResultNode = searchNode.get("results");
+
+	        if (resultsNode == null || !resultsNode.isArray()) {
+	            throw new RuntimeException("No results found in the response");
+	        }
+
+	        List<MovieVO> suggestVO = objectMapper.convertValue(
+	            resultsNode,
+	            new TypeReference<List<MovieVO>>() {}
+	        );
+	        
+	        List<MovieVO> resultVO = objectMapper.convertValue(
+	            searchResultNode, 
+	            new TypeReference<List<MovieVO>>() {}
+	        );
+	        
+	        List<MovieVO> uniqueMovies = new ArrayList<>();
+
+	        // 중복 체크 및 uniqueMovies에 추가
+	        for (MovieVO movie : resultVO) {
+	            int count = movService.checkMovie(movie);
+	            if (count == 0) {
+	                uniqueMovies.add(movie);
+	            }
+	        }
+
+	        model.addAttribute("suggestData", suggestVO);
+	        model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
+	        model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
+	        model.addAttribute("resultData", uniqueMovies);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
+	    }
+	    
+	    return "board/searchResult";
 	}
+
 	
 	@RequestMapping(value="/detail.do")
 	public String movieDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
@@ -730,14 +763,14 @@ public class MovServiceController {
 		return "redirect:/main.do";
 	}
 	
-	@RequestMapping(value="login_fail.do", method=RequestMethod.GET)
+	@RequestMapping(value="/login_fail.do", method=RequestMethod.GET)
 	public String login_fail(Model model) throws Exception {
 		model.addAttribute("errorMessage", "아이디 비밀번호를 확인하십시오.");
 		
 		return "forward:/home.do";
 	}
 	
-	@RequestMapping(value="logout_After.do", method = RequestMethod.GET)
+	@RequestMapping(value="/logout_After.do", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) throws IOException {
 		HttpSession session = request.getSession(false);
 		
@@ -751,12 +784,12 @@ public class MovServiceController {
 		return "redirect:/main.do";
 	}
 	
-	@RequestMapping(value="verify.do")
+	@RequestMapping(value="/verify.do")
 	public String verify() throws Exception {
 		return("board/verify");
 	}
 	
-	@RequestMapping(value="verifyTest.do")
+	@RequestMapping(value="/verifyTest.do")
 	public String verifyTest(@RequestParam("email") String email, @RequestParam("mailKey") String mailKey, Model model) throws Exception {
 	    MemberVO memberVO = new MemberVO();
 	    
@@ -781,6 +814,22 @@ public class MovServiceController {
 	        model.addAttribute("errorMessage", "인증번호가 일치하지 않습니다. 다시 시도해 주세요.");
 	        return "forward:/verify.do";
 	    }
+	}
+	
+	@RequestMapping(value="/mypage.do")
+	public String mypage(Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		
+		session.setAttribute("username", username);
+		
+		ReviewVO reviewVO = new ReviewVO();
+		reviewVO.setUserId(username);
+		
+		List<?> reviewList = movService.checkReview(reviewVO);
+		model.addAttribute("reviewList", reviewList);
+		
+		return "board/mypage";
 	}
 
 }
