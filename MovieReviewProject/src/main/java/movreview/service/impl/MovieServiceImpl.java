@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-
 
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.ActorSnsVO;
@@ -170,6 +168,21 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public int verifyCheck(String email) throws Exception {
 		return movDAO.verifyCheck(email);
+	}
+	// 비밀번호 업데이트
+	@Override
+	public int updatePassword(MemberVO vo) throws Exception {
+		return movDAO.updatePassword(vo);
+	}
+	// 이메일 업데이트
+	@Override
+	public int updateEmail(MemberVO vo) throws Exception {
+		return movDAO.updateEmail(vo);
+	}
+	// 계정 확인
+	@Override
+	public MemberVO searchAcc(MemberVO vo) throws Exception {
+		return movDAO.searchAcc(vo);
 	}
 	// 최근 리뷰 확인
 	@Override

@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@charset "UTF-8";
-
 body {
     background-color: #141414;
     color: white;
@@ -144,31 +142,47 @@ body {
 }
 
 .movie-container {
-    display: flex;
-    align-items: center;
-    position: relative;
+    display: grid; /* 그리드 레이아웃 사용 */
+    grid-template-columns: repeat(5, 1fr); /* 5개의 열 생성 */
+    gap: 10px; /* 아이템 간 간격 설정 */
+    overflow: hidden; /* 넘치는 콘텐츠 숨기기 */
 }
 
 .movie-item {
-    position: relative;
-    margin: 0 10px;
-    flex: 0 0 auto; /* 아이템들이 고정된 크기로 표시되도록 설정 */
+    text-align: center; /* 중앙 정렬 */
+}
+
+/* .movie-poster {
+    width: 100%; 포스터 크기 조정
+    height: auto;
+    border-radius: 10px;
+} */
+
+.movie-info {
+    width: 100%; /* 포스터와 동일하게 크기 조정 */
+}
+
+.box {
+    display: grid;
+    grid-gap: 10px; /* 포스터 간의 간격 조정 */
+    grid-template-columns: repeat(5, 1fr); /* 5개의 열 생성 */
+}
+
+.box img {
+    border-radius: 2px;
 }
 
 .movie-poster {
     width: 150px; /* 포스터 크기 조정 */
-    height: auto;
+    height: 230px;
     border-radius: 10px;
 }
 
-.movie-info {
-    text-align: center;
-    width: 150px;
+.movie-title {
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin-top: 5px; /* 포스터와 제목 사이의 간격 */
+    color: white; /* 제목 색상 변경 */
+    font-size: 14px; /* 제목 폰트 크기 조정 */
+    text-decoration: none; /* 하이퍼링크 색상 제거 */
+    cursor: default;
 }
-
-.scroll-btn {
-    background-color: transparent;
-    color: #ff0000;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;

@@ -783,8 +783,6 @@ public class MovServiceController {
 		if(session != null) {
 			System.out.println("Server is still alived!");
 			session.invalidate();
-			
-			return "redirect:/main.do";
 		}
 		
 		return "redirect:/main.do";
@@ -831,8 +829,10 @@ public class MovServiceController {
 		
 		ReviewVO reviewVO = new ReviewVO();
 		LikeVO likeVO = new LikeVO();
+		MemberVO memberVO = new MemberVO();
 		reviewVO.setUserId(username);
 		likeVO.setUserId(username);
+		memberVO.setId(username);
 		
 		List<?> reviewList = movService.checkReview(reviewVO);
 		List<?> likeList = movService.checkLike(likeVO);
@@ -855,7 +855,7 @@ public class MovServiceController {
 		
 		movService.insertLike(likeVO);
 		
-		return "forward:/localDetail.do?movieId=" + movieId;
+		return "redirect:/localDetail.do?id=" + movieId;
 	}
 	
 	@RequestMapping(value="/deleteLike.do", method=RequestMethod.POST)
@@ -871,7 +871,77 @@ public class MovServiceController {
 		
 		movService.deleteLike(likeVO);
 		
-		return "forward:/localDetail.do?movieId=" + movieId;
+		return "redirect:/localDetail.do?id=" + movieId;
 	}
+	
+	@RequestMapping(value="/updateInfo.do", method=RequestMethod.POST)
+	public String updateInfo(@RequestParam("id") String id, Model model) throws Exception {
+		MemberVO memberVO = new MemberVO();
+		memberVO.setId(id);
+		
+		model.addAttribute("userInfo", movService.searchAcc(memberVO));
+		
+		return "board/updateMember";
+	}
+	
+	@RequestMapping(value="/updatePass.do", method=RequestMethod.POST)
+	public String updatePass(@RequestParam("id") String id, @RequestParam("pass") String pass, Model model, HttpServletRequest request) throws Exception {
+		String encodPW = encoder.encode(pass);
+		System.out.println("encode PW: "+encodPW);
+		
+		MemberVO memberVO = new MemberVO();
+		memberVO.setId(id);
+		memberVO.setPass(encodPW);
+		
+		movService.updatePassword(memberVO);
+		System.out.println("DB update");
+		model.addAttribute("errorMessage", "비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
+		
+		HttpSession session = request.getSession(false);
+		
+		if(session != null) {
+			System.out.println("Server is still alived!");
+			session.invalidate();
+		}
+		
+		return "forward:/main.do";
+	}
+	
+	@RequestMapping(value="/updateEmail.do", method=RequestMethod.POST)
+	public String updateEmail(@RequestParam("id") String id, @RequestParam("email") String email, Model model, HttpServletRequest request) throws Exception {
+		MemberVO memberVO = new MemberVO();
+		
+		String mailKey = new TempKey().getKey(30, false);
+		System.out.println("난수: " + mailKey);
+		String url = "localhost:8080/verify.do";
+		String auth = "0";
+		
+		memberVO.setId(id);
+		memberVO.setEmail(email);
+		memberVO.setMailKey(mailKey);
+		memberVO.setMailAuth(auth);
+		
+		movService.updateEmail(memberVO);
+		model.addAttribute("errorMessage", "이메일이 변경되었습니다. 메일 주소 인증 후 다시 로그인 해주세요.");
+		
+		try {
+			mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", "접속 주소: " + url + "\n 인증번호: " + mailKey);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "FAIL";			
+		}
+		
+		HttpSession session = request.getSession(false);
+		
+		if(session != null) {
+			System.out.println("Server is still alived!");
+			session.invalidate();
+		}
+		
+		return "forward:/main.do";
+		
+	}
+	
 
 }

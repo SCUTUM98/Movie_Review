@@ -61,6 +61,12 @@ public interface MovieService {
 	int verify(MemberVO vo) throws Exception;
 	// 인증 여부 확인
 	int verifyCheck(String email) throws Exception;
+	// 비밀번호 업데이트
+	int updatePassword(MemberVO vo) throws Exception;
+	// 이메일 업데이트
+	int updateEmail(MemberVO vo) throws Exception;
+	// 계정 찾기
+	MemberVO searchAcc(MemberVO vo) throws Exception;
 	// 최근 리뷰 확인
 	List<?> checkReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 리스트

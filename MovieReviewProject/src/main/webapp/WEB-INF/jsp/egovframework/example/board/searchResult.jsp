@@ -25,9 +25,9 @@
 	       	}
 		function localMovieSelect(id) {
 			console.log(id);
-			document.searchForm.id.value = id;
-			document.searchForm.action = "<c:url value='/localDetail.do'/>";
-			document.searchForm.submit();
+			document.listForm.id.value = id;
+			document.listForm.action = "<c:url value='/localDetail.do'/>";
+			document.listForm.submit();
 		}
 		function actorSelect(id) {
 			console.log(id);
@@ -69,7 +69,7 @@
       	<c:if test="${not empty searchList }">
           <h1 id="result">Search Result</h1>
           <form:form commandName="movieVO" name="searchForm" method="post">
-          	  <input type="hidden" name="id" value="">
+          	  <input type="hidden" name="movieId" value="">
 	          <div class="box">
 		      	<c:forEach items="${searchList }" var="search" varStatus="status">
 		      		<a href="javascript:localMovieSelect('${search.movieId}')">

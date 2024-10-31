@@ -187,7 +187,9 @@
 					    
 					    <div class="providers">
 					        <div class="provider-category">
-					            <c:if test="${not empty buyList }"><h2>구매</h2></c:if>
+					            <c:if test="${not empty buyList}">
+					            	<h2>구매</h2>
+					            </c:if>
 					            <c:forEach items="${buyList}" var="buyList">
 					                <c:if test="${not empty buyList.provider_id}">
 					                    <c:if test="${buyList.provider_name != 'Naver Store' }">

@@ -156,6 +156,18 @@ public class MovDAO extends EgovAbstractDAO {
 	public int verifyCheck(String email) throws Exception{
 		return (int) select("movDAO.verifyCheck", email);
 	}
+	// 비밀번호 업데이트
+	public int updatePassword(MemberVO vo) throws Exception{
+		return (int) update("movDAO.updatePassword", vo);
+	}
+	// 이메일 업데이트
+	public int updateEmail(MemberVO vo) throws Exception{
+		return (int) update("movDAO.updateEmail", vo);
+	}
+	// 계정 찾기
+	public MemberVO searchAcc(MemberVO vo) throws Exception{
+		return (MemberVO) select("movDAO.searchAcc", vo);
+	}
 	// 최근 리뷰 확인
 	public List<?> checkReview(ReviewVO vo) throws Exception{
 		return list("movDAO.checkReview", vo);

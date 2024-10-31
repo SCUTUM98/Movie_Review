@@ -471,6 +471,28 @@
 			WHERE email=#email# AND mail_auth = '1'
 		]]>
 	</select>
+	<!-- 비밀번호 업데이트 -->
+	<update id="movDAO.updatePassword" parameterClass="memberVO">
+		<![CDATA[
+			UPDATE member set pass=#pass#
+			WHERE id = #id#
+		]]>
+	</update>
+	<!-- 이메일 업데이트 -->
+	<update id="movDAO.updateEmail" parameterClass="memberVO">
+		<![CDATA[
+			UPDATE member set email=#email#, mail_key=#mailKey#, mail_auth=#mailAuth#
+			Where id=#id#
+		]]>
+	</update>
+	<!-- 계정 정보 찾기 -->
+	<select id="movDAO.searchAcc" resultClass="memberVO">
+		<![CDATA[
+			SELECT id, pass, name, email
+			FROM member
+			WHERE id=#id#
+		]]>
+	</select>
 	
 	<!-- 마이페이지 -->
 	<!-- 최근 리뷰 확인 -->
@@ -500,7 +522,7 @@
 				, l.movie_id AS movieId
 				, l.submit_time AS submitTime
 				, m.poster_path AS posterPath
-				, m.titleEr AS title
+				, m.title_er AS title
 			FROM movie_like l JOIN movie_page m on l.movie_id = m.movie_id
 			WHERE l.user_id = #userId#
 			ORDER BY l.submit_time DESC
