@@ -137,6 +137,11 @@
 	    	document.listForm.action = "<c:url value='/addLike.do'/>";
 	    	document.listForm.submit();
 	    }
+	    function warningAlert(msg){
+	    	alert(msg);
+	    	document.reviewForm.action = "<c:url value='redirect:/localDetail.do'/>";
+	    	document.reviewForm.submit();
+	    }
 	    
     </script>
 </head>
@@ -146,10 +151,10 @@
         <nav class="navbar">
             <ul>
                 <li><a href="/main.do">홈</a></li>
-                <li><a href="#">영화</a></li>
-                <li><a href="#">시리즈</a></li>
+                <li><a href="/movieList.do">영화</a></li>
+                <li><a href="/seriesList.do">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
-                <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
+                <c:if test="${not empty username }"><li><a href="/mypage.do">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
                 <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
             </ul>
@@ -219,16 +224,17 @@
 					            </c:forEach>
 					        </div>
 					        
-					        
-							<c:if test="${liked == 1 }">
-								<div class="favorite-section">
-								    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/liked.png" alt="Favorite" class="favorite-icon" onclick="javascript:disliked('${selectMovie.movieId}')">
-								</div>
-							</c:if>
-							<c:if test="${liked == 0 }">
-								<div class="favorite-section">
-								    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/unliked.png" alt="Favorite" class="favorite-icon" onclick="javascript:liked('${selectMovie.movieId}')">
-								</div>
+					        <c:if test="${not empty username }">
+								<c:if test="${liked == 1 }">
+									<div class="favorite-section">
+									    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/liked.png" alt="Favorite" class="favorite-icon" onclick="javascript:disliked('${selectMovie.movieId}')">
+									</div>
+								</c:if>
+								<c:if test="${liked == 0 }">
+									<div class="favorite-section">
+									    <img id="favorite-icon" src="${pageContext.request.contextPath}/images/unliked.png" alt="Favorite" class="favorite-icon" onclick="javascript:liked('${selectMovie.movieId}')">
+									</div>
+								</c:if>
 							</c:if>
 					    </div>
 					</div>
@@ -283,13 +289,24 @@
 		            <div class="input-group">
 		            	<input type="hidden" name="movieId" value="${selectMovie.movieId }">
 		            	<input type="hidden" name="userId" value="${username }">
-		                <textarea name="detail" placeholder="리뷰를 작성하세요..." maxlength="1000" class="review-textarea"></textarea>
-		                <div class="btn-rating">
-		                	<div class="rating-input">
-			                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field"> / 5
+		            	<c:if test="${not empty username }">
+			                <textarea name="detail" placeholder="리뷰를 작성하세요..." maxlength="1000" class="review-textarea"></textarea>
+			                <div class="btn-rating">
+			                	<div class="rating-input">
+				                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field"> / 5
+				                </div>
+				                <button type="submit" onclick="javascript:reviewSubmit()" class="review-button">등록</button>
 			                </div>
-			                <button type="submit" onclick="javascript:reviewSubmit()" class="review-button">등록</button>
-		                </div>
+			            </c:if>
+			            <c:if test="${empty username }">
+			                <textarea name="detail" placeholder="로그인 후 댓글을 작성할 수 있습니다." maxlength="1000" class="review-textarea" readonly></textarea>
+			                <div class="btn-rating">
+			                	<div class="rating-input">
+				                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field" readonly> / 5
+				                </div>
+				                <button type="submit" onclick="javascript:warningAlert('로그인 후 댓글을 작성할 수 있습니다.')" class="review-button">등록</button>
+			                </div>
+			            </c:if>
 		            </div>
 		        </form:form>
 		    </div>
@@ -298,7 +315,7 @@
 			    <c:forEach items="${reviews}" var="review">
 			        <div class="review-item">
 			            <div class="review-header">
-			                <span class="review-author">${username}</span>
+			                <span class="review-author">${review.userId}</span>
 			                <span class="review-date">${review.submitTime}</span>
 			            </div>
 			            <div class="review-content">

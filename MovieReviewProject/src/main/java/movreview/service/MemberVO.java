@@ -9,6 +9,7 @@ public class MemberVO {
 	private String enabled;
 	private String mailKey;
 	private String mailAuth;
+	private String profile;
 	
 	public String getId() {
 		return id;
@@ -64,5 +65,12 @@ public class MemberVO {
 	}
 	public void setMailAuth(String mailAuth) {
 		this.mailAuth = mailAuth;
+	}
+	
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 }

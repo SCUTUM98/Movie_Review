@@ -43,6 +43,10 @@ public interface MovieService {
 	ReviewVO insertReview(ReviewVO vo) throws Exception;
 	// 리뷰 리스트 불러오기
 	List<?> selectReview(ReviewVO vo) throws Exception;
+	// 시리즈 댓글 작성
+	ReviewVO insertSeriesReview(ReviewVO vo) throws Exception;
+	// 시리즈 댓글 불러오기
+	List<?> selectSeriesReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 추가
 	LikeVO insertLike(LikeVO vo) throws Exception;
 	// 즐겨찾기 제거
@@ -71,4 +75,16 @@ public interface MovieService {
 	List<?> checkReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 리스트
 	List<?> checkLike(LikeVO vo) throws Exception;
+	// 프로필 경로 조회
+	MemberVO profileRoot(MemberVO vo) throws Exception;
+	// 프로필 경로 업데이트
+	int updateProfile(MemberVO vo) throws Exception;
+	// 전체 영화 조회
+	List<?> selectAllMovie(MovieVO vo) throws Exception;
+	// 장르 리스트 조회
+	List<?> getGenre(GenreVO vo) throws Exception;
+	// 장르 별 검색
+	List<?> searchByGenre(MovieVO vo) throws Exception;
+	// 시리즈 리스트 조회
+	List<?> seriesList(CollectionVO vo) throws Exception;
 }

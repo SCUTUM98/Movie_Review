@@ -3,7 +3,10 @@ package movreview.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,6 +15,7 @@ import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
+import movreview.service.GenreVO;
 import movreview.service.LikeVO;
 import movreview.service.MemberVO;
 import movreview.service.MovieService;
@@ -121,6 +125,16 @@ public class MovieServiceImpl implements MovieService {
 	}
 	// 리뷰 불러오기
 	@Override
+	public List<?> selectSeriesReview(ReviewVO vo) throws Exception {
+		return movDAO.selectSeriesReview(vo);
+	}
+	// 시리즈 댓글 작성
+	@Override
+	public ReviewVO insertSeriesReview(ReviewVO vo) throws Exception {
+		return movDAO.insertSeriesReview(vo);
+	}
+	// 시리즈 댓글 불러오기
+	@Override
 	public List<?> selectReview(ReviewVO vo) throws Exception {
 		return movDAO.selectReview(vo);
 	}
@@ -194,5 +208,34 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> checkLike(LikeVO vo) throws Exception {
 		return movDAO.checkLike(vo);
 	}
-
+	// 프로필 경로 조회
+	@Override
+	public MemberVO profileRoot(MemberVO vo) throws Exception {
+		return movDAO.profileRoot(vo);
+	}
+	// 프로필 경로 업데이트
+	@Override
+	public int updateProfile(MemberVO vo) throws Exception {
+		return movDAO.updateProfile(vo);
+	}
+	// 전체 영화 조회
+	@Override
+	public List<?> selectAllMovie(MovieVO vo) throws Exception {
+		return movDAO.selectAllMovie(vo);
+	}
+	// 장르 리스트 조회
+	@Override
+	public List<?> getGenre(GenreVO vo) throws Exception {
+		return movDAO.getGenre(vo);
+	}
+	// 장르 별 검색
+	@Override
+	public List<?> searchByGenre(MovieVO vo) throws Exception {
+		return movDAO.searchByGenre(vo);
+	}
+	// 시리즈 리스트 조회
+	@Override
+	public List<?> seriesList(CollectionVO vo) throws Exception {
+		return movDAO.seriesList(vo);
+	}
 }

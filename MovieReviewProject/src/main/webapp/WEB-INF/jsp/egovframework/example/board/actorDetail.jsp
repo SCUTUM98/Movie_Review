@@ -115,7 +115,7 @@
             <p>${snsData.facebook}</p></div>
             
             <div class="movie-section">
-	        	<h2>출현작</h2>
+	        	<h2>출연작</h2>
 		        <div class="movie-container">
 		            <button type="button" class="scroll-btn" onclick="javascript:sscrollLeft(event)">◀</button>
 		            <div class="movie-list">

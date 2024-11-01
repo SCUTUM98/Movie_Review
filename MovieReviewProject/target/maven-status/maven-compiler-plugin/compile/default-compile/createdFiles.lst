@@ -1,9 +1,12 @@
+movreview\service\web\MailHandler.class
+movreview\service\LikeVO.class
 movreview\service\web\MovServiceController$1.class
 egovframework\example\sample\web\EgovSampleController.class
 egovframework\example\sample\service\impl\EgovSampleServiceImpl.class
 movreview\service\impl\MovieServiceImpl.class
 egovframework\example\cmmn\EgovSampleExcepHndlr.class
 egovframework\example\sample\service\SampleDefaultVO.class
+movreview\service\web\TempKey.class
 movreview\service\impl\MovMapper.class
 egovframework\example\cmmn\web\EgovImgPaginationRenderer.class
 movreview\service\impl\MovDAO.class
@@ -13,6 +16,7 @@ movreview\service\web\MovServiceController.class
 movreview\service\MemberVO.class
 egovframework\example\sample\service\impl\SampleMapper.class
 movreview\service\ProviderVO.class
+movreview\service\ReviewVO.class
 movreview\service\MovieService.class
 movreview\service\MovieVO.class
 egovframework\example\sample\service\EgovSampleService.class
@@ -26,3 +30,4 @@ egovframework\example\sample\service\SampleVO.class
 movreview\service\ActorVO.class
 movreview\service\web\MovServiceController$2.class
 egovframework\example\cmmn\EgovSampleOthersExcepHndlr.class
+movreview\service\web\MailHandler$1.class

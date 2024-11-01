@@ -2,6 +2,7 @@ package movreview.service;
 
 public class ReviewVO {
 	private int reviewId;
+	private int seriesId;
 	private int movieId;
 	private String  userId;
 	private int rate;
@@ -73,6 +74,13 @@ public class ReviewVO {
 	}
 	public void setPosterPath(String posterPath) {
 		this.posterPath = posterPath;
+	}
+	
+	public int getSeriesId() {
+		return seriesId;
+	}
+	public void setSeriesId(int seriesId) {
+		this.seriesId = seriesId;
 	}
 	
 	

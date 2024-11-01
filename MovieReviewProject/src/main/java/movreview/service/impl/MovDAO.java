@@ -12,6 +12,7 @@ import movreview.service.MovieVO;
 import movreview.service.ActorSnsVO;
 import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
+import movreview.service.GenreVO;
 import movreview.service.LikeVO;
 import movreview.service.MemberVO;
 import movreview.service.ReviewVO;
@@ -120,6 +121,14 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> selectReview(ReviewVO vo) throws Exception {
 		return list("movDAO.selectReview", vo);
 	}
+	// 시리즈 댓글 작성
+	public ReviewVO insertSeriesReview(ReviewVO vo) throws Exception {
+		return (ReviewVO) insert("movDAO.insertSeriesReview", vo);
+	}
+	// 리뷰 불러오기
+	public List<?> selectSeriesReview(ReviewVO vo) throws Exception {
+		return list("movDAO.selectSeriesReview", vo);
+	}
 	// 즐겨찾기 추가
 	public LikeVO insertLike(LikeVO vo) throws Exception {
 		return (LikeVO) insert("movDAO.insertLike", vo);
@@ -175,5 +184,29 @@ public class MovDAO extends EgovAbstractDAO {
 	// 즐겨찾기 리스트
 	public List<?> checkLike(LikeVO vo) throws Exception{
 		return list("movDAO.checkLike", vo);
+	}
+	// 프로필 경로 조회
+	public MemberVO profileRoot(MemberVO vo) throws Exception{
+		return (MemberVO) select("movDAO.profileRoot", vo);
+	}
+	// 프로필 경로 업데이트
+	public int updateProfile(MemberVO vo) throws Exception{
+		return (int) update("movDAO.updateProfile", vo);
+	}
+	// 전체 영화 조회
+	public List<?> selectAllMovie(MovieVO vo) throws Exception {
+		return list("movDAO.selectAllMovie", vo);
+	}
+	// 장르 리스트 조회
+	public List<?> getGenre(GenreVO vo) throws Exception {
+		return list("movDAO.getGenre", vo);
+	}
+	// 장르 별 검색
+	public List<?> searchByGenre(MovieVO vo) throws Exception {
+		return list("movDAO.searchByGenre", vo);
+	}
+	// 시리즈 리스트 조회
+	public List<?> seriesList(CollectionVO vo) throws Exception {
+		return list("movDAO.seriesList", vo);
 	}
 }

@@ -13,7 +13,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
+	<title>Film Report 로그인</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -79,7 +79,7 @@
 							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
 						</div>
 						<div class="form-group">
-							<p>Not registered? <a href="sign-up.html">Sign Up</a> | <a href="forgot.html">Forgot Password?</a></p>
+							<p><a href="/registerMember.do">회원가입</a> | <a href="forgot.html">비밀번호 찾기</a></p>
 						</div>
 						<div class="form-group">
 							<input type="submit" value="Sign In" class="btn btn-primary">
@@ -90,9 +90,25 @@
 				</div>
 			</div>
 			<div class="row" style="padding-top: 60px; clear: both;">
-				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. Designed by <a href="https://freehtml5.co">FreeHTML5.co</a></small></p></div>
+				<div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p></div>
 			</div>
-		</div>
+
+		<script>
+	        window.onload = function() {
+	            var errorMessage = "${errorMessage}";
+	            if (errorMessage) {
+	                alert(errorMessage);
+	                errorMessage = null;
+	            }
+	        };
+	    </script>
 	</body>
 </html>
 
+<%    
+response.setHeader("Cache-Control","no-store");    
+response.setHeader("Pragma","no-cache");    
+response.setDateHeader("Expires",0);    
+if (request.getProtocol().equals("HTTP/1.1"))  
+        response.setHeader("Cache-Control", "no-cache");  
+%>

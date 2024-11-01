@@ -12,6 +12,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Film Report ${collectionList.name }</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/detail/detailStyle.css">
+    <script type="text/javascript">
+	    function warningAlert(msg){
+	    	alert(msg);
+	    	document.reviewForm.action = "<c:url value='redirect:/localDetail.do'/>";
+	    	document.reviewForm.submit();
+	    }
+	    function reviewSubmit(){
+	    	console.log("review submit clicked");
+	    	document.reviewForm.action = "<c:url value='/addSeriesReview.do'/>";
+	    	document.reviewForm.submit();
+	    }
+    </script>
 </head>
 <body>
     <header class="header">
@@ -45,6 +57,57 @@
             <h2>개요</h2>
             <p>${collectionList.overview }</p></div>
             
+            <div class="review-section">
+		    <h2>리뷰</h2>
+		    
+		    <div class="review-input">
+		        <form:form action="addReview.do" name="reviewForm" role="form" method="post">
+		            <div class="input-group">
+		            	<input type="hidden" name="seriesId" value="${collectionList.id }">
+		            	<input type="hidden" name="userId" value="${username }">
+		            	<c:if test="${not empty username }">
+			                <textarea name="detail" placeholder="리뷰를 작성하세요..." maxlength="1000" class="review-textarea"></textarea>
+			                <div class="btn-rating">
+			                	<div class="rating-input">
+				                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field"> / 5
+				                </div>
+				                <button type="submit" onclick="javascript:reviewSubmit()" class="review-button">등록</button>
+			                </div>
+			            </c:if>
+			            <c:if test="${empty username }">
+			                <textarea name="detail" placeholder="로그인 후 댓글을 작성할 수 있습니다." maxlength="1000" class="review-textarea" readonly></textarea>
+			                <div class="btn-rating">
+			                	<div class="rating-input">
+				                    <input type="number" name="rate" min="1" max="5" placeholder="평점" class="rating-field" readonly> / 5
+				                </div>
+				                <button type="submit" onclick="javascript:warningAlert('로그인 후 댓글을 작성할 수 있습니다.')" class="review-button">등록</button>
+			                </div>
+			            </c:if>
+		            </div>
+		        </form:form>
+		    </div>
+		
+		    <div class="review-list">
+			    <c:forEach items="${reviews}" var="review">
+			        <div class="review-item">
+			            <div class="review-header">
+			                <span class="review-author">${review.userId}</span>
+			                <span class="review-date">${review.submitTime}</span>
+			            </div>
+			            <div class="review-content">
+			                <p>${review.detail}</p>
+			            </div>
+			            <div class="review-rating">
+			                <c:if test="${review.rate == '1' }"><span>⭐</span></c:if>
+		                    <c:if test="${review.rate == '2' }"><span>⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '3' }"><span>⭐⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '4' }"><span>⭐⭐⭐⭐</span></c:if>
+		                    <c:if test="${review.rate == '5' }"><span>⭐⭐⭐⭐⭐</span></c:if>
+			            </div>
+			        </div>
+			    </c:forEach>
+			</div>
+            
             <div class="movie-section">
 	        	<h2>Series</h2>
 		        <div class="movie-container">
@@ -69,7 +132,7 @@
 	    	</div>
         </div>
     </div>
-    <script src="script.js"></script>
+</div>
 </body>
 </html>
 
