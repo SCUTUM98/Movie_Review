@@ -73,8 +73,11 @@ public interface MovieService {
 	MemberVO searchAcc(MemberVO vo) throws Exception;
 	// 최근 리뷰 확인
 	List<?> checkReview(ReviewVO vo) throws Exception;
+	List<?> selectAllReview(ReviewVO vo) throws Exception;
+	List<?> selectAllSeriesReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 리스트
 	List<?> checkLike(LikeVO vo) throws Exception;
+	List<?> selectAllLike(LikeVO vo) throws Exception;
 	// 프로필 경로 조회
 	MemberVO profileRoot(MemberVO vo) throws Exception;
 	// 프로필 경로 업데이트

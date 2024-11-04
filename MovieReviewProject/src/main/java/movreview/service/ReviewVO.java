@@ -12,6 +12,8 @@ public class ReviewVO {
 	private int dislikeCnt;
 	
 	private String posterPath;
+	private String titleEn;
+	private String cname;
 	
 	public int getReviewId() {
 		return reviewId;
@@ -81,6 +83,20 @@ public class ReviewVO {
 	}
 	public void setSeriesId(int seriesId) {
 		this.seriesId = seriesId;
+	}
+	
+	public String getTitleEn() {
+		return titleEn;
+	}
+	public void setTitleEn(String titleEn) {
+		this.titleEn = titleEn;
+	}
+	
+	public String getCname() {
+		return cname;
+	}
+	public void setCname(String cname) {
+		this.cname = cname;
 	}
 	
 	

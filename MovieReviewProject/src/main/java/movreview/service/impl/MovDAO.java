@@ -181,9 +181,18 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> checkReview(ReviewVO vo) throws Exception{
 		return list("movDAO.checkReview", vo);
 	}
+	public List<?> selectAllReview(ReviewVO vo) throws Exception{
+		return list("movDAO.selectAllReview", vo);
+	}
+	public List<?> selectAllSeriesReview(ReviewVO vo) throws Exception{
+		return list("movDAO.selectAllSeriesReview", vo);
+	}
 	// 즐겨찾기 리스트
 	public List<?> checkLike(LikeVO vo) throws Exception{
 		return list("movDAO.checkLike", vo);
+	}
+	public List<?> selectAllLike(LikeVO vo) throws Exception{
+		return list("movDAO.selectAllLike", vo);
 	}
 	// 프로필 경로 조회
 	public MemberVO profileRoot(MemberVO vo) throws Exception{

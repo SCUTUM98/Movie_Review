@@ -525,7 +525,7 @@
 	</select>
 	
 	<!-- 마이페이지 -->
-	<!-- 최근 리뷰 확인 -->
+	<!-- 댓글 확인 -->
 	<select id="movDAO.checkReview" resultClass="reviewVO">
 		<![CDATA[
 			SELECT r.review_id AS reviewID
@@ -544,6 +544,42 @@
 			LIMIT 3
 		]]>
 	</select>
+	<select id="movDAO.selectAllReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.movie_id AS movieId
+					, r.user_id AS userId
+					, r.rate
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, m.poster_path AS posterPath
+					, m.title_er AS titleEn
+			FROM review r
+			JOIN movie_page m ON r.movie_id = m.movie_id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
+	<select id="movDAO.selectAllSeriesReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.series_id AS seriesId
+					, r.user_id AS userId
+					, r.rate
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, c.poster_path AS posterPath
+					, c.cname
+			FROM series_review r
+			JOIN collection c ON r.series_id = c.id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
 	<!-- 좋아요 영화 조회 -->
 	<select id="movDAO.checkLike" resultClass="likeVO">
 		<![CDATA[
@@ -557,6 +593,19 @@
 			WHERE l.user_id = #userId#
 			ORDER BY l.submit_time DESC
 			LIMIT 5
+		]]>
+	</select>
+	<select id="movDAO.selectAllLike" resultClass="likeVO">
+		<![CDATA[
+			SELECT l.like_id AS likeId
+				, l.user_id AS userId
+				, l.movie_id AS movieId
+				, l.submit_time AS submitTime
+				, m.poster_path AS posterPath
+				, m.title_er AS title
+			FROM movie_like l JOIN movie_page m on l.movie_id = m.movie_id
+			WHERE l.user_id = #userId#
+			ORDER BY l.submit_time DESC
 		]]>
 	</select>
 	<!-- 프로필 경로 조회 -->

@@ -203,10 +203,22 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> checkReview(ReviewVO vo) throws Exception {
 		return movDAO.checkReview(vo);
 	}
+	@Override
+	public List<?> selectAllReview(ReviewVO vo) throws Exception {
+		return movDAO.selectAllReview(vo);
+	}
+	@Override
+	public List<?> selectAllSeriesReview(ReviewVO vo) throws Exception {
+		return movDAO.selectAllSeriesReview(vo);
+	}
 	// 즐겨찾기 리스트
 	@Override
 	public List<?> checkLike(LikeVO vo) throws Exception {
 		return movDAO.checkLike(vo);
+	}
+	@Override
+	public List<?> selectAllLike(LikeVO vo) throws Exception {
+		return movDAO.selectAllLike(vo);
 	}
 	// 프로필 경로 조회
 	@Override

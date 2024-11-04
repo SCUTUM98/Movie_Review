@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
+import org.hsqldb.rights.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -815,6 +816,7 @@ public class MovServiceController {
 				return "forward:/verify.do";
 			} else {
 				movService.updateMailAuth(memberVO);
+				model.addAttribute("errorMessage", "이메일 인증이 완료되었습니다. 이제 로그인이 가능합니다.");
 				return "redirect:/main.do";
 			}
 		} else {
@@ -1025,15 +1027,43 @@ public class MovServiceController {
 
 		return "redirect:/localDetail.do?id=" + movieId;
 	}
+	
+	@RequestMapping(value = "/identify.do")
+	public String identify(Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		session.setAttribute("username", username);
+		
+		return "board/checkPass";
+	}
 
 	@RequestMapping(value = "/updateInfo.do", method = RequestMethod.POST)
-	public String updateInfo(@RequestParam("id") String id, Model model) throws Exception {
-		MemberVO memberVO = new MemberVO();
-		memberVO.setId(id);
+	public String updateInfo(@RequestParam("id") String id, @RequestParam("pw") String pass, Model model) throws Exception {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
+		MemberVO userVO = new MemberVO();
+		userVO.setId(id);
+		String pw = movService.searchAcc(userVO).getPass();
+		
+		if(encoder.matches(pass, pw)) {
+			MemberVO memberVO = new MemberVO();
+			memberVO.setId(id);
 
-		model.addAttribute("userInfo", movService.searchAcc(memberVO));
+			model.addAttribute("userInfo", movService.searchAcc(memberVO));
 
-		return "board/updateMember";
+			return "board/updateMember";
+		}
+		
+		else {
+			if (pw == null) {
+				model.addAttribute("errorMessage", "비밀번호를 입력해주세요.");
+			}
+			else {
+				model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+			}
+			
+			return "forward:/identify.do";
+		}
 	}
 
 	@RequestMapping(value = "/updatePass.do", method = RequestMethod.POST)
@@ -1061,8 +1091,7 @@ public class MovServiceController {
 	}
 
 	@RequestMapping(value = "/updateEmail.do", method = RequestMethod.POST)
-	public String updateEmail(@RequestParam("id") String id, @RequestParam("email") String email, Model model,
-			HttpServletRequest request) throws Exception {
+	public String updateEmail(@RequestParam("id") String id, @RequestParam("email") String email, Model model, HttpServletRequest request) throws Exception {
 		MemberVO memberVO = new MemberVO();
 
 		String mailKey = new TempKey().getKey(30, false);
@@ -1095,6 +1124,59 @@ public class MovServiceController {
 
 		return "forward:/main.do";
 
+	}
+	
+	@RequestMapping(value = "/commentDetail.do")
+	public String commentDetail(Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		session.setAttribute("username", username);
+		
+		ReviewVO reviewVO = new ReviewVO();
+		reviewVO.setUserId(username);
+
+		List<?> reviewList = movService.selectAllReview(reviewVO);
+		model.addAttribute("reviewList", reviewList);
+		
+		return "board/commentDetail";
+	}
+	
+	@RequestMapping(value = "/commentCategory.do")
+	public String commentCategory(@RequestParam("selectedValue") String selectedValue, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		session.setAttribute("username", username);
+		
+		ReviewVO reviewVO = new ReviewVO();
+		ReviewVO seriesReviewVO = new ReviewVO();
+		
+		reviewVO.setUserId(username);
+		seriesReviewVO.setUserId(username);
+		
+		List<?> reviewList = movService.selectAllReview(reviewVO);
+		List<?> seriesList = movService.selectAllSeriesReview(seriesReviewVO);
+		
+		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("seriesList", seriesList);
+		
+		return "board/commentDetail";
+	}
+	
+	@RequestMapping(value = "/favoritesDetail.do")
+	public String favoritesDetail(Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		session.setAttribute("username", username);
+		
+		LikeVO likeVO = new LikeVO();
+		
+		likeVO.setUserId(username);
+		
+		List<?> reviewList = movService.selectAllLike(likeVO);
+		
+		model.addAttribute("movieList", reviewList);
+		
+		return "board/favoriteDetail";
 	}
 
 	@PostMapping("/updateProfile.do")

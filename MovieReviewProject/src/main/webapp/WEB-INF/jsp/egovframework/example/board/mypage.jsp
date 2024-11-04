@@ -24,12 +24,26 @@
         function updateInfo(id) {
             console.log(id);
             document.listForm.id.value = id;
-            document.listForm.action = "<c:url value='/updateInfo.do'/>";
-            document.listForm.submit(); // 수정된 부분
+            document.listForm.action = "<c:url value='/identify.do'/>";
+            document.listForm.submit();
+        }
+        
+        function moveToCommentDetail(id) {
+        	console.log(id);
+        	document.commentForm.id.value = id;
+        	document.commentForm.action = "<c:url value='/commentDetail.do'/>";
+        	document.commentForm.submit();
+        }
+        
+        function moveToFavoritesDetail(id) {
+        	console.log(id);
+        	document.likeForm.id.value = id;
+        	document.likeForm.action = "<c:url value='/favoritesDetail.do'/>";
+        	document.likeForm.submit();
         }
 
         function updateProfile() {
-            document.getElementById("profileFile").click(); // 파일 입력창 클릭
+            document.getElementById("profileFile").click();
         }
 
         function uploadProfile() {
@@ -105,6 +119,7 @@
             <div class="right-panel">
                 <div class="review-section">
                     <h2>Reviews</h2>
+                    
                     <div class="review-list">
                         <c:forEach items="${reviewList}" var="review">
                             <div class="review-item">
@@ -133,14 +148,26 @@
                                             <span>⭐⭐⭐⭐⭐</span>
                                         </c:if>
                                     </div>
+                                    <div class="deleteBtn-section">
+                                    	<form:form action="deleteComment.do" name="deleteForm" method="post">
+                                    		<input type="hidden" name="id" value="">
+                                    		<button type="button" name="deleteBtn" onclick="">삭제</button>
+                                    	</form:form>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
+                    <div class="detailBtn-section">
+                    	<form:form action="commentDetail.do" name="commentForm" method="post">
+                    		<input type="hidden" name="id" value="">
+                    		<button type="button" class="detailBtn" name="commentDetailBtn" onclick="javascript:moveToCommentDetail('${username}')">>>더보기</button>
+                    	</form:form>
+                    </div>
                 </div>
 
                 <h2>Favorites</h2>
-                <form:form commandName="movieVO" name="likeForm" method="post">
+                <form commandName="movieVO" name="likeForm" method="post">
                     <input type="hidden" name="id" value="">
                     <div class="box">
                         <c:forEach items="${likeList}" var="like">
@@ -160,7 +187,10 @@
                             </c:if>
                         </c:forEach>
                     </div>
-                </form:form>
+                    <div class="detailBtn-section">
+                    	<button type="button" class="detailBtn" name="favoritesDetailBtn" onclick="javascript:moveToFavoritesDetail('${username}')">>>더보기</button>
+	                </div>
+                </form>
             </div>
         </div>
     </c:if>
