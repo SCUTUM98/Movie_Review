@@ -65,6 +65,9 @@ public class MovServiceController {
 
 	@Value("${tmdb-api-key}")
 	private String apiKey;
+	
+	@Value("${google-api-key}")
+	private String mapApi;
 
 	@Resource(name = "movService")
 	private MovieService movService;
@@ -675,8 +678,9 @@ public class MovServiceController {
 	}
 
 	@RequestMapping(value = "/actorDetail.do")
-	public String actorDetail(@RequestParam("actorId") int actorId, Model model, HttpServletRequest request)
-			throws Exception {
+	public String actorDetail(@RequestParam("actorId") int actorId, Model model, HttpServletRequest request) throws Exception {
+		model.addAttribute("googleAPI", mapApi);
+		
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 

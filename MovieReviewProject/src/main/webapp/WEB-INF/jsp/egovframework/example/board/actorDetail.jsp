@@ -39,8 +39,8 @@
         <nav class="navbar">
             <ul>
                 <li><a href="/main.do">홈</a></li>
-                <li><a href="#">영화</a></li>
-                <li><a href="#">시리즈</a></li>
+                <li><a href="/movieList.do">영화</a></li>
+                <li><a href="/seriesList.do">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
                 <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
@@ -68,7 +68,12 @@
 		    <c:if test="${empty actorData.deathday}">
 		        <c:if test="${not empty actorData.birthday }"><h3>🎉  ${actorData.birthday }</h3></c:if>
 		        <c:if test="${not empty actorData.status }"><h3>🎬 ${actorData.status }</h3></c:if>
-		        <c:if test="${not empty actorData.homeplace }"><h3>🏡  ${actorData.homeplace }</h3></c:if>
+		        <c:if test="${not empty actorData.homeplace }">
+		        	<h3>🏡  ${actorData.homeplace }</h3>
+		        	<iframe width="320" height="240" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+		            src="https://www.google.com/maps/embed/v1/place?key=${googleAPI }&q=${actorData.homeplace}">
+					</iframe>
+		        </c:if>
 		    </c:if>
 		
 		    <div class="sns-section">
@@ -112,7 +117,8 @@
         <div class="right-panel">
         	<div class="overview-section">
             <h2>개요</h2>
-            <p>${snsData.facebook}</p></div>
+            
+            </div>
             
             <div class="movie-section">
 	        	<h2>출연작</h2>
