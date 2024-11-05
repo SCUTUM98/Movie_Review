@@ -447,7 +447,57 @@
 			WHERE user_id = #userId# AND movie_id = #movieId#
 		]]>
 	</select>
-	
+	<!-- 영화 정보 업데이트 -->
+	<update id="movDAO.movieUpdate" parameterClass="movieVO">
+		<![CDATA[
+			UPDATE movie_page
+			SET title_kr = #titleKr#
+				, title_er = #titleEn#
+				, release_date = #releaseDate#
+				, overview = #overview#
+				, backdrop_path = #backdropPath#
+				, poster_path = #posterPath#
+				, collection_id = #collectionId#
+				, status = #status#
+				, tagline = #tagline#
+				, submit_date = CURRENT_TIMESTAMP
+			WHERE movie_id = #movieId#
+		]]>
+	</update>
+	<!-- 시리즈 정보 업데이트 -->
+	<update id="movDAO.seriesUpdate" parameterClass="collectionVO">
+		<![CDATA[
+			UPDATE collection
+			SET cname = #name#
+				, poster_path = #posterPath#
+				, backdrop_path = #backdropPath#
+				, overview = #overview#
+				, submit_date = CURRENT_TIMESTAMP
+			WHERE id = #id#
+		]]>
+	</update>
+	<!-- 배우 정보 업데이트 -->
+	<update id="movDAO.actorUpdate" parameterClass="actorVO">
+		<![CDATA[
+			UPDATE actor
+			SET profile_path = #profilePath#
+				, deathday = #deathday#
+				, status = #status#
+				, homeplace = #homeplace#
+			WHERE actor_id = #actorId#
+		]]>
+	</update>
+	<update id="movDAO.actorSnsUpdate" parameterClass="actorSnsVO">
+		<![CDATA[
+			UPDATE actor_sns
+			SET facebook = #facebook#
+				, instagram = #instagram#
+				, tiktok = #tiktok#
+				, twitter = #twitter#
+				, youtube = #youtube#
+			WHERE actor_id = #actorId#
+		]]>
+	</update>
 	<!-- 계정 관리 -->
 	<!-- 회원 가입 -->
 	<insert id="movDAO.registerMember" parameterClass="memberVO">

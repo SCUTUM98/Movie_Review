@@ -153,6 +153,25 @@ public class MovieServiceImpl implements MovieService {
 	public int selectLike(LikeVO vo) throws Exception {
 		return movDAO.selectLike(vo);
 	}
+	// 영화 업데이트
+	@Override
+	public int movieUpdate(MovieVO vo) throws Exception {
+		return movDAO.movieUpdate(vo);
+	}
+	// 시리즈 업데이트
+	@Override
+	public int seriesUpdate(CollectionVO vo) throws Exception {
+		return movDAO.seriesUpdate(vo);
+	}
+	// 배우 업데이트
+	@Override
+	public int actorUpdate(ActorVO vo) throws Exception {
+		return movDAO.actorUpdate(vo);
+	}
+	@Override
+	public int actorSnsUpdate(ActorSnsVO vo) throws Exception {
+		return movDAO.actorSnsUpdate(vo);
+	}
 	// 회원 가입
 	@Override
 	public MemberVO registerMember(MemberVO vo) throws Exception {

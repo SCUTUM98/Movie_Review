@@ -534,6 +534,18 @@ public class MovServiceController {
 
 		return "board/localDetail";
 	}
+	
+	@RequestMapping(value="movieUpdate.do")
+	public String movieUpdate(@RequestParam("movieId") int movieId) throws Exception {
+		String detailData = tmdbService.movieDetail(apiKey, movieId);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(detailData);
+		MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
+		movService.movieUpdate(detailVO);
+		
+		return "redirect:/localDetail.do?id=" + movieId;
+	}
 
 	@RequestMapping(value = "/addReview.do", method = RequestMethod.POST)
 	public String addReview(SessionStatus status, HttpServletRequest request, Model model,

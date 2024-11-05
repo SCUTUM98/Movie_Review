@@ -141,6 +141,21 @@ public class MovDAO extends EgovAbstractDAO {
 	public int selectLike(LikeVO vo) throws Exception {
 		return (int) select("movDAO.selectLike", vo);
 	}
+	// 영화 업데이트
+	public int movieUpdate(MovieVO vo) throws Exception {
+		return (int) update("movDAO.movieUpdate", vo);
+	}
+	// 시리즈 업데이트
+	public int seriesUpdate(CollectionVO vo) throws Exception {
+		return (int) update("movDAO.seriesUpdate", vo);
+	}
+	// 배우 업데이트
+	public int actorUpdate(ActorVO vo) throws Exception {
+		return (int) update("movDAO.actorUpdate", vo);
+	}
+	public int actorSnsUpdate(ActorSnsVO vo) throws Exception {
+		return (int) update("movDAO.actorSnsUpdate", vo);
+	}
 	// 회원 가입
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return (MemberVO) insert("movDAO.registerMember", vo);

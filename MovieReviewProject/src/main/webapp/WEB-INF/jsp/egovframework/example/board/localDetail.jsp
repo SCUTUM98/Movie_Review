@@ -77,6 +77,12 @@
 	    	document.listForm.action = "<c:url value='/seriesDetail.do'/>";
 	    	document.listForm.submit();
 	    }
+	    function moveToUpdate(id){
+	    	document.updateForm.movieId.value = id;
+	    	console.log(document.updateForm.movieId.value);
+	    	document.updateForm.action = "<c:url value='/movieUpdate.do'/>";
+	    	document.updateForm.submit();
+	    }
 	    
 	    function moveToProvider(provider, name){
 	    	if (provider == 'Google Play Movies'){
@@ -400,6 +406,15 @@
 		            <button type="button" class="scroll-btn right" onclick="javascript:rec_scrollRight(event)">▶</button>
 		        </div>
 		    
+		</div>
+		
+		<div class="update-section">
+			<form:form action="movieUpdate.do" name="updateForm" method="post">
+				<input type="hidden" name="movieId" value="">
+				<button type="submit" class="update-Btn" onclick="javascript:moveToUpdate('${selectMovie.movieId}')">영화 업데이트</button>
+			</form:form>
+			
+			
 		</div>
 </body>
 </html>

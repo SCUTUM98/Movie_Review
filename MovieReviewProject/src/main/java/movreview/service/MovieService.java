@@ -53,6 +53,13 @@ public interface MovieService {
 	void deleteLike(LikeVO vo) throws Exception;
 	// 즐겨찾기 확인
 	int selectLike(LikeVO vo) throws Exception;
+	// 영화 업데이트
+	int movieUpdate(MovieVO vo) throws Exception;
+	// 시리즈 업데이트
+	int seriesUpdate(CollectionVO vo) throws Exception;
+	// 배우 업데이트
+	int actorUpdate(ActorVO vo) throws Exception;
+	int actorSnsUpdate(ActorSnsVO vo) throws Exception;
 	// 회원 가입
 	MemberVO registerMember(MemberVO vo) throws Exception;
 	// 인증 랜덤 번호 저장
