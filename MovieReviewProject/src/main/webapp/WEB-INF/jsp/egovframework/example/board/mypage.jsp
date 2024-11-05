@@ -148,12 +148,7 @@
                                             <span>⭐⭐⭐⭐⭐</span>
                                         </c:if>
                                     </div>
-                                    <div class="deleteBtn-section">
-                                    	<form:form action="deleteComment.do" name="deleteForm" method="post">
-                                    		<input type="hidden" name="id" value="">
-                                    		<button type="button" name="deleteBtn" onclick="">삭제</button>
-                                    	</form:form>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </c:forEach>

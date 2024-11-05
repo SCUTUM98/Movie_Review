@@ -220,6 +220,16 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> selectAllLike(LikeVO vo) throws Exception {
 		return movDAO.selectAllLike(vo);
 	}
+	// 영화 댓글 삭제
+	@Override
+	public void deleteMovieComment(ReviewVO vo) throws Exception {
+		movDAO.deleteMovieComment(vo);
+	}
+	// 시리즈 댓글 삭제
+	@Override
+	public void deleteSeriesComment(ReviewVO vo) throws Exception {
+		movDAO.deleteSeriesComment(vo);
+	}
 	// 프로필 경로 조회
 	@Override
 	public MemberVO profileRoot(MemberVO vo) throws Exception {

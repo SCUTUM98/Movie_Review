@@ -208,7 +208,7 @@ ul {
     border: none;
     border-radius: 5px; /* 모서리 둥글게 */
     background-color: #ffffff; /* 배경 색상 */
-    color: black; /* 텍스트 색상 */
+    color: white; /* 텍스트 색상 */
     resize: none; /* 크기 조절 비활성화 */
 }
 
@@ -277,4 +277,97 @@ ul {
 .review-rating {
     color: #ffcc00; /* 평점 색상 */
     font-weight: bold; /* 평점 강조 */
+}
+
+/* 기존 CSS에 추가 */
+
+.table-horizontal {
+    width: 100%;
+    border-collapse: collapse; /* 테두리 겹치기 방지 */
+    margin-top: 20px; /* 테이블 상단 여백 */
+}
+
+.table-horizontal table {
+    width: 100%;
+}
+
+.table-horizontal th, .table-horizontal td {
+    border: 1px solid #fff; /* 테두리 색상 */
+    padding: 10px;
+    text-align: left;
+}
+
+.table-horizontal th {
+    background-color: #333; /* 헤더 배경 색상 */
+    color: white; /* 헤더 텍스트 색상 */
+}
+
+.table-horizontal tr:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* 마우스 오버 시 배경 색상 */
+}
+
+.movie-section {
+    margin-top: 20px; /* 영화 섹션 상단 여백 */
+    border-radius: 10px; /* 모서리 둥글게 */
+}
+
+.movie-info {
+    text-align: center; /* 영화 제목 중앙 정렬 */
+}
+
+.review-section {
+    background-color: #4c4c4c; /* 배경 색상 설정 */
+    padding: 10px; /* 패딩 추가 */
+    border-radius: 10px; /* 모서리 둥글게 */
+}
+
+.review-item {
+    background-color: #2c2c2c; /* 댓글 배경 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    padding: 15px; /* 패딩 추가 */
+    margin-bottom: 15px; /* 각 댓글 간 간격 */
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between; /* 양쪽 정렬 */
+    margin-bottom: 10px; /* 헤더와 내용 간 간격 */
+}
+
+.review-author {
+    font-weight: bold; /* 작성자 이름 강조 */
+}
+
+.review-date {
+    color: #aaa; /* 날짜 색상 */
+    font-size: 0.9em; /* 날짜 크기 조정 */
+}
+
+.review-content {
+    margin-bottom: 10px; /* 내용과 평점 간 간격 */
+}
+
+.review-rating {
+    color: #ffcc00; /* 평점 색상 */
+    font-weight: bold; /* 평점 강조 */
+}
+.table-horizontal {
+    width: 100%;
+    margin-top: 20px; /* 테이블 상단 여백 */
+    border-collapse: collapse; /* 테두리 겹치기 방지 */
+}
+
+.table-horizontal th, .table-horizontal td {
+    border: 1px solid #fff; /* 테두리 색상 */
+    padding: 10px; /* 셀 내부 여백 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+.table-horizontal th {
+    background-color: #333; /* 헤더 배경 색상 */
+    color: white; /* 헤더 텍스트 색상 */
+}
+
+.table-horizontal tr:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* 마우스 오버 시 배경 색상 */
 }

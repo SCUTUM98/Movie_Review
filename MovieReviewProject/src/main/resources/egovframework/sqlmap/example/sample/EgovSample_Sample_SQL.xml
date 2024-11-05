@@ -608,6 +608,20 @@
 			ORDER BY l.submit_time DESC
 		]]>
 	</select>
+	<!-- 영화 댓글 삭제 -->
+	<delete id="movDAO.deleteMovieComment">
+		<![CDATA[
+			DELETE FROM review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
+	<!-- 시리즈 댓글 삭제 -->
+	<delete id="movDAO.deleteSeriesComment">
+		<![CDATA[
+			DELETE FROM series_review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
 	<!-- 프로필 경로 조회 -->
 	<select id="movDAO.profileRoot" resultClass="memberVO">
 		<![CDATA[

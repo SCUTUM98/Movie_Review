@@ -194,6 +194,14 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> selectAllLike(LikeVO vo) throws Exception{
 		return list("movDAO.selectAllLike", vo);
 	}
+	// 영화 댓글 삭제
+	public void deleteMovieComment(ReviewVO vo) throws Exception {
+		delete("movDAO.deleteMovieComment", vo);
+	}
+	// 시리즈 댓글 삭제
+	public void deleteSeriesComment(ReviewVO vo) throws Exception {
+		delete("movDAO.deleteSeriesComment", vo);
+	}
 	// 프로필 경로 조회
 	public MemberVO profileRoot(MemberVO vo) throws Exception{
 		return (MemberVO) select("movDAO.profileRoot", vo);

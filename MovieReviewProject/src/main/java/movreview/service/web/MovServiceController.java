@@ -31,7 +31,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +48,7 @@ import javax.servlet.http.HttpSession;
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
 import movreview.service.TmdbService;
+import movreview.service.NaverService;
 import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
 import movreview.service.ProviderVO;
@@ -68,12 +72,21 @@ public class MovServiceController {
 	
 	@Value("${google-api-key}")
 	private String mapApi;
+	
+	@Value("${naver-client-key}")
+	private String client;
+	
+	@Value("${naver-secret-key}")
+	private String secret;
 
 	@Resource(name = "movService")
 	private MovieService movService;
 
 	@Autowired
 	private TmdbService tmdbService;
+	
+	@Autowired
+	private NaverService naverService;
 
 	@Inject
 	BCryptPasswordEncoder encoder;
@@ -679,48 +692,102 @@ public class MovServiceController {
 
 	@RequestMapping(value = "/actorDetail.do")
 	public String actorDetail(@RequestParam("actorId") int actorId, Model model, HttpServletRequest request) throws Exception {
-		model.addAttribute("googleAPI", mapApi);
+	    model.addAttribute("googleAPI", mapApi);
+	    
+	    HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+
+	    model.addAttribute("username", username);
+
+	    ActorVO actorVO = new ActorVO();
+	    ActorSnsVO snsVO = new ActorSnsVO();
+
+	    String movieCredits = tmdbService.movieCredits(apiKey, actorId);
+
+	    actorVO.setActorId(String.valueOf(actorId));
+	    snsVO.setActorId(actorId);
+
+	    ActorVO tmp = movService.actorDetail(actorVO);
+	    model.addAttribute("actorData", tmp);
+	    model.addAttribute("snsData", movService.snsDetail(snsVO));
+
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        JsonNode creditNode = objectMapper.readTree(movieCredits);
+	        JsonNode credits = creditNode.path("cast");
+
+	        if (credits != null && !credits.isEmpty()) {
+	            List<Map<String, Object>> creditList = new ArrayList<>();
+	            for (JsonNode credit : credits) {
+	                Map<String, Object> creditMap = objectMapper.convertValue(credit, Map.class);
+	                creditList.add(creditMap);
+	            }
+	            model.addAttribute("creditData", creditList);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
+	    }
+	    
+	    String news = naverService.searchNews(client, secret, tmp.getActName());
+	    
+	    ObjectMapper newsMapper = new ObjectMapper();
+	    try {
+	        JsonNode newsItem = newsMapper.readTree(news);
+	        JsonNode newsNode = newsItem.path("items");
+	        
+	        if (newsNode != null && !newsNode.isEmpty()) {
+	            List<Map<String, Object>> newsList = new ArrayList<>();
+	            for (JsonNode newsN : newsNode) {
+	                Map<String, Object> newsMap = newsMapper.convertValue(newsN, Map.class);
+	                
+	                // pubDate 문자열 변환
+	                String pubDateStr = (String) newsMap.get("pubDate");
+	                if (pubDateStr != null && !pubDateStr.isEmpty()) {
+	                    try {
+	                        // 입력 형식과 출력 형식 정의
+	                        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+	                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+	                        Date pubDate = inputFormat.parse(pubDateStr); // 문자열을 Date로 변환
+	                        String formattedDate = outputFormat.format(pubDate); // 원하는 형식으로 변환
+	                        newsMap.put("pubDate", formattedDate); // 변환된 날짜로 업데이트
+	                    } catch (ParseException e) {
+	                        e.printStackTrace(); // 예외 처리
+	                        System.err.println("Failed to parse date: " + pubDateStr); // 문제를 로그에 남김
+	                        newsMap.put("pubDate", "N/A"); // 변환 실패 시 N/A 표시
+	                    }
+	                } else {
+	                    newsMap.put("pubDate", "N/A"); // 날짜가 없을 경우 표시
+	                }
+	                
+	                newsList.add(newsMap);
+	            }
+	            model.addAttribute("newsData", newsList);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
+	    }
+
+	    return "board/actorDetail";
+	}
+
+	@RequestMapping(value="/deleteComment.do")
+	public String deleteComment(@RequestParam("type") String type, @RequestParam("reviewId") int reviewId, Model model) throws Exception {
+		ReviewVO commentVO = new ReviewVO();
+		commentVO.setReviewId(reviewId);
+		System.out.println(commentVO.getReviewId());
 		
-		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
-
-		model.addAttribute("username", username);
-
-		ActorVO actorVO = new ActorVO();
-		ActorSnsVO snsVO = new ActorSnsVO();
-
-		String movieCredits = tmdbService.movieCredits(apiKey, actorId);
-
-		actorVO.setActorId(String.valueOf(actorId));
-		snsVO.setActorId(actorId);
-
-		System.out.println("actorId: " + actorVO.getActorId());
-
-		ActorVO tmp = movService.actorDetail(actorVO);
-		System.out.println(tmp.getActorId());
-
-		model.addAttribute("actorData", movService.actorDetail(actorVO));
-		model.addAttribute("snsData", movService.snsDetail(snsVO));
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			JsonNode creditNode = objectMapper.readTree(movieCredits);
-			JsonNode credits = creditNode.path("cast");
-
-			if (credits != null && !credits.isEmpty()) {
-				List<Map<String, Object>> creditList = new ArrayList<>();
-				for (JsonNode credit : credits) {
-					Map<String, Object> creditMap = objectMapper.convertValue(credit, Map.class);
-					creditList.add(creditMap);
-				}
-				model.addAttribute("creditData", creditList);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		if(type.equals("movie")) {
+			System.out.println(type);
+			movService.deleteMovieComment(commentVO);
 		}
-
-		return "board/actorDetail";
+		if(type.equals("series")) {
+			System.out.println(type);
+			movService.deleteSeriesComment(commentVO);
+		}
+		
+		return "redirect:/commentDetail.do";
 	}
 
 	@RequestMapping("/registerMember.do")

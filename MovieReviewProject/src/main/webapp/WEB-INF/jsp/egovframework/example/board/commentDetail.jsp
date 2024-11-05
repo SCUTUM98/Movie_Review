@@ -24,7 +24,15 @@
 	        document.getElementById("filterForm").selectedValue.value = value;
 	        document.getElementById("filterForm").submit();
 	    }
-
+        function deleteComment(type, id) {
+        	console.log("btn clicked");
+        	console.log(type);
+        	console.log(id);
+        	document.getElementById("filterForm").type.value = type;
+        	document.getElementById("filterForm").reviewId.value = id;
+        	document.getElementById("filterForm").action = "<c:url value='/deleteComment.do'/>"
+        	document.getElementById("filterForm").submit();
+        }
 
     </script>
 </head>
@@ -55,6 +63,8 @@
             <div class="review-section">
 	            <form id="filterForm" action="/commentCategory.do" method="post">
 	            	<input type="hidden" name="selectedValue" value="">
+	            	<input type="hidden" name="type" value="">
+	            	<input type="hidden" name="reviewId" value="">
 					<h2>Reviews</h2>
 					<div class="review-list">
 					    <c:if test="${empty param.selectedValue}">
@@ -82,7 +92,7 @@
 					                    <div class="deleteBtn-section">
 					                        <form:form action="deleteComment.do" name="deleteForm" method="post">
 					                            <input type="hidden" name="id" value="${review.reviewId}">
-					                            <button type="button" name="deleteBtn" onclick="">삭제</button>
+					                            <button type="button" name="deleteBtn" onclick="javascript:deleteComment('movie', '${review.reviewId }')">삭제</button>
 					                        </form:form>
 					                    </div>
 					                </div>
@@ -114,7 +124,7 @@
 					                    <div class="deleteBtn-section">
 					                        <form:form action="deleteComment.do" name="deleteForm" method="post">
 					                            <input type="hidden" name="id" value="${review.reviewId}">
-					                            <button type="button" name="deleteBtn" onclick="">삭제</button>
+					                            <button type="submit" name="deleteBtn" onclick="javascript:deleteComment('movie', '${review.reviewId }')">삭제</button>
 					                        </form:form>
 					                    </div>
 					                </div>
@@ -147,7 +157,7 @@
 					                    <div class="deleteBtn-section">
 					                        <form:form action="deleteComment.do" name="deleteForm" method="post">
 					                            <input type="hidden" name="id" value="${review.reviewId}">
-					                            <button type="button" name="deleteBtn" onclick="">삭제</button>
+					                            <button type="button" name="deleteBtn" onclick="javascript:deleteComment('series', '${review.reviewId }')">삭제</button>
 					                        </form:form>
 					                    </div>
 					                </div>

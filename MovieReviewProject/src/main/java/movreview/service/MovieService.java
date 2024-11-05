@@ -78,6 +78,10 @@ public interface MovieService {
 	// 즐겨찾기 리스트
 	List<?> checkLike(LikeVO vo) throws Exception;
 	List<?> selectAllLike(LikeVO vo) throws Exception;
+	// 영화 댓글 삭제
+	void deleteMovieComment(ReviewVO vo) throws Exception;
+	// 시리즈 댓글 삭제
+	void deleteSeriesComment(ReviewVO vo) throws Exception;
 	// 프로필 경로 조회
 	MemberVO profileRoot(MemberVO vo) throws Exception;
 	// 프로필 경로 업데이트

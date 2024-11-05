@@ -117,7 +117,7 @@
         <div class="right-panel">
         	<div class="overview-section">
             <h2>개요</h2>
-            
+            <p></p>
             </div>
             
             <div class="movie-section">
@@ -142,13 +142,50 @@
 		            <button type="button" class="scroll-btn" onclick="javascript:scrollRight(event)">▶</button>
 		        </div>
 	    	</div>
+	    	
+	    	<div class="news-section">
+			    <h2>NEWS</h2>
+			    <div class="table-horizontal hover">
+			        <table>
+			            <colgroup>
+			                <col style="width:10px;"> <!-- 번호 열 -->
+			                <col style="width:300px;"> <!-- 제목 열 -->
+			                <col style="width:100px;"> <!-- 게시일 열 -->
+			            </colgroup>
+			            <thead>
+			                <tr>
+			                    <th scope="col">번호</th>
+			                    <th scope="col">제목</th>
+			                    <th scope="col">게시일</th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <c:if test="${empty newsData }">
+			                    <tr>
+			                        <td colspan="3" style="text-align: center;">관련 뉴스가 없습니다.</td>
+			                    </tr>
+			                </c:if>
+			                <c:forEach items="${newsData }" var="news" varStatus="status">
+			                    <tr>
+			                        <td>${status.index + 1}</td>
+			                        <td><a href="${news.link}" target="_blank">${news.title }</a></td>
+			                        <td><c:out value="${news.pubDate }"/></td>
+			                    </tr>
+			                </c:forEach>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 
 <footer>
-	<h2>내려와라ㅏ아아아ㅏ아아</h2>
+	<div class="row" style="padding-top: 60px; clear: both;">
+		<div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p></div>
+	</div>
 </footer>
 </html>
 
