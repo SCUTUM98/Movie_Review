@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class MovServiceController {
 		model.addAttribute("recentlyAdded", movService.recentlyAdded(recentVO));
 		model.addAttribute("recentlyCollected", movService.recentlyCollected(seriesVO));
 
-		String suggestData = tmdbService.suggestMovie(apiKey);
+		String suggestData = tmdbService.movieTrends(apiKey);
 
 		if (suggestData == null || suggestData.isEmpty()) {
 			throw new RuntimeException("Received null or empty response from the API");
@@ -536,13 +537,32 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="movieUpdate.do")
-	public String movieUpdate(@RequestParam("movieId") int movieId) throws Exception {
+	public String movieUpdate(@RequestParam("movieId") int movieId, Model model) throws Exception {
 		String detailData = tmdbService.movieDetail(apiKey, movieId);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode jsonNode = objectMapper.readTree(detailData);
 		MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
 		movService.movieUpdate(detailVO);
+		
+		MovieVO seriesName = new MovieVO();
+		seriesName.setMovieId(movieId);
+		
+		if(jsonNode.has("belongs_to_collection")) {
+			JsonNode collectionNode = jsonNode.path("belongs_to_collection");
+			CollectionVO collectionVO = new CollectionVO();
+			collectionVO.setId(collectionNode.path("id").asInt());
+			collectionVO.setName(collectionNode.path("name").asText());
+			collectionVO.setPosterPath(collectionNode.path("poster_path").asText());
+			collectionVO.setBackdropPath(collectionNode.path("backdrop_path").asText());
+
+			String collectionData = tmdbService.collectionDetail(apiKey, collectionVO.getName());
+			LOGGER.debug("CollectionData: " + collectionData);
+			JsonNode overviewNode = objectMapper.readTree(collectionData);
+			
+			collectionVO.setOverview(overviewNode.findPath("overview").asText());
+			movService.seriesUpdate(collectionVO);
+		}
 		
 		return "redirect:/localDetail.do?id=" + movieId;
 	}
@@ -587,6 +607,24 @@ public class MovServiceController {
 		movService.insertSeriesReview(reviewVO);
 
 		return "redirect:/seriesDetail.do?collectionId=" + seriesId;
+	}
+	
+	@RequestMapping(value = "/addActorReview.do", method = RequestMethod.POST)
+	public String addActorReview(SessionStatus status, HttpServletRequest request, Model model,
+			@RequestParam("actorId") String actorId, @RequestParam("userId") String userId, @RequestParam("detail") String detail) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		model.addAttribute("username", username);
+		
+		ReviewVO reviewVO = new ReviewVO();
+
+		reviewVO.setActorId(actorId);
+		reviewVO.setUserId(userId);
+		reviewVO.setDetail(detail);
+		
+		movService.insertActorReview(reviewVO);
+		
+		return "redirect:/actorDetail.do?actorId=" + actorId;
 	}
 
 	@RequestMapping(value = "/addMovie.do", method = RequestMethod.POST)
@@ -780,6 +818,12 @@ public class MovServiceController {
 	        e.printStackTrace();
 	        throw new RuntimeException("Error processing the API response: " + e.getMessage());
 	    }
+	    
+	    ReviewVO reviewVO = new ReviewVO();
+		reviewVO.setActorId(Integer.toString(actorId));
+		System.out.println("collectionId: " + reviewVO.getSeriesId());
+		List<?> reviewList = movService.selectActorReview(reviewVO);
+		model.addAttribute("reviews", reviewList);
 
 	    return "board/actorDetail";
 	}
@@ -797,6 +841,10 @@ public class MovServiceController {
 		if(type.equals("series")) {
 			System.out.println(type);
 			movService.deleteSeriesComment(commentVO);
+		}
+		if(type.contentEquals("actor")) {
+			System.out.println(type);
+			movService.deleteActorComment(commentVO);
 		}
 		
 		return "redirect:/commentDetail.do";
@@ -1232,15 +1280,19 @@ public class MovServiceController {
 		
 		ReviewVO reviewVO = new ReviewVO();
 		ReviewVO seriesReviewVO = new ReviewVO();
+		ReviewVO actorReviewVO = new ReviewVO();
 		
 		reviewVO.setUserId(username);
 		seriesReviewVO.setUserId(username);
+		actorReviewVO.setUserId(username);
 		
 		List<?> reviewList = movService.selectAllReview(reviewVO);
 		List<?> seriesList = movService.selectAllSeriesReview(seriesReviewVO);
+		List<?> actorList = movService.selectAllActorReview(actorReviewVO);
 		
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("seriesList", seriesList);
+		model.addAttribute("actorList", actorList);
 		
 		return "board/commentDetail";
 	}
@@ -1261,6 +1313,30 @@ public class MovServiceController {
 		
 		return "board/favoriteDetail";
 	}
+	
+	@RequestMapping(value = "/idCheck.do", method = RequestMethod.POST)
+    @ResponseBody // JSON으로 응답
+    public Map<String, Integer> idCheck(@RequestParam("id") String id) throws Exception {
+        int cnt = movService.checkId(id);
+        System.out.println("cnt: " + cnt);
+        
+        // JSON 형식으로 반환할 Map 생성
+        Map<String, Integer> response = new HashMap<>();
+        response.put("cnt", cnt); // cnt 값을 Map에 추가
+        return response; // JSON으로 반환
+    }
+
+	@RequestMapping(value = "/emailCheck.do", method = RequestMethod.POST)
+    @ResponseBody // JSON으로 응답
+    public Map<String, Integer> emailCheck(@RequestParam("email") String email) throws Exception {
+        int cnt = movService.checkEmail(email);
+        System.out.println("cnt: " + cnt);
+        
+        // JSON 형식으로 반환할 Map 생성
+        Map<String, Integer> response = new HashMap<>();
+        response.put("cnt", cnt); // cnt 값을 Map에 추가
+        return response; // JSON으로 반환
+    }
 
 	@PostMapping("/updateProfile.do")
     public ResponseEntity<?> updateProfile(@RequestParam("id") String userId,

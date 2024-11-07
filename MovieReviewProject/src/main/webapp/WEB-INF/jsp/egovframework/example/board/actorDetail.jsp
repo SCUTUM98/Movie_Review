@@ -31,6 +31,16 @@
 	            behavior: 'smooth'
 	        });
 	    }
+	    function warningAlert(msg){
+	    	alert(msg);
+	    	document.reviewForm.action = "<c:url value='redirect:/localDetail.do'/>";
+	    	document.reviewForm.submit();
+	    }
+	    function reviewSubmit(){
+	    	console.log("review submit clicked");
+	    	document.reviewForm.action = "<c:url value='/addActorReview.do'/>";
+	    	document.reviewForm.submit();
+	    }
     </script>
 </head>
 <body>
@@ -42,7 +52,7 @@
                 <li><a href="/movieList.do">영화</a></li>
                 <li><a href="/seriesList.do">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
-                <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
+                <c:if test="${not empty username }"><li><a href="/mypage.do">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
                 <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
             </ul>
@@ -143,6 +153,45 @@
 		        </div>
 	    	</div>
 	    	
+	    	<div class="review-section">
+		    <h2>응원</h2>
+		    
+		    <div class="review-input">
+		        <form:form action="addActorReview.do" name="reviewForm" role="form" method="post">
+		            <div class="input-group">
+		            	<input type="hidden" name="actorId" value="${actorData.actorId }">
+		            	<input type="hidden" name="userId" value="${username }">
+		            	<c:if test="${not empty username }">
+			                <textarea name="detail" placeholder="응원 글을 작성해주세요." maxlength="1000" class="review-textarea"></textarea>
+			                <div class="btn-rating">
+			                	
+				                <button type="submit" onclick="javascript:reviewSubmit()" class="review-button">등록</button>
+			                </div>
+			            </c:if>
+			            <c:if test="${empty username }">
+			                <textarea name="detail" placeholder="로그인 후 댓글을 작성할 수 있습니다." maxlength="1000" class="review-textarea" readonly></textarea>
+			                <div class="btn-rating">
+				                <button type="submit" onclick="javascript:warningAlert('로그인 후 댓글을 작성할 수 있습니다.')" class="review-button">등록</button>
+			                </div>
+			            </c:if>
+		            </div>
+		        </form:form>
+		    </div>
+		
+		    <div class="review-list">
+			    <c:forEach items="${reviews}" var="review">
+			        <div class="review-item">
+			            <div class="review-header">
+			                <span class="review-author">${review.userId}</span>
+			                <span class="review-date">${review.submitTime}</span>
+			            </div>
+			            <div class="review-content">
+			                <p>${review.detail}</p>
+			            </div>
+			        </div>
+			    </c:forEach>
+			</div>
+	    	
 	    	<div class="news-section">
 			    <h2>NEWS</h2>
 			    <div class="table-horizontal hover">
@@ -182,11 +231,11 @@
     <script src="script.js"></script>
 </body>
 
-<footer>
+<!-- <footer>
 	<div class="row" style="padding-top: 60px; clear: both;">
 		<div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p></div>
 	</div>
-</footer>
+</footer> -->
 </html>
 
 <%    

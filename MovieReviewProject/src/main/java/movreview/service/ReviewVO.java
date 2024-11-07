@@ -4,6 +4,7 @@ public class ReviewVO {
 	private int reviewId;
 	private int seriesId;
 	private int movieId;
+	private String actorId;
 	private String  userId;
 	private int rate;
 	private String detail;
@@ -14,6 +15,8 @@ public class ReviewVO {
 	private String posterPath;
 	private String titleEn;
 	private String cname;
+	private String actName;
+	private String profilePath;
 	
 	public int getReviewId() {
 		return reviewId;
@@ -97,6 +100,25 @@ public class ReviewVO {
 	}
 	public void setCname(String cname) {
 		this.cname = cname;
+	}
+	
+	public String getActorId() {
+		return actorId;
+	}
+	public void setActorId(String actorId) {
+		this.actorId = actorId;
+	}
+	public String getActName() {
+		return actName;
+	}
+	public void setActName(String actName) {
+		this.actName = actName;
+	}
+	public String getProfilePath() {
+		return profilePath;
+	}
+	public void setProfilePath(String profilePath) {
+		this.profilePath = profilePath;
 	}
 	
 	

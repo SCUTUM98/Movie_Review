@@ -129,6 +129,14 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> selectSeriesReview(ReviewVO vo) throws Exception {
 		return list("movDAO.selectSeriesReview", vo);
 	}
+	// 응원 글 작성
+	public ReviewVO insertActorReview(ReviewVO vo) throws Exception {
+		return (ReviewVO) insert("movDAO.insertActorReview", vo);
+	}
+	// 응원 글 불러오기
+	public List<?> selectActorReview(ReviewVO vo) throws Exception {
+		return list("movDAO.selectActorReview", vo);
+	}
 	// 즐겨찾기 추가
 	public LikeVO insertLike(LikeVO vo) throws Exception {
 		return (LikeVO) insert("movDAO.insertLike", vo);
@@ -156,9 +164,21 @@ public class MovDAO extends EgovAbstractDAO {
 	public int actorSnsUpdate(ActorSnsVO vo) throws Exception {
 		return (int) update("movDAO.actorSnsUpdate", vo);
 	}
+	// 시리즈 찾기
+	public MovieVO findSeriesByName(MovieVO vo) throws Exception {
+		return (MovieVO) select("movDAO.findSeriesByName", vo);
+	}
 	// 회원 가입
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return (MemberVO) insert("movDAO.registerMember", vo);
+	}
+	// 아이디 중복 확인
+	public int checkId(String id) throws Exception {
+		return (int) select("movDAO.checkId", id);
+	}
+	// 이메일 중복 확인
+	public int checkEmail(String email) throws Exception {
+		return (int) select("movDAO.checkEmail", email);
 	}
 	// 인증 랜덤 번호 저장
 	public int updateMailKey(MemberVO vo) throws Exception{
@@ -202,6 +222,9 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> selectAllSeriesReview(ReviewVO vo) throws Exception{
 		return list("movDAO.selectAllSeriesReview", vo);
 	}
+	public List<?> selectAllActorReview(ReviewVO vo) throws Exception{
+		return list("movDAO.selectAllActorReview", vo);
+	}
 	// 즐겨찾기 리스트
 	public List<?> checkLike(LikeVO vo) throws Exception{
 		return list("movDAO.checkLike", vo);
@@ -216,6 +239,10 @@ public class MovDAO extends EgovAbstractDAO {
 	// 시리즈 댓글 삭제
 	public void deleteSeriesComment(ReviewVO vo) throws Exception {
 		delete("movDAO.deleteSeriesComment", vo);
+	}
+	// 응원 글 삭제
+	public void deleteActorComment(ReviewVO vo) throws Exception {
+		delete("movDAO.deleteActorComment", vo);
 	}
 	// 프로필 경로 조회
 	public MemberVO profileRoot(MemberVO vo) throws Exception{

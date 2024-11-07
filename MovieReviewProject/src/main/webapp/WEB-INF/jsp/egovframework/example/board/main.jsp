@@ -14,22 +14,6 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main/mainStyle.css">
     
     <script type="text/javascript">
-    	let currentIndex = 0;
-	
-	    function scrollLeft(event) {
-	        console.log("Left button clicked");
-	        const slides = document.querySelectorAll('.slide');
-	        currentIndex = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
-	        updateSlider();
-	    }
-	
-	    function scrollRight(event) {
-	        console.log("Right button clicked");
-	        const slides = document.querySelectorAll('.slide');
-	        currentIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
-	        updateSlider();
-	    }
-	    
 	    function colScrollLeft(event) {
 	    	event.preventDefault();
 	        const container = document.querySelector('.collection-list');
@@ -83,12 +67,6 @@
 	            behavior: 'smooth'
 	        });
 	    }
-	
-	    function updateSlider() {
-	        const sliderContainer = document.querySelector('.slider-container');
-	        const offset = -currentIndex * 100; // 슬라이드 이동 거리
-	        sliderContainer.style.transform = `translateX(${offset}%)`;
-	    }
 	    
 	    function movieSelect(id) {
 			console.log(id);
@@ -110,6 +88,38 @@
 		}
 
     </script>
+    <script type="text/javascript">
+        let currentSlide = 0;
+
+        function showSlide(index) {
+        	console.log(index)
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            if (index >= totalSlides) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = totalSlides - 1;
+            } else {
+                currentSlide = index;
+            }
+            const sliderContainer = document.querySelector('.slider-container');
+            sliderContainer.style.transform = 'translateX(-'+(currentSlide * 100)+'%)';
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        setInterval(nextSlide, 5000);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(currentSlide);
+        });
+    </script>
 </head>
 <body>
     <div class="header">
@@ -127,25 +137,27 @@
         </nav>
     </div>
     
-    <form action="addMovie.do" id="listForm" name="listForm" method="post">
+    <div class="movie-slider">
+	        <div class="slider-container">
+	            <c:if test="${not empty movieData}">
+	                <c:forEach items="${movieData}" var="movie">
+	                    <c:if test="${not empty movie.backdropPath}">
+	                        <div class="slide" style="background-image: url('http://image.tmdb.org/t/p/w1280${movie.backdropPath}')">
+	                            <div class="slide-title">${movie.titleEn}</div>
+	                        </div>
+	                    </c:if>
+	                </c:forEach>
+	            </c:if>
+	        </div>
+	        <button class="scroll-btn left" onclick="prevSlide()">◀</button>
+	        <button class="scroll-btn right" onclick="nextSlide()">▶</button>
+	    </div>
+    
+    <form action="" id="listForm" name="listForm" method="post">
     	<input type="hidden" name="id" value="">
     	<input type="hidden" name="collectionId" value="">
     
-	    <div class="movie-slider">
-	        <div class="slider-container">
-	        	<c:if test="${not empty movieData}">
-	        		<c:forEach items="${movieData}" var="movie">
-	        			<c:if test="${not empty movie.backdropPath }">
-	        				<div class="slide" style="background-image: url('http://image.tmdb.org/t/p/w1280${movie.backdropPath}')">
-	            				<div class="slide-title">${movie.titleEn}</div>
-	        				</div>
-	        			</c:if>
-	        		</c:forEach>
-	        	</c:if>
-	        </div>
-	        <button class="scroll-btn" onclick="javascript:scrollLeft(event)">◀</button>
-	        <button class="scroll-btn" onclick="javascript:scrollRight(event)">▶</button>
-	    </div>
+	     
 	    
 	    <div class="movie-section">
 	        <h2>최근 등록 영화</h2>

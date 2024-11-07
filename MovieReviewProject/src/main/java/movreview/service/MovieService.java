@@ -47,6 +47,10 @@ public interface MovieService {
 	ReviewVO insertSeriesReview(ReviewVO vo) throws Exception;
 	// 시리즈 댓글 불러오기
 	List<?> selectSeriesReview(ReviewVO vo) throws Exception;
+	// 응원 글 작성
+	ReviewVO insertActorReview(ReviewVO vo) throws Exception;
+	// 응원 글 불러오기
+	List<?> selectActorReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 추가
 	LikeVO insertLike(LikeVO vo) throws Exception;
 	// 즐겨찾기 제거
@@ -60,8 +64,14 @@ public interface MovieService {
 	// 배우 업데이트
 	int actorUpdate(ActorVO vo) throws Exception;
 	int actorSnsUpdate(ActorSnsVO vo) throws Exception;
+	// 시리즈 찾기
+	MovieVO findSeriesByName(MovieVO vo) throws Exception;
 	// 회원 가입
 	MemberVO registerMember(MemberVO vo) throws Exception;
+	// 아이디 중복 확인
+	int checkId(String id) throws Exception;
+	// 이메일 중복 확인
+	int checkEmail(String email) throws Exception;
 	// 인증 랜덤 번호 저장
 	int updateMailKey(MemberVO vo) throws Exception;
 	// 메일 인증 업데이트
@@ -82,6 +92,7 @@ public interface MovieService {
 	List<?> checkReview(ReviewVO vo) throws Exception;
 	List<?> selectAllReview(ReviewVO vo) throws Exception;
 	List<?> selectAllSeriesReview(ReviewVO vo) throws Exception;
+	List<?> selectAllActorReview(ReviewVO vo) throws Exception;
 	// 즐겨찾기 리스트
 	List<?> checkLike(LikeVO vo) throws Exception;
 	List<?> selectAllLike(LikeVO vo) throws Exception;
@@ -89,6 +100,8 @@ public interface MovieService {
 	void deleteMovieComment(ReviewVO vo) throws Exception;
 	// 시리즈 댓글 삭제
 	void deleteSeriesComment(ReviewVO vo) throws Exception;
+	// 응원 글 샂게
+	void deleteActorComment(ReviewVO vo) throws Exception;
 	// 프로필 경로 조회
 	MemberVO profileRoot(MemberVO vo) throws Exception;
 	// 프로필 경로 업데이트

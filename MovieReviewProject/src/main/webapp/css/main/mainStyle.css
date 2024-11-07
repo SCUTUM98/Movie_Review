@@ -37,12 +37,14 @@ body {
 .movie-slider {
     position: relative;
     overflow: hidden;
-    height: 500px; /* 슬라이더 높이 설정 */
+    height: 80vh; /* 슬라이더 높이 설정 */
 }
 
 .slider-container {
     display: flex;
     transition: transform 0.5s ease; /* 부드러운 전환 효과 */
+    height: 80vh;
+    width: 100%;
 }
 
 .slide {
@@ -51,7 +53,19 @@ body {
     background-size: cover; /* 배경 이미지 크기 조정 */
     background-position: center; /* 중앙 정렬 */
     position: relative;
-    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.7); /* 배경 색상 */
+}
+
+/* 필터 추가 */
+.slide:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* 약간의 어두운 필터 */
+    z-index: 1; /* 슬라이드보다 위에 */
 }
 
 .slide-title {
@@ -59,10 +73,8 @@ body {
     bottom: 20px; /* 아래쪽 여백 */
     left: 20px; /* 왼쪽 여백 */
     font-size: 24px; /* 제목 크기 */
-    background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
-    padding: 10px; /* 패딩 추가 */
-    border-radius: 5px; /* 모서리 둥글게 */
     color: white; /* 텍스트 색상 설정 */
+    z-index: 2; /* 필터 위에 표시 */
 }
 
 .scroll-btn {
@@ -72,13 +84,15 @@ body {
     cursor: pointer;
     font-size: 24px;
     z-index: 10; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+    top: 50%; /* 중앙 정렬 */
+    transform: translateY(-50%); /* 중앙 정렬 보정 */
 }
 
 .movie-section {
     position: relative;
     background-color: #141414; /* 배경 색상 설정 */
     padding: 10px;
-    z-index: 1;
+    z-index: 3; /* 슬라이드보다 위에 표시 */
 }
 
 .movie-container {
@@ -144,5 +158,3 @@ body {
     left: -10px; /* 왼쪽으로 이동 */
     z-index: 20; /* 확대된 포스터를 가장 위에 표시 */
 }
-
-

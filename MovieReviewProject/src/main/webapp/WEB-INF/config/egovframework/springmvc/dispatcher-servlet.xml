@@ -19,6 +19,11 @@
         <property name="webBindingInitializer">
             <bean class="egovframework.example.cmmn.web.EgovBindingInitializer"/>
         </property>
+        <property name="messageConverters">
+	        <list>
+	            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+	        </list>
+	    </property>
     </bean>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="interceptors">
@@ -60,6 +65,8 @@
             </map>
         </property>
     </bean>
+    
+    
 	<!-- /For Pagination Tag -->
 
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>

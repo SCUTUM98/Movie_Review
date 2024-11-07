@@ -55,28 +55,21 @@
 	<!-- Waypoints -->
 	<script src="${pageContext.request.contextPath}/js/jquery.waypoints.min.js"></script>
 	<!-- Main JS -->
-	<script src="${pageContext.request.contextPath}/js/main.js"></script>
-
-
+	<script src="${pageContext.request.contextPath}/js/main.js"></script>	
 	</head>
 	<body>
 			<div class="row">
 				<div class="col-md-4 col-md-offset-4">
-					
-
 					<!-- Start Sign In Form -->
 					<form action="login" id="loginForm" class="fh5co-form animate-box" data-animate-effect="fadeIn" method="post">
 						<h2>Sign In</h2>
 						<div class="form-group">
 							<label for="username" class="sr-only">Username</label>
-							<input type="text" class="form-control" id="id" name="id" placeholder="ID" autocomplete="off">
+							<input type="text" class="form-control" id="id" name="id" placeholder="ID" autocomplete="off" required>
 						</div>
 						<div class="form-group">
 							<label for="password" class="sr-only">Password</label>
-							<input type="password" class="form-control" id="pass" name="pass" placeholder="Password" autocomplete="off">
-						</div>
-						<div class="form-group">
-							<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>
+							<input type="password" class="form-control" id="pass" name="pass" placeholder="Password" autocomplete="off" required>
 						</div>
 						<div class="form-group">
 							<p><a href="/registerMember.do">회원가입</a> | <a href="forgot.html">비밀번호 찾기</a></p>

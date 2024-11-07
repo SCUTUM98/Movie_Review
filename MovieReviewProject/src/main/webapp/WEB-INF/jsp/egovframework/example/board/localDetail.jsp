@@ -78,10 +78,10 @@
 	    	document.listForm.submit();
 	    }
 	    function moveToUpdate(id){
-	    	document.updateForm.movieId.value = id;
-	    	console.log(document.updateForm.movieId.value);
-	    	document.updateForm.action = "<c:url value='/movieUpdate.do'/>";
-	    	document.updateForm.submit();
+	    	document.listForm.movieId.value = id;
+	    	console.log(document.listForm.movieId.value);
+	    	document.listForm.action = "<c:url value='/movieUpdate.do'/>";
+	    	document.listForm.submit();
 	    }
 	    
 	    function moveToProvider(provider, name){
@@ -244,6 +244,8 @@
 							</c:if>
 					    </div>
 					</div>
+					<button type="submit" class="register-button" onclick="javascript:moveToUpdate('${selectMovie.movieId}')">영화 업데이트</button>
+					
 				</div>
 			</div>
 	    </div>

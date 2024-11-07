@@ -12,6 +12,7 @@
 	<typeAlias  alias="actorSnsVO" type="movreview.service.ActorSnsVO"/>
 	<typeAlias  alias="reviewVO" type="movreview.service.ReviewVO"/>
 	<typeAlias  alias="likeVO" type="movreview.service.LikeVO"/>
+	<typeAlias  alias="genreVO" type="movreview.service.GenreVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -395,6 +396,62 @@
 			ORDER BY submit_time DESC
 		]]>
 	</select>
+	<!-- 시리즈 댓글 작성 -->
+	<insert id="movDAO.insertSeriesReview" parameterClass="reviewVO">
+		<![CDATA[
+			INSERT INTO series_review (series_id, user_id, rate, detail, submit_time, like_cnt, dislike_cnt)
+			VALUES( #seriesId#
+					, #userId#
+					, #rate#
+					, #detail#
+					, CURRENT_TIMESTAMP
+					, 0
+					, 0)
+		]]>
+	</insert>
+	<!-- 시리즈 댓글 조회 -->
+	<select id="movDAO.selectSeriesReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT review_id AS reviewID
+					, series_id AS seriesId
+					, user_id AS userId
+					, rate
+					, detail
+					, submit_time AS submitTime
+					, like_cnt AS likeCnt
+					, dislike_cnt AS dislikeCnt
+			FROM series_review
+			WHERE series_id = #seriesId#
+			ORDER BY submit_time DESC
+		]]>
+	</select>
+	<!-- 배우 응원 글 -->
+	<insert id="movDAO.insertActorReview" parameterClass="reviewVO">
+		<![CDATA[
+			INSERT INTO actor_review (actor_id, user_id, detail, submit_time, like_cnt, dislike_cnt)
+			VALUES (#actorId#
+					, #userId#
+					, #detail#
+					, CURRENT_TIMESTAMP
+					, 0
+					, 0)
+		]]>
+	</insert>
+	<!-- 배우 응원 글 조회 -->
+	<select id="movDAO.selectActorReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT review_id AS reviewId
+					, actor_id AS actorId
+					, user_id AS userId
+					, detail
+					, submit_time AS submitTime
+					, like_cnt AS likeCnt
+					, dislike_cnt AS dislikeCnt
+			FROM actor_review
+			WHERE actor_id = #actorId#
+			ORDER BY submit_time DESC
+		]]>
+	</select>
 	<!-- 즐겨찾기 등록 -->
 	<insert id="movDAO.insertLike" parameterClass="likeVO">
 		<![CDATA[
@@ -417,7 +474,65 @@
 			WHERE user_id = #userId# AND movie_id = #movieId#
 		]]>
 	</select>
-	
+	<!-- 영화 정보 업데이트 -->
+	<update id="movDAO.movieUpdate" parameterClass="movieVO">
+		<![CDATA[
+			UPDATE movie_page
+			SET title_kr = #titleKr#
+				, title_er = #titleEn#
+				, release_date = #releaseDate#
+				, overview = #overview#
+				, backdrop_path = #backdropPath#
+				, poster_path = #posterPath#
+				, status = #status#
+				, tagline = #tagline#
+				, submit_date = CURRENT_TIMESTAMP
+			WHERE movie_id = #movieId#
+		]]>
+	</update>
+	<!-- 시리즈 정보 업데이트 -->
+	<update id="movDAO.seriesUpdate" parameterClass="collectionVO">
+		<![CDATA[
+			UPDATE collection
+			SET cname = #name#
+				, poster_path = #posterPath#
+				, backdrop_path = #backdropPath#
+				, overview = #overview#
+				, submit_date = CURRENT_TIMESTAMP
+			WHERE id = #id#
+		]]>
+	</update>
+	<!-- 배우 정보 업데이트 -->
+	<update id="movDAO.actorUpdate" parameterClass="actorVO">
+		<![CDATA[
+			UPDATE actor
+			SET profile_path = #profilePath#
+				, deathday = #deathday#
+				, status = #status#
+				, homeplace = #homeplace#
+			WHERE actor_id = #actorId#
+		]]>
+	</update>
+	<update id="movDAO.actorSnsUpdate" parameterClass="actorSnsVO">
+		<![CDATA[
+			UPDATE actor_sns
+			SET facebook = #facebook#
+				, instagram = #instagram#
+				, tiktok = #tiktok#
+				, twitter = #twitter#
+				, youtube = #youtube#
+			WHERE actor_id = #actorId#
+		]]>
+	</update>
+	<!-- 시리즈 이름 찾기 -->
+	<select id="movDAO.findSeriesByName" resultClass="movieVO">
+		<![CDATA[
+			SELECT m.movie_id AS movieId, c.cname, c.id AS collectionId
+			FROM movie_page AS m LEFT JOIN collection AS c
+			ON m.collection_id = c.id
+			WHERE m.movie_id = #movieId#
+		]]>
+	</select>
 	<!-- 계정 관리 -->
 	<!-- 회원 가입 -->
 	<insert id="movDAO.registerMember" parameterClass="memberVO">
@@ -433,6 +548,22 @@
 					,'0' )
 		]]>
 	</insert>
+	<!-- ID 중복 확인 -->
+	<select id="movDAO.checkId" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(id)
+			FROM member
+			WHERE id = #id#
+		]]>
+	</select>
+	<!-- 이메일 중복 확인 -->
+	<select id="movDAO.checkEmail" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(email)
+			FROM member
+			WHERE email = #email#
+		]]>
+	</select>
 	<!-- 인증 랜덤 번호 저장 -->
 	<update id="movDAO.updateMailKey" parameterClass="memberVO">
 		<![CDATA[
@@ -495,7 +626,7 @@
 	</select>
 	
 	<!-- 마이페이지 -->
-	<!-- 최근 리뷰 확인 -->
+	<!-- 댓글 확인 -->
 	<select id="movDAO.checkReview" resultClass="reviewVO">
 		<![CDATA[
 			SELECT r.review_id AS reviewID
@@ -514,6 +645,59 @@
 			LIMIT 3
 		]]>
 	</select>
+	<select id="movDAO.selectAllReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.series_id AS seriesId
+					, r.user_id AS userId
+					, r.rate
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, c.poster_path AS posterPath
+					, c.cname
+			FROM series_review r
+			JOIN collection c ON r.series_id = c.id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
+	<select id="movDAO.selectAllSeriesReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.series_id AS seriesId
+					, r.user_id AS userId
+					, r.rate
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, c.poster_path AS posterPath
+					, c.cname
+			FROM series_review r
+			JOIN collection c ON r.series_id = c.id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
+	<select id="movDAO.selectAllActorReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.actor_id AS actorId
+					, r.user_id AS userId
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, a.profile_path AS profilePath
+					, a.act_name AS actName
+			FROM actor_review r
+			JOIN actor a ON r.actor_id = a.actor_id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
 	<!-- 좋아요 영화 조회 -->
 	<select id="movDAO.checkLike" resultClass="likeVO">
 		<![CDATA[
@@ -528,5 +712,112 @@
 			ORDER BY l.submit_time DESC
 			LIMIT 5
 		]]>
+	</select>
+	<select id="movDAO.selectAllLike" resultClass="likeVO">
+		<![CDATA[
+			SELECT l.like_id AS likeId
+				, l.user_id AS userId
+				, l.movie_id AS movieId
+				, l.submit_time AS submitTime
+				, m.poster_path AS posterPath
+				, m.title_er AS title
+			FROM movie_like l JOIN movie_page m on l.movie_id = m.movie_id
+			WHERE l.user_id = #userId#
+			ORDER BY l.submit_time DESC
+		]]>
+	</select>
+	<!-- 영화 댓글 삭제 -->
+	<delete id="movDAO.deleteMovieComment">
+		<![CDATA[
+			DELETE FROM review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
+	<!-- 시리즈 댓글 삭제 -->
+	<delete id="movDAO.deleteSeriesComment">
+		<![CDATA[
+			DELETE FROM series_review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
+	<!-- 응원 글 삭제 -->
+	<delete id="movDAO.deleteActorComment">
+		<![CDATA[
+			DELETE FROM actor_review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
+	<!-- 프로필 경로 조회 -->
+	<select id="movDAO.profileRoot" resultClass="memberVO">
+		<![CDATA[
+			SELECT profile
+			FROM member
+			WHERE id=#id#
+		]]>
+	</select>
+	<!-- 프로필 경로 업데이트 -->
+	<update id="movDAO.updateProfile" parameterClass="memberVO">
+		<![CDATA[
+			UPDATE member set profile=#profile#
+			WHERE id=#id#
+		]]>
+	</update>
+	
+	<!-- 영화 리스트 업 -->
+	<!-- 전체 영화 조회 -->
+	<select id="movDAO.selectAllMovie" resultClass="movieVO">
+		<![CDATA[
+			SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
+	        FROM movie_page
+	        ORDER BY title_er
+		]]>
+	</select>
+	<!-- 장르 리스트 조회 -->
+	<select id="movDAO.getGenre" resultClass="genreVO">
+		<![CDATA[
+			SELECT id, name, update_time AS updateTime
+			FROM genre
+			ORDER BY name
+		]]>
+	</select>
+	<!-- 장르별 검색 -->
+	<select id="movDAO.searchByGenre" resultClass="movieVO">
+		<![CDATA[
+			SELECT movie_id AS movieId
+	        		, title_kr AS titleKr
+	        		, title_er AS titleEn
+	        		, backdrop_path AS backdropPath
+	        		, poster_path AS posterPath
+	        		, collection_id AS collectionId
+	        		, genre AS genreDB
+	        		, overview
+	        		, release_date AS releaseDate
+	        		, tagline
+			FROM movie_page
+			WHERE (genre ILIKE '%' || #genreDB# || '%')
+			ORDER BY titleEn
+		]]>
+	</select>
+	<!-- 시리즈 리스트 조회 -->
+	<select id="movDAO.seriesList" resultClass="collectionVO">
+		<![CDATA[
+				SELECT id
+						, cname AS name
+						, poster_path AS posterPath
+						, backdrop_path AS backdropPath
+						, overview
+						, submit_date
+				FROM collection
+				ORDER by cname
+			]]>
 	</select>
 </sqlMap>

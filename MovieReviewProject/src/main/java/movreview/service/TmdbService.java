@@ -197,4 +197,19 @@ public class TmdbService {
         
         return response.getBody();
     }
+    
+    public String movieTrends(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/trending/movie/day?language=ko-KR");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
 }

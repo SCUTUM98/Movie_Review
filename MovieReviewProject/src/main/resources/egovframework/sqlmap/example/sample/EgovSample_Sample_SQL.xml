@@ -425,6 +425,33 @@
 			ORDER BY submit_time DESC
 		]]>
 	</select>
+	<!-- 배우 응원 글 -->
+	<insert id="movDAO.insertActorReview" parameterClass="reviewVO">
+		<![CDATA[
+			INSERT INTO actor_review (actor_id, user_id, detail, submit_time, like_cnt, dislike_cnt)
+			VALUES (#actorId#
+					, #userId#
+					, #detail#
+					, CURRENT_TIMESTAMP
+					, 0
+					, 0)
+		]]>
+	</insert>
+	<!-- 배우 응원 글 조회 -->
+	<select id="movDAO.selectActorReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT review_id AS reviewId
+					, actor_id AS actorId
+					, user_id AS userId
+					, detail
+					, submit_time AS submitTime
+					, like_cnt AS likeCnt
+					, dislike_cnt AS dislikeCnt
+			FROM actor_review
+			WHERE actor_id = #actorId#
+			ORDER BY submit_time DESC
+		]]>
+	</select>
 	<!-- 즐겨찾기 등록 -->
 	<insert id="movDAO.insertLike" parameterClass="likeVO">
 		<![CDATA[
@@ -457,7 +484,6 @@
 				, overview = #overview#
 				, backdrop_path = #backdropPath#
 				, poster_path = #posterPath#
-				, collection_id = #collectionId#
 				, status = #status#
 				, tagline = #tagline#
 				, submit_date = CURRENT_TIMESTAMP
@@ -498,6 +524,15 @@
 			WHERE actor_id = #actorId#
 		]]>
 	</update>
+	<!-- 시리즈 이름 찾기 -->
+	<select id="movDAO.findSeriesByName" resultClass="movieVO">
+		<![CDATA[
+			SELECT m.movie_id AS movieId, c.cname, c.id AS collectionId
+			FROM movie_page AS m LEFT JOIN collection AS c
+			ON m.collection_id = c.id
+			WHERE m.movie_id = #movieId#
+		]]>
+	</select>
 	<!-- 계정 관리 -->
 	<!-- 회원 가입 -->
 	<insert id="movDAO.registerMember" parameterClass="memberVO">
@@ -513,6 +548,22 @@
 					,'0' )
 		]]>
 	</insert>
+	<!-- ID 중복 확인 -->
+	<select id="movDAO.checkId" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(id)
+			FROM member
+			WHERE id = #id#
+		]]>
+	</select>
+	<!-- 이메일 중복 확인 -->
+	<select id="movDAO.checkEmail" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(email)
+			FROM member
+			WHERE email = #email#
+		]]>
+	</select>
 	<!-- 인증 랜덤 번호 저장 -->
 	<update id="movDAO.updateMailKey" parameterClass="memberVO">
 		<![CDATA[
@@ -597,17 +648,17 @@
 	<select id="movDAO.selectAllReview" resultClass="reviewVO">
 		<![CDATA[
 			SELECT r.review_id AS reviewID
-					, r.movie_id AS movieId
+					, r.series_id AS seriesId
 					, r.user_id AS userId
 					, r.rate
 					, r.detail
 					, r.submit_time AS submitTime
 					, r.like_cnt AS likeCnt
 					, r.dislike_cnt AS dislikeCnt
-					, m.poster_path AS posterPath
-					, m.title_er AS titleEn
-			FROM review r
-			JOIN movie_page m ON r.movie_id = m.movie_id
+					, c.poster_path AS posterPath
+					, c.cname
+			FROM series_review r
+			JOIN collection c ON r.series_id = c.id
 			WHERE r.user_id = #userId#
 			ORDER BY r.submit_time DESC
 		]]>
@@ -626,6 +677,23 @@
 					, c.cname
 			FROM series_review r
 			JOIN collection c ON r.series_id = c.id
+			WHERE r.user_id = #userId#
+			ORDER BY r.submit_time DESC
+		]]>
+	</select>
+	<select id="movDAO.selectAllActorReview" resultClass="reviewVO">
+		<![CDATA[
+			SELECT r.review_id AS reviewID
+					, r.actor_id AS actorId
+					, r.user_id AS userId
+					, r.detail
+					, r.submit_time AS submitTime
+					, r.like_cnt AS likeCnt
+					, r.dislike_cnt AS dislikeCnt
+					, a.profile_path AS profilePath
+					, a.act_name AS actName
+			FROM actor_review r
+			JOIN actor a ON r.actor_id = a.actor_id
 			WHERE r.user_id = #userId#
 			ORDER BY r.submit_time DESC
 		]]>
@@ -669,6 +737,13 @@
 	<delete id="movDAO.deleteSeriesComment">
 		<![CDATA[
 			DELETE FROM series_review
+			WHERE review_id = #reviewId#
+		]]>
+	</delete>
+	<!-- 응원 글 삭제 -->
+	<delete id="movDAO.deleteActorComment">
+		<![CDATA[
+			DELETE FROM actor_review
 			WHERE review_id = #reviewId#
 		]]>
 	</delete>

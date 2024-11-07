@@ -65,10 +65,6 @@
 	    }
 	    
 	    function moveToActorDetail(id){
-	    	/* document.listForm.actorId.value = id;
-	    	console.log(document.listForm.actorId.value);
-	    	document.listForm.action = "<c:url value='/actorDetail.do'/>";
-	    	document.listForm.submit(); */
 	    	alert('영화 등록 후 이용해 주세요.');
 	    }
 	    

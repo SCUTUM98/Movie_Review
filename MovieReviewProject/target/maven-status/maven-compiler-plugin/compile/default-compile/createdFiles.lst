@@ -18,9 +18,12 @@ egovframework\example\sample\service\impl\SampleMapper.class
 movreview\service\ProviderVO.class
 movreview\service\ReviewVO.class
 movreview\service\MovieService.class
+movreview\service\NaverService.class
 movreview\service\MovieVO.class
 egovframework\example\sample\service\EgovSampleService.class
+movreview\service\GenreVO.class
 movreview\service\ActorSnsVO.class
+movreview\service\NewsVO.class
 movreview\service\VideoVO.class
 egovframework\example\cmmn\web\EgovBindingInitializer.class
 movreview\service\TmdbService.class

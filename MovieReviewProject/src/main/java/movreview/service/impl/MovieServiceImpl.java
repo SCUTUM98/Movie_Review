@@ -138,6 +138,16 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> selectReview(ReviewVO vo) throws Exception {
 		return movDAO.selectReview(vo);
 	}
+	// 응원 글 작성
+	@Override
+	public ReviewVO insertActorReview(ReviewVO vo) throws Exception {
+		return movDAO.insertActorReview(vo);
+	}
+	// 응원 글 불러오기
+	@Override
+	public List<?> selectActorReview(ReviewVO vo) throws Exception {
+		return movDAO.selectActorReview(vo);
+	}
 	// 즐겨찾기 추가
 	@Override
 	public LikeVO insertLike(LikeVO vo) throws Exception {
@@ -172,10 +182,25 @@ public class MovieServiceImpl implements MovieService {
 	public int actorSnsUpdate(ActorSnsVO vo) throws Exception {
 		return movDAO.actorSnsUpdate(vo);
 	}
+	// 시리즈 찾기
+	@Override
+	public MovieVO findSeriesByName(MovieVO vo) throws Exception {
+		return movDAO.findSeriesByName(vo);
+	}
 	// 회원 가입
 	@Override
 	public MemberVO registerMember(MemberVO vo) throws Exception {
 		return movDAO.registerMember(vo);
+	}
+	// 아이디 중복 확인
+	@Override
+	public int checkId(String id) throws Exception {
+		return movDAO.checkId(id);
+	}
+	// 이메일 중복 확인
+	@Override
+	public int checkEmail(String email) throws Exception {
+		return movDAO.checkEmail(email);
 	}
 	// 인증 랜덤 번호 저장
 	@Override
@@ -230,6 +255,10 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> selectAllSeriesReview(ReviewVO vo) throws Exception {
 		return movDAO.selectAllSeriesReview(vo);
 	}
+	@Override
+	public List<?> selectAllActorReview(ReviewVO vo) throws Exception {
+		return movDAO.selectAllActorReview(vo);
+	}
 	// 즐겨찾기 리스트
 	@Override
 	public List<?> checkLike(LikeVO vo) throws Exception {
@@ -248,6 +277,11 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public void deleteSeriesComment(ReviewVO vo) throws Exception {
 		movDAO.deleteSeriesComment(vo);
+	}
+	// 응원 글 샂게
+	@Override
+	public void deleteActorComment(ReviewVO vo) throws Exception {
+		movDAO.deleteActorComment(vo);
 	}
 	// 프로필 경로 조회
 	@Override

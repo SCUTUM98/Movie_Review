@@ -38,6 +38,7 @@ public class MovieVO {
 	private boolean adult;
 	private String original_language;
 	private boolean video;
+	private String cname;
 	
 	public int getMovieId() {
 		return movieId;
@@ -140,6 +141,12 @@ public class MovieVO {
 	@Override
 	public int hashCode() {
 	    return Objects.hash(movieId); // movieId를 기준으로 해시 코드 생성
+	}
+	public String getCname() {
+		return cname;
+	}
+	public void setCname(String cname) {
+		this.cname = cname;
 	}
 
 }

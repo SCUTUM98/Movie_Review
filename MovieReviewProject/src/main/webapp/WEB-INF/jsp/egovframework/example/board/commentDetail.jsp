@@ -171,7 +171,24 @@
 							    <option value="series">시리즈</option>
 							    <option value="actor" selected>배우</option>
 							</select>
-					        <!-- 배우 리뷰 리스트 출력 -->
+					        <c:forEach items="${actorList}" var="review">
+					            <div class="review-item">
+					                <img src="http://image.tmdb.org/t/p/w780${review.profilePath}" alt="Profile Poster" class="review-poster">
+					                <div class="review-content">
+					                    <div class="review-header">
+					                        <span class="review-author">${review.actName}</span>
+					                        <span class="review-date">${review.submitTime}</span>
+					                    </div>
+					                    <p>${review.detail}</p>
+					                    <div class="deleteBtn-section">
+					                        <form:form action="deleteComment.do" name="deleteForm" method="post">
+					                            <input type="hidden" name="id" value="${review.reviewId}">
+					                            <button type="button" name="deleteBtn" onclick="javascript:deleteComment('actor', '${review.reviewId }')">삭제</button>
+					                        </form:form>
+					                    </div>
+					                </div>
+					            </div>
+					        </c:forEach>
 					    </c:if>
 					</div>
 
