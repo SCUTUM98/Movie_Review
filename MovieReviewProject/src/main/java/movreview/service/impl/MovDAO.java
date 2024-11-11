@@ -212,6 +212,14 @@ public class MovDAO extends EgovAbstractDAO {
 	public MemberVO searchAcc(MemberVO vo) throws Exception{
 		return (MemberVO) select("movDAO.searchAcc", vo);
 	}
+	// 아이디 찾기
+	public String findId(MemberVO vo) throws Exception{
+		return (String) select("movDAO.findId", vo);
+	}
+	// 비밀번호 찾기
+	public int findPass(MemberVO vo) throws Exception {
+		return (int) select("movDAO.findPass", vo);
+	}
 	// 최근 리뷰 확인
 	public List<?> checkReview(ReviewVO vo) throws Exception{
 		return list("movDAO.checkReview", vo);

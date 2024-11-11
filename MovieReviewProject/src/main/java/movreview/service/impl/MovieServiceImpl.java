@@ -242,6 +242,16 @@ public class MovieServiceImpl implements MovieService {
 	public MemberVO searchAcc(MemberVO vo) throws Exception {
 		return movDAO.searchAcc(vo);
 	}
+	// 아이디 찾기
+	@Override
+	public String findId(MemberVO vo) throws Exception {
+		return movDAO.findId(vo);
+	}
+	// 비밀번호 찾기
+	@Override
+	public int findPass(MemberVO vo) throws Exception {
+		return movDAO.findPass(vo);
+	}
 	// 최근 리뷰 확인
 	@Override
 	public List<?> checkReview(ReviewVO vo) throws Exception {

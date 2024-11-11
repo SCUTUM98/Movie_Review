@@ -45,7 +45,6 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #B1B6B7;
-    
 }
 
 .menu-button {
@@ -58,7 +57,6 @@ body {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s;
-    
 }
 
 .menu-button:hover {
@@ -69,16 +67,16 @@ body {
     width: 80%;
     padding: 20px;
     background-color: #708090;
-    display: flex; /* Flexbox 추가 */
-    flex-direction: column; /* 세로 정렬 */
+    display: flex;
+    flex-direction: column;
 }
 
 .box {
-    display: grid; /* Grid 레이아웃 사용 */
+    display: grid;
     grid-template-columns: repeat(5, minmax(200px, 1fr));
     grid-template-rows: repeat(autofill, minmax(250px, 1fr));
-    grid-gap: 10px 10px; /* 아이템 간의 간격 설정 */
-    padding: 10px; /* 패딩 추가 (선택 사항) */
+    grid-gap: 10px 10px;
+    padding: 10px;
 }
 
 .box a {
@@ -93,23 +91,23 @@ body {
 }
 
 .movie-item {
-    display: flex; /* 필요에 따라 flex 사용 */
-    flex-direction: column; /* 내용 세로 정렬 */
-    align-items: center; /* 중앙 정렬 */
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
 .movie-poster {
-    width: 150px; /* 포스터 크기 조정 */
-    height: 230px; /* 고정 높이 */
-    border-radius: 10px; /* 모서리 둥글게 */
+    width: 150px;
+    height: 230px;
+    border-radius: 10px;
 }
 
 .movie-title {
-    text-align: center; /* 제목을 중앙 정렬 */
-    margin-top: 5px; /* 포스터와 제목 사이의 간격 */
-    color: white; /* 제목 색상 변경 */
-    font-size: 14px; /* 제목 폰트 크기 조정 */
-    text-decoration: none; /* 하이퍼링크 색상 제거 */
+    text-align: center;
+    margin-top: 5px;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
     cursor: default;
 }

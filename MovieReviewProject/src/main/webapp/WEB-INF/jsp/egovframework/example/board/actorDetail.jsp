@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${actorData.actName } 배우 정보</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/detail/detailStyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script type="text/javascript">
 	    function sscrollLeft(event) {
@@ -41,6 +42,40 @@
 	    	document.reviewForm.action = "<c:url value='/addActorReview.do'/>";
 	    	document.reviewForm.submit();
 	    }
+	    function checkMovie(id){
+	    	console.log(id);
+	    	
+	    	var id = id;
+	    	$.ajax({
+	    		url: './movieCheck.do',
+	    		type: 'post',
+	    		data: {id:id},
+	    		dataType: 'json',
+	    		success: function(response) {
+	    			console.log("서버 응답:", response); 
+	                if (response.cnt === 0) { 
+	                    movieSelect(id);
+	                } else { 
+	                    localMovieSelect(id);
+	                }
+	    		},
+	    		error: function() {
+	                alert("에러입니다");
+	            }
+	    	});
+	    }
+	    function movieSelect(id) {
+			console.log(id);
+	    	document.movieForm.id.value = id;
+	       	document.movieForm.action = "<c:url value='/detail.do'/>";
+	       	document.movieForm.submit();
+	       	}
+		function localMovieSelect(id) {
+			console.log(id);
+			document.movieForm.id.value = id;
+			document.movieForm.action = "<c:url value='/localDetail.do'/>";
+			document.movieForm.submit();
+		}
     </script>
 </head>
 <body>
@@ -125,32 +160,34 @@
 
         
         <div class="right-panel">
-        	<div class="overview-section">
-            <h2>개요</h2>
-            <p></p>
-            </div>
-            
             <div class="movie-section">
 	        	<h2>출연작</h2>
+	        	<form:form name="movieForm" method="post">
+		          <input type="hidden" name="id" value="">
 		        <div class="movie-container">
 		            <button type="button" class="scroll-btn" onclick="javascript:sscrollLeft(event)">◀</button>
+		            
 		            <div class="movie-list">
+		            	
 		                <c:forEach items="${creditData}" var="credit">
 		                    <div class="movie-item">
 		                        <c:if test="${empty credit.poster_path}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:movieSelect('${credit.id }')" alt="${credit.title}" class="movie-poster">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie('${credit.id }')" alt="${credit.title}" class="movie-poster">
 		                        </c:if>
 		                        <c:if test="${not empty credit.poster_path}">
-		                            <img src="http://image.tmdb.org/t/p/w780${credit.poster_path}" onclick="javascript:movieSelect('${credit.id }')" alt="${credit.title}" class="movie-poster">
+		                            <img src="http://image.tmdb.org/t/p/w780${credit.poster_path}" onclick="checkMovie('${credit.id }')" alt="${credit.title}" class="movie-poster">
 		                        </c:if>
 		                        <div class="movie-info">
 		                            <p class="movie-name">${credit.title}</p>
 		                        </div>
 		                    </div>
 		                </c:forEach>
+		                
 		            </div>
+		            
 		            <button type="button" class="scroll-btn" onclick="javascript:scrollRight(event)">▶</button>
 		        </div>
+		        </form:form>
 	    	</div>
 	    	
 	    	<div class="review-section">
@@ -199,26 +236,23 @@
 			            <colgroup>
 			                <col style="width:10px;"> <!-- 번호 열 -->
 			                <col style="width:300px;"> <!-- 제목 열 -->
-			                <col style="width:100px;"> <!-- 게시일 열 -->
 			            </colgroup>
 			            <thead>
 			                <tr>
-			                    <th scope="col">번호</th>
-			                    <th scope="col">제목</th>
-			                    <th scope="col">게시일</th>
+			                    <th scope="col" style="text-align: center;">번호</th>
+			                    <th scope="col" style="text-align: center;">제목</th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			                <c:if test="${empty newsData }">
 			                    <tr>
-			                        <td colspan="3" style="text-align: center;">관련 뉴스가 없습니다.</td>
+			                        <td colspan="2" style="text-align: center;">관련 뉴스가 없습니다.</td>
 			                    </tr>
 			                </c:if>
 			                <c:forEach items="${newsData }" var="news" varStatus="status">
 			                    <tr>
-			                        <td>${status.index + 1}</td>
+			                        <td style="text-align: center;">${status.index + 1}</td>
 			                        <td><a href="${news.link}" target="_blank">${news.title }</a></td>
-			                        <td><c:out value="${news.pubDate }"/></td>
 			                    </tr>
 			                </c:forEach>
 			            </tbody>
@@ -228,7 +262,6 @@
 
         </div>
     </div>
-    <script src="script.js"></script>
 </body>
 
 <!-- <footer>

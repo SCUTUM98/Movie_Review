@@ -15,6 +15,7 @@
 
   <script src="main.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/search/main.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
   <script type="text/javascript">
 		function movieSelect(id) {
@@ -41,6 +42,28 @@
 			document.collectionForm.action = "<c:url value='/seriesDetail.do'/>";
 			document.collectionForm.submit();
 		}
+		function checkMovie(id){
+	    	console.log(id);
+	    	
+	    	var id = id;
+	    	$.ajax({
+	    		url: './movieCheck.do',
+	    		type: 'post',
+	    		data: {id:id},
+	    		dataType: 'json',
+	    		success: function(response) {
+	    			console.log("서버 응답:", response); 
+	                if (response.cnt === 0) { 
+	                    movieSelect(id);
+	                } else { 
+	                    localMovieSelect(id);
+	                }
+	    		},
+	    		error: function() {
+	                alert("에러입니다");
+	            }
+	    	});
+	    }
   </script>
 </head>
 <body>
@@ -151,45 +174,15 @@
       	  <input type="hidden" name="id" value="">
 	      <div class="box">
 	      	<c:forEach items="${suggestData }" var="trending" varStatus="status">
-	      		<a href="javascript:movieSelect('${trending.movieId}')">
-	      			<img src="http://image.tmdb.org/t/p/w780${trending.posterPath }" alt="${trending.titleKr }" class="movie-poster">
-	      			<p class="movie-title">${trending.titleEn}</p>
-	      		</a>
+	      		<a><img src="http://image.tmdb.org/t/p/w780${trending.posterPath}" onclick="checkMovie('${trending.movieId }')" alt="${trending.titleEn}" class="movie-poster">
+	      		<p class="movie-title">${trending.titleEn}</p></a>
 	      	</c:forEach>            
 	      </div>
 	  </form:form>
 
-    <!-- LINKS -->
-    <section class="link">
-      <div class="logos">
-        <a href="#"><i class="fab fa-facebook-square fa-2x logo"></i></a>
-        <a href="#"><i class="fab fa-instagram fa-2x logo"></i></a>
-        <a href="#"><i class="fab fa-twitter fa-2x logo"></i></a>
-        <a href="#"><i class="fab fa-youtube fa-2x logo"></i></a>
-      </div>
-      <div class="sub-links">
-        <ul>
-          <li><a href="#">Audio and Subtitles</a></li>
-          <li><a href="#">Audio Description</a></li>
-          <li><a href="#">Help Center</a></li>
-          <li><a href="#">Gift Cards</a></li>
-          <li><a href="#">Media Center</a></li>
-          <li><a href="#">Investor Relations</a></li>
-          <li><a href="#">Jobs</a></li>
-          <li><a href="#">Terms of Use</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="#">Legal Notices</a></li>
-          <li><a href="#">Corporate Information</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </section>
-    <!-- END OF LINKS -->
-
     <!-- FOOTER -->
     <footer>
-      <p>&copy 1997-2018 Netflix, Inc.</p>
-      <p>Carlos Avila &copy 2018</p>
+      <p><small>𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p>
     </footer>
   </div>
 </body>

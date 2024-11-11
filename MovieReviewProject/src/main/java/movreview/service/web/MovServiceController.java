@@ -50,9 +50,7 @@ import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
 import movreview.service.TmdbService;
 import movreview.service.NaverService;
-import movreview.service.impl.MovieServiceImpl;
 import movreview.service.MovieVO;
-import movreview.service.ProviderVO;
 import movreview.service.ReviewVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
@@ -109,6 +107,8 @@ public class MovServiceController {
 		model.addAttribute("recentlyCollected", movService.recentlyCollected(seriesVO));
 
 		String suggestData = tmdbService.movieTrends(apiKey);
+		String upComing = tmdbService.upComing(apiKey);
+		System.out.println("MOVIE DATA: " + suggestData);
 
 		if (suggestData == null || suggestData.isEmpty()) {
 			throw new RuntimeException("Received null or empty response from the API");
@@ -124,12 +124,28 @@ public class MovServiceController {
 
 			List<MovieVO> suggestVO = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieVO>>() {
 			});
-
+			
+			
 			LOGGER.debug("결과: " + suggestVO);
 			model.addAttribute("movieData", suggestVO);
 			model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
 			model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
 		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		}
+		
+		if (upComing == null || upComing.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API");
+		}
+		
+		try {
+			JsonNode comingNode = objectMapper.readTree(upComing);
+			JsonNode comingResult = comingNode.get("results");
+			
+			List<MovieVO> upComingVO = objectMapper.convertValue(comingResult, new TypeReference<List<MovieVO>>() {});
+			model.addAttribute("upComingData", upComingVO);
+		} catch(Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Error processing the API response: " + e.getMessage());
 		}
@@ -145,16 +161,6 @@ public class MovServiceController {
 		model.addAttribute("username", username);
 
 		return "board/search";
-	}
-
-	// API 테스트용
-	@GetMapping("/searchMovie.do")
-	public String searchMovie(HttpServletRequest request, Model model) throws Exception {
-		String searchKeyword = "아이언맨";
-
-		String movieData = tmdbService.searchByName(apiKey, searchKeyword);
-		model.addAttribute("movieData", movieData);
-		return "board/dataTest";
 	}
 
 	@RequestMapping(value = "/movieSearch.do", method = RequestMethod.POST)
@@ -200,10 +206,8 @@ public class MovServiceController {
 		model.addAttribute("collectionList", collectionList);
 		model.addAttribute("overviewList", overviewList);
 
-		// 새로운 리스트 생성
 		List<MovieVO> newOverviewList = new ArrayList<>();
 
-		// searchList의 MovieVO 객체를 Set으로 변환하여 중복 제거
 		Set<MovieVO> searchSet = new HashSet<>();
 		for (Object obj : searchList) {
 			if (obj instanceof MovieVO) {
@@ -211,19 +215,17 @@ public class MovServiceController {
 			}
 		}
 
-		// overviewList에서 searchList에 있는 항목 제외
 		for (Object obj : overviewList) {
 			if (obj instanceof MovieVO) {
 				MovieVO movie = (MovieVO) obj;
 				if (!searchSet.contains(movie)) {
-					newOverviewList.add(movie); // 중복되지 않은 항목 추가
+					newOverviewList.add(movie);
 				}
 			}
 		}
 
 		model.addAttribute("newOverviewList", newOverviewList);
 
-		// API 요청 처리 및 결과 모델에 추가
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
 
@@ -237,7 +239,6 @@ public class MovServiceController {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			// JSON 파싱 및 데이터 처리
 			JsonNode jsonNode = objectMapper.readTree(suggestData);
 			JsonNode resultsNode = jsonNode.get("results");
 			JsonNode searchNode = objectMapper.readTree(searchResult);
@@ -255,7 +256,6 @@ public class MovServiceController {
 
 			List<MovieVO> uniqueMovies = new ArrayList<>();
 
-			// 중복 체크 및 uniqueMovies에 추가
 			for (MovieVO movie : resultVO) {
 				int count = movService.checkMovie(movie);
 				if (count == 0) {
@@ -335,7 +335,6 @@ public class MovServiceController {
 
 			model.addAttribute("detailData", detailVO);
 
-			// 장르 설정
 			List<String> genres = new ArrayList<>();
 			for (JsonNode genreNode : jsonNode.path("genres")) {
 				genres.add(genreNode.path("name").asText());
@@ -343,7 +342,6 @@ public class MovServiceController {
 			detailVO.setGenre(genres);
 			LOGGER.debug("Genre list: " + detailVO.getGenre());
 
-			// 컬렉션 데이터 처리
 			if (jsonNode.has("belongs_to_collection")) {
 				JsonNode collectionNode = jsonNode.path("belongs_to_collection");
 				CollectionVO collectionVO = new CollectionVO();
@@ -367,7 +365,6 @@ public class MovServiceController {
 				}
 			}
 
-			// 배우 데이터 처리
 			int movieId = jsonNode.path("id").asInt();
 			String actorData = tmdbService.searchActor(apiKey, movieId);
 
@@ -384,7 +381,6 @@ public class MovServiceController {
 				model.addAttribute("actorData", actorList);
 			}
 
-			// 비디오 데이터 처리
 			if (vidNode.isArray()) {
 				for (JsonNode video : vidNode) {
 					VideoVO videoVO = objectMapper.convertValue(video, VideoVO.class);
@@ -486,7 +482,6 @@ public class MovServiceController {
 				System.out.println("Stream List: " + streamList);
 			}
 
-			// 비디오 데이터 처리
 			if (vidNode.isArray()) {
 				for (JsonNode video : vidNode) {
 					VideoVO videoVO = objectMapper.convertValue(video, VideoVO.class);
@@ -877,12 +872,40 @@ public class MovServiceController {
 
 		movService.registerMember(memberVO);
 
-		try {
-			mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", "접속 주소: " + url + "\n 인증번호: " + mailKey);
+		String htmlContent = "<html>" +
+		        "<head>" +
+		        "<style>" +
+		        "body { font-family: Arial, sans-serif; }" +
+		        ".container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }" +
+		        ".header { background-color: #f2f2f2; padding: 10px; text-align: center; }" +
+		        ".content { margin: 20px 0; }" +
+		        ".footer { font-size: 12px; text-align: center; color: #777; }" +
+		        "</style>" +
+		        "</head>" +
+		        "<body>" +
+		        "<div class='container'>" +
+		        "<div class='header'>" +
+		        "<h2>Film Report 회원가입 인증</h2>" +
+		        "</div>" +
+		        "<div class='content'>" +
+		        "<p>안녕하세요!</p>" +
+		        "<p>아래 링크를 클릭하여 인증을 완료해 주세요:</p>" +
+		        "<p><a href='" + url + "'>접속 주소</a></p>" +
+		        "<p>인증번호: <strong>" + mailKey + "</strong></p>" +
+		        "</div>" +
+		        "<div class='footer'>" +
+		        "<p>감사합니다!</p>" +
+		        "<p>Film Report 팀</p>" +
+		        "</div>" +
+		        "</div>" +
+		        "</body>" +
+		        "</html>";
 
+		try {
+		    mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", htmlContent, "text/html");
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "FAIL";
+		    e.printStackTrace();
+		    return "FAIL";
 		}
 
 		status.setComplete();
@@ -1237,14 +1260,43 @@ public class MovServiceController {
 
 		movService.updateEmail(memberVO);
 		model.addAttribute("errorMessage", "이메일이 변경되었습니다. 메일 주소 인증 후 다시 로그인 해주세요.");
+		
+		String htmlContent = "<html>" +
+		        "<head>" +
+		        "<style>" +
+		        "body { font-family: Arial, sans-serif; }" +
+		        ".container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }" +
+		        ".header { background-color: #f2f2f2; padding: 10px; text-align: center; }" +
+		        ".content { margin: 20px 0; }" +
+		        ".footer { font-size: 12px; text-align: center; color: #777; }" +
+		        "</style>" +
+		        "</head>" +
+		        "<body>" +
+		        "<div class='container'>" +
+		        "<div class='header'>" +
+		        "<h2>Film Report 회원가입 인증</h2>" +
+		        "</div>" +
+		        "<div class='content'>" +
+		        "<p>안녕하세요!</p>" +
+		        "<p>아래 링크를 클릭하여 인증을 완료해 주세요:</p>" +
+		        "<p><a href='" + url + "'>접속 주소</a></p>" +
+		        "<p>인증번호: <strong>" + mailKey + "</strong></p>" +
+		        "</div>" +
+		        "<div class='footer'>" +
+		        "<p>감사합니다!</p>" +
+		        "<p>Film Report 팀</p>" +
+		        "</div>" +
+		        "</div>" +
+		        "</body>" +
+		        "</html>";
 
 		try {
-			mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", "접속 주소: " + url + "\n 인증번호: " + mailKey);
-
+		    mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", htmlContent, "text/html");
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "FAIL";
+		    e.printStackTrace();
+		    return "FAIL";
 		}
+
 
 		HttpSession session = request.getSession(false);
 
@@ -1320,23 +1372,117 @@ public class MovServiceController {
         int cnt = movService.checkId(id);
         System.out.println("cnt: " + cnt);
         
-        // JSON 형식으로 반환할 Map 생성
         Map<String, Integer> response = new HashMap<>();
-        response.put("cnt", cnt); // cnt 값을 Map에 추가
-        return response; // JSON으로 반환
+        response.put("cnt", cnt);
+        return response;
+    }
+	
+	@RequestMapping(value = "/movieCheck.do", method = RequestMethod.POST)
+    @ResponseBody // JSON으로 응답
+    public Map<String, Integer> movieCheck(@RequestParam("id") int id) throws Exception {
+		MovieVO movieVO = new MovieVO();
+		movieVO.setMovieId(id);
+		
+        int cnt = movService.checkMovie(movieVO);
+        System.out.println("cnt: " + cnt);
+        
+        Map<String, Integer> response = new HashMap<>();
+        response.put("cnt", cnt); 
+        return response;
     }
 
 	@RequestMapping(value = "/emailCheck.do", method = RequestMethod.POST)
-    @ResponseBody // JSON으로 응답
+    @ResponseBody
     public Map<String, Integer> emailCheck(@RequestParam("email") String email) throws Exception {
         int cnt = movService.checkEmail(email);
         System.out.println("cnt: " + cnt);
         
-        // JSON 형식으로 반환할 Map 생성
         Map<String, Integer> response = new HashMap<>();
-        response.put("cnt", cnt); // cnt 값을 Map에 추가
-        return response; // JSON으로 반환
+        response.put("cnt", cnt);
+        return response;
     }
+	
+	@RequestMapping("/findId.do")
+	public String findId() throws Exception {
+		
+		return "board/login";
+	}
+	
+	@RequestMapping(value="findIdResult.do", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> findIdResult(@RequestParam("name") String name, @RequestParam("email") String email) throws Exception {
+		System.out.println("name: " + name + "email: " + email);
+		MemberVO memberVO = new MemberVO();
+		memberVO.setName(name);
+		memberVO.setEmail(email);
+		
+		String id = movService.findId(memberVO);
+		System.out.println("id: " + id);
+		
+		Map<String, String> response = new HashMap<>();
+		response.put("id", id);
+		return response;
+	}
+	
+	@RequestMapping("/findPass.do")
+	public String findPass() throws Exception {
+		
+		return "board/findPass";
+	}
+	
+	@RequestMapping(value="findPassResult.do", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> findPassResult(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception {
+		System.out.println("id: " + id + "email: " + email);
+		MemberVO memberVO = new MemberVO();
+		memberVO.setId(id);
+		memberVO.setEmail(email);
+		
+		int cnt = movService.findPass(memberVO);
+		
+		if (cnt != 0) {
+			String mailKey = new TempKey().getKey(30, false);
+			String url = "localhost:8080/home.do";
+			
+			String htmlContent = "<html>" +
+			        "<head>" +
+			        "<style>" +
+			        "body { font-family: Arial, sans-serif; }" +
+			        ".container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }" +
+			        ".header { background-color: #f2f2f2; padding: 10px; text-align: center; }" +
+			        ".content { margin: 20px 0; }" +
+			        ".footer { font-size: 12px; text-align: center; color: #777; }" +
+			        "</style>" +
+			        "</head>" +
+			        "<body>" +
+			        "<div class='container'>" +
+			        "<div class='header'>" +
+			        "<h2>Film Report 임시 비밀번호</h2>" +
+			        "</div>" +
+			        "<div class='content'>" +
+			        "<p>안녕하세요!</p>" +
+			        "<p>아래 링크를 클릭하여 로그인 후 비밀번호를 변경해주세요:</p>" +
+			        "<p><a href='" + url + "'>접속 주소</a></p>" +
+			        "<p>임시 비밀번호: <strong>" + mailKey + "</strong></p>" +
+			        "</div>" +
+			        "<div class='footer'>" +
+			        "<p>감사합니다!</p>" +
+			        "<p>Film Report 팀</p>" +
+			        "</div>" +
+			        "</div>" +
+			        "</body>" +
+			        "</html>";
+
+			mailHandler.sendMail(email, "Film Report 임시 비밀번호 입니다.", htmlContent, "text/html");
+			String encodPW = encoder.encode(mailKey);
+			memberVO.setPass(encodPW);
+			movService.updatePassword(memberVO);
+		}
+		
+		Map<String, Integer> response = new HashMap<>();
+		response.put("cnt", cnt);
+		return response;
+	}
 
 	@PostMapping("/updateProfile.do")
     public ResponseEntity<?> updateProfile(@RequestParam("id") String userId,
@@ -1358,17 +1504,14 @@ public class MovServiceController {
             throw new IllegalArgumentException("파일이 비어 있습니다.");
         }
 
-        // 파일 이름 생성
         String fileName = member.getId() + "_Profile." + getFileExtension(file.getOriginalFilename());
         String root = "C:\\Users\\admin\\Desktop\\upload\\profile";
         File uploadFile = new File(root, fileName);
 
-        // 파일 업로드
         try {
             file.transferTo(uploadFile);
-            // 프로필 경로 업데이트
             member.setProfile(uploadFile.getAbsolutePath());
-            movService.updateProfile(member); // DB에 경로 저장
+            movService.updateProfile(member);
             return uploadFile.getAbsolutePath();
         } catch (IOException e) {
             LOGGER.error("파일 업로드 실패", e);
@@ -1376,7 +1519,6 @@ public class MovServiceController {
         }
     }
 
-    // 파일 확장자 가져오기
     private String getFileExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

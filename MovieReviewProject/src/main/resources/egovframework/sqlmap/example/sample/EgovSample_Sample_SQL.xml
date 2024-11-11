@@ -624,6 +624,22 @@
 			WHERE id=#id#
 		]]>
 	</select>
+	<!-- 아이디 찾기 -->
+	<select id="movDAO.findId" resultClass="String">
+		<![CDATA[
+			SELECT id
+			FROM member
+			WHERE name=#name# AND email=#email#
+		]]>
+	</select>
+	<!-- 비밀번호 찾기 -->
+	<select id="movDAO.findPass" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(id)
+			FROM member
+			WHERE id=#id# AND email=#email#
+		]]>
+	</select>
 	
 	<!-- 마이페이지 -->
 	<!-- 댓글 확인 -->
@@ -648,17 +664,17 @@
 	<select id="movDAO.selectAllReview" resultClass="reviewVO">
 		<![CDATA[
 			SELECT r.review_id AS reviewID
-					, r.series_id AS seriesId
+					, r.movie_id AS movieId
 					, r.user_id AS userId
 					, r.rate
 					, r.detail
 					, r.submit_time AS submitTime
 					, r.like_cnt AS likeCnt
 					, r.dislike_cnt AS dislikeCnt
-					, c.poster_path AS posterPath
-					, c.cname
-			FROM series_review r
-			JOIN collection c ON r.series_id = c.id
+					, m.poster_path AS posterPath
+					, m.title_er AS name
+			FROM review r
+			JOIN movie_page m ON r.movie_id = m.movie_id
 			WHERE r.user_id = #userId#
 			ORDER BY r.submit_time DESC
 		]]>

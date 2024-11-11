@@ -168,7 +168,7 @@
         </div>
     </div>
     <div class="row" style="padding-top: 60px; clear: both;">
-        <div class="col-md-12 text-center"><p><small>&copy; 𝓕𝓸𝓻 𝓶𝔶 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼 </small></p></div>
+        <div class="col-md-12 text-center"><p><small>𝓕𝓸𝓻 𝓶𝔶 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼 </small></p></div>
     </div>
 </body>
 </html>

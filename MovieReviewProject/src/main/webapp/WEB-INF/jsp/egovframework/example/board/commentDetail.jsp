@@ -78,7 +78,7 @@
 					                <img src="http://image.tmdb.org/t/p/w780${review.posterPath}" alt="Movie Poster" class="review-poster">
 					                <div class="review-content">
 					                    <div class="review-header">
-					                        <span class="review-author">${review.titleEn}</span>
+					                        <span class="review-author">${review.name}</span>
 					                        <span class="review-date">${review.submitTime}</span>
 					                    </div>
 					                    <p>${review.detail}</p>
@@ -110,7 +110,7 @@
 					                <img src="http://image.tmdb.org/t/p/w780${review.posterPath}" alt="Movie Poster" class="review-poster">
 					                <div class="review-content">
 					                    <div class="review-header">
-					                        <span class="review-author">${review.titleEn}</span>
+					                        <span class="review-author">${review.name}</span>
 					                        <span class="review-date">${review.submitTime}</span>
 					                    </div>
 					                    <p>${review.detail}</p>
@@ -138,26 +138,26 @@
 							    <option value="series" selected>시리즈</option>
 							    <option value="actor">배우</option>
 							</select>
-					        <c:forEach items="${seriesList}" var="review">
+					        <c:forEach items="${seriesList}" var="series">
 					            <div class="review-item">
-					                <img src="http://image.tmdb.org/t/p/w780${review.posterPath}" alt="Series Poster" class="review-poster">
+					                <img src="http://image.tmdb.org/t/p/w780${series.posterPath}" alt="Series Poster" class="review-poster">
 					                <div class="review-content">
 					                    <div class="review-header">
-					                        <span class="review-author">${review.cname}</span>
-					                        <span class="review-date">${review.submitTime}</span>
+					                        <span class="review-author">${series.cname}</span>
+					                        <span class="review-date">${series.submitTime}</span>
 					                    </div>
-					                    <p>${review.detail}</p>
+					                    <p>${series.detail}</p>
 					                    <div class="review-rating">
-					                        <c:if test="${review.rate == '1'}"><span>⭐</span></c:if>
-					                        <c:if test="${review.rate == '2'}"><span>⭐⭐</span></c:if>
-					                        <c:if test="${review.rate == '3'}"><span>⭐⭐⭐</span></c:if>
-					                        <c:if test="${review.rate == '4'}"><span>⭐⭐⭐⭐</span></c:if>
-					                        <c:if test="${review.rate == '5'}"><span>⭐⭐⭐⭐⭐</span></c:if>
+					                        <c:if test="${series.rate == '1'}"><span>⭐</span></c:if>
+					                        <c:if test="${series.rate == '2'}"><span>⭐⭐</span></c:if>
+					                        <c:if test="${series.rate == '3'}"><span>⭐⭐⭐</span></c:if>
+					                        <c:if test="${series.rate == '4'}"><span>⭐⭐⭐⭐</span></c:if>
+					                        <c:if test="${series.rate == '5'}"><span>⭐⭐⭐⭐⭐</span></c:if>
 					                    </div>
 					                    <div class="deleteBtn-section">
 					                        <form:form action="deleteComment.do" name="deleteForm" method="post">
-					                            <input type="hidden" name="id" value="${review.reviewId}">
-					                            <button type="button" name="deleteBtn" onclick="javascript:deleteComment('series', '${review.reviewId }')">삭제</button>
+					                            <input type="hidden" name="id" value="${series.reviewId}">
+					                            <button type="button" name="deleteBtn" onclick="javascript:deleteComment('series', '${series.reviewId }')">삭제</button>
 					                        </form:form>
 					                    </div>
 					                </div>

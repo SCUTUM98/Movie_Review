@@ -13,36 +13,11 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
+	<title>Film Report 아이디 찾기</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
 	<meta name="author" content="FreeHTML5.co" />
-
-  <!-- 
-	//////////////////////////////////////////////////////
-
-	FREE HTML5 TEMPLATE 
-	DESIGNED & DEVELOPED by FreeHTML5.co
-		
-	Website: 		http://freehtml5.co/
-	Email: 			info@freehtml5.co
-	Twitter: 		http://twitter.com/fh5co
-	Facebook: 		https://www.facebook.com/fh5co
-
-	//////////////////////////////////////////////////////
-	 -->
-
-  	<!-- Facebook and Twitter integration -->
-	<meta property="og:title" content=""/>
-	<meta property="og:image" content=""/>
-	<meta property="og:url" content=""/>
-	<meta property="og:site_name" content=""/>
-	<meta property="og:description" content=""/>
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
 
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 	<link rel="shortcut icon" href="favicon.ico">
@@ -70,49 +45,70 @@
 	<script src="${pageContext.request.contextPath}/js/jquery.waypoints.min.js"></script>
 	<!-- Main JS -->
 	<script src="${pageContext.request.contextPath}/js/main.js"></script>
-
+	
+	<script>
+		function findId(){
+			var name = $('#name').val();
+			var email = $('#email').val();
+			console.log(name);
+			console.log(email);
+			
+			$.ajax({
+				url: './findIdResult.do',
+				type: 'post',
+				data: {name:name, email:email},
+				dataType: 'json',
+				success: function(response) {
+					console.log("서버 응답:", response);
+					if (response.id === null){
+						alert("일치하는 정보가 없습니다.")
+					} else {
+						alert("회원님의 ID는 '" + response.id + "' 입니다.");
+						window.location.href = '/home.do';
+					}
+				},
+				error: function(xhr, status, error) {
+		            console.error("AJAX 요청 실패:", status, error); // 에러 로그 추가
+		            alert("서버 오류가 발생했습니다.");
+		        }
+			})
+		}
+	</script>
 
 	</head>
 	<body>
 
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12 text-center">
-					<ul class="menu">
-						<li class="active"><a href="index.html">Style 1</a></li>
-						<li><a href="index2.html">Style 2</a></li>
-						<li><a href="index3.html">Style 3</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="row">
 				<div class="col-md-4 col-md-offset-4">
 					
 
 					<!-- Start Sign In Form -->
-					<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeIn">
-						<h2>Forgot Password</h2>
+					<form action="#" name="findForm" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+						<h2>아이디 찾기</h2>
 						<div class="form-group">
-							<div class="alert alert-success" role="alert">Your email has been sent.</div>
+							<label for="name" class="sr-only">Name</label>
+							<input class="form-control" id="name" name="name" placeholder="name" autocomplete="off" required>
 						</div>
 						<div class="form-group">
 							<label for="email" class="sr-only">Email</label>
-							<input type="email" class="form-control" id="email" placeholder="Email" autocomplete="off">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" autocomplete="off" required>
 						</div>
 						<div class="form-group">
-							<p><a href="index.html">Sign In</a> or <a href="sign-up.html">Sign Up</a></p>
+							<p><a href="/home.do">로그인</a> or <a href="/registerMember.do">회원가입</a></p>
 						</div>
 						<div class="form-group">
-							<input type="submit" value="Send Email" class="btn btn-primary">
+							<p><a href="/findPass.do">비밀번호를 잊으셨나요?</a></p>
+						</div>
+						<div class="form-group">
+							<input type="button" value="아이디 찾기" class="btn btn-primary" onclick="findId()">
 						</div>
 					</form>
-					<!-- END Sign In Form -->
-
 
 				</div>
 			</div>
 			<div class="row" style="padding-top: 60px; clear: both;">
-				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. Designed by <a href="https://freehtml5.co">FreeHTML5.co</a></small></p></div>
+				<div class="col-md-12 text-center"><p><small>&copy;𝓕𝓸𝓻 𝓶𝔶 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</small></p></div>
 			</div>
 		</div>
 	</body>

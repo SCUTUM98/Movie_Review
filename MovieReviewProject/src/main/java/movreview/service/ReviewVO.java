@@ -17,6 +17,7 @@ public class ReviewVO {
 	private String cname;
 	private String actName;
 	private String profilePath;
+	private String name;
 	
 	public int getReviewId() {
 		return reviewId;
@@ -119,6 +120,12 @@ public class ReviewVO {
 	}
 	public void setProfilePath(String profilePath) {
 		this.profilePath = profilePath;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

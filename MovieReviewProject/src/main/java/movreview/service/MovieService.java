@@ -88,6 +88,10 @@ public interface MovieService {
 	int updateEmail(MemberVO vo) throws Exception;
 	// 계정 찾기
 	MemberVO searchAcc(MemberVO vo) throws Exception;
+	// 아이디 찾기
+	String findId(MemberVO vo) throws Exception;
+	// 비밀번호 찾기
+	int findPass(MemberVO vo) throws Exception;
 	// 최근 리뷰 확인
 	List<?> checkReview(ReviewVO vo) throws Exception;
 	List<?> selectAllReview(ReviewVO vo) throws Exception;

@@ -19,6 +19,12 @@
 			document.listForm.action = "<c:url value='/seriesDetail.do'/>";
 			document.listForm.submit();
 		}
+	    function localMovieSelect(id) {
+			console.log(id);
+			document.listForm.id.value = id;
+			document.listForm.action = "<c:url value='/localDetail.do'/>";
+			document.listForm.submit();
+		}
     </script>
 </head>
 <body>
@@ -47,7 +53,7 @@
         <div class="right-panel">
             <h2 class="mypage-title">즐겨찾기</h2>
             <form:form action="localDetail.do" name="listForm" method="post">
-                <input type="hidden" name="collectionId" value=""/>
+                <input type="hidden" name="id" value=""/>
                 <div class="box">
                     <c:forEach items="${movieList }" var="movie">
                     	<c:if test="${movie.movieId != 0 }">

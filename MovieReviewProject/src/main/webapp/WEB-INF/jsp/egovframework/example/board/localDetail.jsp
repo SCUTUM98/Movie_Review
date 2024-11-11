@@ -342,14 +342,25 @@
 
 		
 		    <div class="pagination">
-		        <c:if test="${currentPage > 1}">
-		            <a href="reviewList.do?page=${currentPage - 1}" class="page-link">◀ 이전</a>
-		        </c:if>
-		        <span>Page ${currentPage} of ${totalPages}</span>
-		        <c:if test="${currentPage < totalPages}">
-		            <a href="reviewList.do?page=${currentPage + 1}" class="page-link">다음 ▶</a>
-		        </c:if>
-		    </div>
+			    <c:if test="${currentPage > 1}">
+			        <a href="?id=${selectMovie.movieId}&page=${currentPage - 1}">이전</a>
+			    </c:if>
+			
+			    <c:forEach var="i" begin="1" end="${totalPages}">
+			        <c:choose>
+			            <c:when test="${i == currentPage}">
+			                <span>${i}</span> <!-- 현재 페이지는 span으로 표시 -->
+			            </c:when>
+			            <c:otherwise>
+			                <a href="?id=${selectMovie.movieId}&page=${i}">${i}</a> <!-- 다른 페이지 링크 -->
+			            </c:otherwise>
+			        </c:choose>
+			    </c:forEach>
+			
+			    <c:if test="${currentPage < totalPages}">
+			        <a href="?id=${selectMovie.movieId}&page=${currentPage + 1}">다음</a>
+			    </c:if>
+			</div>
 		</div>
 
 		<c:if test="${not empty collectionData.name }">
@@ -408,15 +419,6 @@
 		            <button type="button" class="scroll-btn right" onclick="javascript:rec_scrollRight(event)">▶</button>
 		        </div>
 		    
-		</div>
-		
-		<div class="update-section">
-			<form:form action="movieUpdate.do" name="updateForm" method="post">
-				<input type="hidden" name="movieId" value="">
-				<button type="submit" class="update-Btn" onclick="javascript:moveToUpdate('${selectMovie.movieId}')">영화 업데이트</button>
-			</form:form>
-			
-			
 		</div>
 </body>
 </html>

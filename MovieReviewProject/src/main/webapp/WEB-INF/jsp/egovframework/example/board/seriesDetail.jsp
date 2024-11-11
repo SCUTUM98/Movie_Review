@@ -23,6 +23,12 @@
 	    	document.reviewForm.action = "<c:url value='/addSeriesReview.do'/>";
 	    	document.reviewForm.submit();
 	    }
+	    function localMovieSelect(id) {
+			console.log(id);
+			document.sereisForm.id.value = id;
+			document.sereisForm.action = "<c:url value='/localDetail.do'/>";
+			document.sereisForm.submit();
+		}
     </script>
 </head>
 <body>
@@ -31,8 +37,8 @@
         <nav class="navbar">
             <ul>
                 <li><a href="/main.do">홈</a></li>
-                <li><a href="#">영화</a></li>
-                <li><a href="#">시리즈</a></li>
+                <li><a href="/movieList.do">영화</a></li>
+                <li><a href="/seriesList.do">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
                 <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
@@ -110,16 +116,18 @@
             
             <div class="movie-section">
 	        	<h2>Series</h2>
+	        	<form:form name="sereisForm" method="post">
+	        	<input type="hidden" name="id" value="">
 		        <div class="movie-container">
 		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
 		            <div class="movie-list">
 		                <c:forEach items="${movieList}" var="movie">
 		                    <div class="movie-item">
 		                        <c:if test="${empty movie.posterPath}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="localMovieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
 		                        </c:if>
 		                        <c:if test="${not empty movie.posterPath}">
-		                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" onclick="javascript:movieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
+		                            <img src="http://image.tmdb.org/t/p/w780${movie.posterPath}" onclick="localMovieSelect('${movie.movieId }')" alt="${movie.titleEn}" class="movie-poster">
 		                        </c:if>
 		                        <div class="movie-info">
 		                            <p class="movie-name">${movie.titleEn}</p>
@@ -129,6 +137,7 @@
 		            </div>
 		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
 		        </div>
+		        </form:form>
 	    	</div>
         </div>
     </div>
