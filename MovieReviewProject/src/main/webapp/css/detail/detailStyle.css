@@ -40,7 +40,7 @@ body {
 }
 
 .sns-section {
-    width: 30%;
+    width: auto;
     margin-top: 20px;
     align-items: center;
 }

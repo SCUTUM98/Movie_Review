@@ -29,6 +29,23 @@
 			document.sereisForm.action = "<c:url value='/localDetail.do'/>";
 			document.sereisForm.submit();
 		}
+	    function sscrollLeft(event) {
+	    	event.preventDefault();
+	        const container = document.querySelector('.movie-list');
+	        container.scrollBy({
+	            left: -150,
+	            behavior: 'smooth'
+	        });
+	    }
+	
+	    function sscrollRight(event) {
+	    	event.preventDefault();
+	        const container = document.querySelector('.movie-list');
+	        container.scrollBy({
+	            left: 150,
+	            behavior: 'smooth'
+	        });
+	    }
     </script>
 </head>
 <body>
@@ -40,7 +57,7 @@
                 <li><a href="/movieList.do">영화</a></li>
                 <li><a href="/seriesList.do">시리즈</a></li>
                 <li><a href="/search.do">검색</a></li>
-                <c:if test="${not empty username }"><li><a href="#">마이페이지</a></li></c:if>
+                <c:if test="${not empty username }"><li><a href="/mypage.do">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>
                 <c:if test="${not empty username }"><li><a href="/logout">로그아웃</a></li></c:if>
             </ul>
@@ -119,7 +136,7 @@
 	        	<form:form name="sereisForm" method="post">
 	        	<input type="hidden" name="id" value="">
 		        <div class="movie-container">
-		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollLeft(event)">◀</button>
+		            <button type="button" class="scroll-btn" onclick="javascript:sscrollLeft(event)">◀</button>
 		            <div class="movie-list">
 		                <c:forEach items="${movieList}" var="movie">
 		                    <div class="movie-item">
@@ -135,7 +152,7 @@
 		                    </div>
 		                </c:forEach>
 		            </div>
-		            <button type="button" class="scroll-btn" onclick="javascript:sug_scrollRight(event)">▶</button>
+		            <button type="button" class="scroll-btn" onclick="javascript:sscrollRight(event)">▶</button>
 		        </div>
 		        </form:form>
 	    	</div>

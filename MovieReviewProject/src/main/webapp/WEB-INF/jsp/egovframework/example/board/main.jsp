@@ -16,18 +16,18 @@
     
     <script>
 	    function checkId() {
-	        var id = $('#id').val(); // id 값 저장
+	        var id = $('#id').val();
 	        $.ajax({
-	            url: './idCheck.do', // 요청 URL
-	            type: 'post', // POST 방식
-	            data: { id: id }, // 전송할 데이터
-	            dataType: 'json', // 응답 데이터 형식
-	            success: function(response) { // 서버 응답 처리
-	                console.log("서버 응답:", response); // 전체 응답 로그 확인
-	                if (response.cnt === 0) { // cnt가 0이면 사용 가능한 아이디
+	            url: './idCheck.do', 
+	            type: 'post', 
+	            data: { id: id }, 
+	            dataType: 'json',
+	            success: function(response) {
+	                console.log("서버 응답:", response); 
+	                if (response.cnt === 0) {
 	                    $('.id_ok').css("display", "inline-block");
 	                    $('.id_already').css("display", "none");
-	                } else { // cnt가 0이 아니면 이미 존재하는 아이디
+	                } else {
 	                    $('.id_already').css("display", "inline-block");
 	                    $('.id_ok').css("display", "none");
 	                    alert("아이디를 다시 입력해주세요");

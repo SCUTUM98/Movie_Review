@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script type="text/javascript">
-	    function sscrollLeft(event) {
+	    function scrollLeft(event) {
 	    	event.preventDefault();
 	        const container = document.querySelector('.movie-list');
 	        container.scrollBy({
