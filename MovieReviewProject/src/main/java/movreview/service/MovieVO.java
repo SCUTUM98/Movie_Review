@@ -135,12 +135,12 @@ public class MovieVO {
 	    if (this == obj) return true;
 	    if (obj == null || getClass() != obj.getClass()) return false;
 	    MovieVO movie = (MovieVO) obj;
-	    return Objects.equals(movieId, movie.movieId); // movieId를 기준으로 비교
+	    return Objects.equals(movieId, movie.movieId);
 	}
 
 	@Override
 	public int hashCode() {
-	    return Objects.hash(movieId); // movieId를 기준으로 해시 코드 생성
+	    return Objects.hash(movieId);
 	}
 	public String getCname() {
 		return cname;
