@@ -98,13 +98,12 @@ header {
 }
 
 .movie-title {
-    text-align: center; /* 제목을 중앙 정렬 */
-    margin-top: 5px; /* 포스터와 제목 사이의 간격 */
-    color: var(--light); /* 제목 색상 */
-    font-size: 14px; /* 제목 폰트 크기 조정 */
+    text-align: center;
+    margin-top: 5px;
+    color: var(--light);
+    font-size: 14px;
 }
 
-/* MAIN CONTIANER */
 .main-container {
   padding: 50px;
 }
@@ -130,7 +129,6 @@ header {
   border-radius: 2px;
 }
 
-/* LINKS */
 .link {
   padding: 50px;
 }
@@ -162,15 +160,12 @@ header {
 }
 
 
-/* FOOTER */
 footer {
   padding: 20px;
   text-align: center;
   color: var(--dark);
   margin: 10px;
 }
-
-/* MEDIA QUERIES */
 
 @media(max-width: 900px) {
 
