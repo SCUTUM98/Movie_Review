@@ -75,7 +75,7 @@ public class MailHandler {
     }
 
     private void sendingBody(Message msg, String receiver, String title, String text, String mimeType) throws Exception {
-        msg.setFrom(new InternetAddress(user + tail)); // 발신자 셋팅
+        msg.setFrom(new InternetAddress(user + tail));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver)); 
         msg.setSubject(title);  
 
