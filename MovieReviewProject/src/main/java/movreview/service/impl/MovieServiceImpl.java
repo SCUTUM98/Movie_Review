@@ -252,6 +252,11 @@ public class MovieServiceImpl implements MovieService {
 	public int findPass(MemberVO vo) throws Exception {
 		return movDAO.findPass(vo);
 	}
+	// 회원 탈퇴
+	@Override
+	public int deleteAcc(String id) throws Exception {
+		return movDAO.deleteAcc(id);
+	}
 	// 최근 리뷰 확인
 	@Override
 	public List<?> checkReview(ReviewVO vo) throws Exception {

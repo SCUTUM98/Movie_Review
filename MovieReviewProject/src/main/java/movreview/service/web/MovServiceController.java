@@ -1402,6 +1402,18 @@ public class MovServiceController {
         return response;
     }
 	
+	@RequestMapping(value = "/deleteAcc.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> deleteAcc(@RequestParam("id") String id) throws Exception {
+		int result = movService.deleteAcc(id);
+		System.out.println("result: " + result);
+		
+		Map<String, Integer> response = new HashMap<>();
+		response.put("result", result);
+
+		return response;
+	}
+	
 	@RequestMapping("/findId.do")
 	public String findId() throws Exception {
 		

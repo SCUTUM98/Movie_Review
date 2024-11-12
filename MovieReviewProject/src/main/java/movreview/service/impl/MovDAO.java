@@ -220,6 +220,10 @@ public class MovDAO extends EgovAbstractDAO {
 	public int findPass(MemberVO vo) throws Exception {
 		return (int) select("movDAO.findPass", vo);
 	}
+	// 회원 탈퇴
+	public int deleteAcc(String id) throws Exception {
+		return delete("movDAO.deleteAcc", id);
+	}
 	// 최근 리뷰 확인
 	public List<?> checkReview(ReviewVO vo) throws Exception{
 		return list("movDAO.checkReview", vo);

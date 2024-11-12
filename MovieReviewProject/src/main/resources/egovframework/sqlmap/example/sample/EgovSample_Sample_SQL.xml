@@ -640,6 +640,13 @@
 			WHERE id=#id# AND email=#email#
 		]]>
 	</select>
+	<!-- 회원 탈퇴 -->
+	<delete id="movDAO.deleteAcc">
+		<![CDATA[
+			DELETE FROM member
+			WHERE id = #id#
+		]]>
+	</delete>
 	
 	<!-- 마이페이지 -->
 	<!-- 댓글 확인 -->

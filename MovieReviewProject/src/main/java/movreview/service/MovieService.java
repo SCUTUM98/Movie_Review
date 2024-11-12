@@ -92,6 +92,8 @@ public interface MovieService {
 	String findId(MemberVO vo) throws Exception;
 	// 비밀번호 찾기
 	int findPass(MemberVO vo) throws Exception;
+	// 회원 탈퇴
+	int deleteAcc(String id) throws Exception;
 	// 최근 리뷰 확인
 	List<?> checkReview(ReviewVO vo) throws Exception;
 	List<?> selectAllReview(ReviewVO vo) throws Exception;
@@ -104,7 +106,7 @@ public interface MovieService {
 	void deleteMovieComment(ReviewVO vo) throws Exception;
 	// 시리즈 댓글 삭제
 	void deleteSeriesComment(ReviewVO vo) throws Exception;
-	// 응원 글 샂게
+	// 응원 글 삭제
 	void deleteActorComment(ReviewVO vo) throws Exception;
 	// 프로필 경로 조회
 	MemberVO profileRoot(MemberVO vo) throws Exception;

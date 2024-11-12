@@ -53,6 +53,31 @@
                 }
             });
         }
+        
+        function deleteAcc() {
+            var id = $('#id').val();
+            if (confirm("계정을 삭제하시겠습니까?\n탈퇴이후 삭제된 데이터는 복구되지 않습니다.")){
+            	$.ajax({
+                    url: './deleteAcc.do',
+                    type: 'post',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("서버 응답:", response);
+                        if (response.result === 0) {
+                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
+                        } else {
+                        	alert("계정이 삭제되었습니다.\n감사합니다.");
+                        	self.location.href="/logout";
+                        }
+                    },
+                    error: function() {
+                        alert("서버 통신에 에러가 발생했습니다.");
+                    }
+                });
+            }
+            
+        }
 
         function validatePassword() {
             var password = $('#pass').val();
@@ -146,7 +171,8 @@
                             <label for="confirmPassword">비밀번호 확인</label>
                             <input type="password" id="confirmPassword" name="confirmPassword">
                         </div>
-                        <button type="button" onclick="updatePass()">비밀번호 변경</button> <!-- type="submit" -> type="button"으로 수정 -->
+                        <button type="button" onclick="updatePass()">비밀번호 변경</button>
+                        <button type="button" onclick="deleteAcc()">회원 탈퇴</button>
                     </form>
                     <button onclick="location.href='/mypage.do'" class="back-button">마이페이지 돌아가기</button> <!-- 수정: redirect 기능 변경 -->
                 </div>
