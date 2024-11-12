@@ -1534,5 +1534,15 @@ public class MovServiceController {
     private String getFileExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
+    
+    @RequestMapping("/adminMain.do")
+    public String adminMain() throws Exception {
+    	return "board/admin";
+    }
+    
+    @RequestMapping("/adminAccTable.do")
+    public String adminAccTable(Model model) throws Exception {
+    	return "board/accountTable";
+    }
 
 }
