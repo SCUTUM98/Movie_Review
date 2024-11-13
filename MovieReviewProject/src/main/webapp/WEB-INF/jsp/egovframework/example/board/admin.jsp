@@ -106,10 +106,18 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            <a class="nav-link" href="/adminAccTable.do">
-                                <div class="sb-nav-link-icon"><i class="fas fa-address-card"></i></div>
-                                                       계정현황
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#accountsLayouts" aria-expanded="false" aria-controls="accountsLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Accounts
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="accountsLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="/adminAccTable.do">계정 현황</a>
+                                    <a class="nav-link" href="/adminAccList.do">관리자 현황</a>
+                                </nav>
+                            </div>
+                            
                             <div class="sb-sidenav-menu-heading">Move To</div>
                             <a class="nav-link" href="/main.do">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>

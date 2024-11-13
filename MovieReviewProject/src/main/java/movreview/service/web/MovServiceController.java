@@ -55,6 +55,7 @@ import movreview.service.ReviewVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.ActorVO;
 import movreview.service.VideoVO;
@@ -100,6 +101,20 @@ public class MovServiceController {
 		System.out.println("UserName: " + username);
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		
+		logVO.setLogType("move");
+		logVO.setLogDetail("main.do");
+		
+		movService.insertLog(logVO);
 
 		MovieVO recentVO = new MovieVO();
 		CollectionVO seriesVO = new CollectionVO();
@@ -159,12 +174,27 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("search.do");
+		
+		movService.insertLog(logVO);
 
 		return "board/search";
 	}
 
 	@RequestMapping(value = "/movieSearch.do", method = RequestMethod.POST)
-	public String movieSearch(@RequestParam("searchKeyword") String title, Model model) throws Exception {
+	public String movieSearch(@RequestParam("searchKeyword") String title, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		
 		MovieVO searchVO = new MovieVO();
 		ActorVO actorVO = new ActorVO();
 		searchVO.setTitleEn(title);
@@ -186,6 +216,21 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("search");
+		logVO.setLogDetail(searchKeyword);
+		movService.insertLog(logVO);
+		
+		logVO.setLogType("move");
+		logVO.setLogDetail("result.do");
+		movService.insertLog(logVO);
 
 		MovieVO searchVO = new MovieVO();
 		ActorVO actorVO = new ActorVO();
@@ -282,6 +327,21 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("detail.do");
+		movService.insertLog(logVO);
+		
+		logVO.setLogType("load tmdb");
+		logVO.setLogDetail(Integer.toString(id));
+		movService.insertLog(logVO);
 
 		LOGGER.debug("ID Value: " + id);
 
@@ -405,6 +465,21 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("localDetail.do");
+		movService.insertLog(logVO);
+		
+		logVO.setLogType("load Film Report");
+		logVO.setLogDetail(Integer.toString(id));
+		movService.insertLog(logVO);
 
 		MovieVO selectVO = new MovieVO();
 		CollectionVO collectVO = new CollectionVO();
@@ -532,7 +607,23 @@ public class MovServiceController {
 	}
 	
 	@RequestMapping(value="movieUpdate.do")
-	public String movieUpdate(@RequestParam("movieId") int movieId, Model model) throws Exception {
+	public String movieUpdate(@RequestParam("movieId") int movieId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+
+		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("update movie");
+		logVO.setLogDetail(Integer.toString(movieId));
+		movService.insertLog(logVO);
+		
 		String detailData = tmdbService.movieDetail(apiKey, movieId);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -569,6 +660,15 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+
+		logVO.setLogType("movie review");
+		logVO.setLogDetail(Integer.toString(movieId));
+		movService.insertLog(logVO);
 
 		System.out.println("UserId: " + userId);
 
@@ -591,6 +691,16 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+
+		logVO.setLogType("series review");
+		logVO.setLogDetail(Integer.toString(seriesId));
+		movService.insertLog(logVO);
+
 
 		ReviewVO reviewVO = new ReviewVO();
 
@@ -610,6 +720,15 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+
+		logVO.setLogType("actor review");
+		logVO.setLogDetail(actorId);
+		movService.insertLog(logVO);
 		
 		ReviewVO reviewVO = new ReviewVO();
 
@@ -662,12 +781,25 @@ public class MovServiceController {
 		collectionVO.setOverview(seriesOverview);
 
 		CollectionVO checkCollection = movService.checkCollection(collectionVO);
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
 
 		if (checkCollection == null) {
 			movService.insertMovie(movieVO);
+			logVO.setLogType("add movie");
+			logVO.setLogDetail(Integer.toString(movieId));
+			movService.insertLog(logVO);
 			movService.insertCollection(collectionVO);
+			logVO.setLogType("add series");
+			logVO.setLogDetail(Integer.toString(seriesId));
+			movService.insertLog(logVO);
 		} else if (checkCollection != null) {
 			movService.insertMovie(movieVO);
+			logVO.setLogType("add movie");
+			logVO.setLogDetail(Integer.toString(movieId));
+			movService.insertLog(logVO);
 		}
 
 		for (int i = 0; i < actorIds.length; i++) {
@@ -716,6 +848,17 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 
 		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("seriesDetail.do");
+		movService.insertLog(logVO);
 
 		CollectionVO collectionVO = new CollectionVO();
 		collectionVO.setId(collectionId);
@@ -824,22 +967,39 @@ public class MovServiceController {
 	}
 
 	@RequestMapping(value="/deleteComment.do")
-	public String deleteComment(@RequestParam("type") String type, @RequestParam("reviewId") int reviewId, Model model) throws Exception {
+	public String deleteComment(@RequestParam("type") String type, @RequestParam("reviewId") int reviewId, Model model, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+	    String username = (String) session.getAttribute("username");
+		
 		ReviewVO commentVO = new ReviewVO();
 		commentVO.setReviewId(reviewId);
 		System.out.println(commentVO.getReviewId());
 		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+
 		if(type.equals("movie")) {
 			System.out.println(type);
 			movService.deleteMovieComment(commentVO);
+			logVO.setLogType("delete movie comment");
+			logVO.setLogDetail(Integer.toString(reviewId));
+			movService.insertLog(logVO);
 		}
 		if(type.equals("series")) {
 			System.out.println(type);
 			movService.deleteSeriesComment(commentVO);
+			logVO.setLogType("delete series comment");
+			logVO.setLogDetail(Integer.toString(reviewId));
+			movService.insertLog(logVO);
 		}
 		if(type.contentEquals("actor")) {
 			System.out.println(type);
 			movService.deleteActorComment(commentVO);
+			logVO.setLogType("delete actor comment");
+			logVO.setLogDetail(Integer.toString(reviewId));
+			movService.insertLog(logVO);
 		}
 		
 		return "redirect:/commentDetail.do";
@@ -847,6 +1007,11 @@ public class MovServiceController {
 
 	@RequestMapping("/registerMember.do")
 	public String registerMember() throws Exception {
+		LogVO logVO = new LogVO();
+		logVO.setUserId("A traveler");
+		logVO.setLogType("move");
+		logVO.setLogDetail("registerMember.do");
+		movService.insertLog(logVO);
 
 		return "board/signup";
 	}
@@ -871,6 +1036,12 @@ public class MovServiceController {
 		System.out.println("id: " + id);
 
 		movService.registerMember(memberVO);
+		
+		LogVO logVO = new LogVO();
+		logVO.setUserId(id);
+		logVO.setLogType("register");
+		logVO.setLogDetail("try reigster");
+		movService.insertLog(logVO);
 
 		String htmlContent = "<html>" +
 		        "<head>" +
@@ -903,27 +1074,50 @@ public class MovServiceController {
 
 		try {
 		    mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", htmlContent, "text/html");
+		    logVO.setLogType("send mail success");
+			logVO.setLogDetail(mailKey);
+			movService.insertLog(logVO);
 		} catch (Exception e) {
 		    e.printStackTrace();
+		    logVO.setLogType("send mail fail");
+			logVO.setLogDetail(mailKey);
+			movService.insertLog(logVO);
 		    return "FAIL";
 		}
 
 		status.setComplete();
+		
+		logVO.setLogType("register");
+		logVO.setLogDetail("register success");
+		movService.insertLog(logVO);
 
 		return "redirect:/home.do";
 	}
 
 	@RequestMapping(value = "/home.do", method = RequestMethod.GET)
 	public String home() throws Exception {
+		LogVO logVO = new LogVO();
+		logVO.setUserId("A traveler");
+		logVO.setLogType("move");
+		logVO.setLogDetail("home.do");
+		movService.insertLog(logVO);
+		
 		return "board/signin";
 	}
 
 	@RequestMapping(value = "/login_success.do", method = RequestMethod.GET)
-	public String login(HttpServletRequest request) {
+	public String login(HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		String username = request.getUserPrincipal().getName();
 
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		logVO.setUserId(username);
+		logVO.setLogType("log-in success");
+		logVO.setLogDetail("로그인 성공");
+		
+		movService.insertLog(logVO);
 
 		return "redirect:/main.do";
 	}
@@ -931,6 +1125,7 @@ public class MovServiceController {
 	@RequestMapping(value = "/login_fail.do", method = RequestMethod.GET)
 	public String login_fail(Model model) throws Exception {
 		model.addAttribute("errorMessage", "아이디 비밀번호를 확인하십시오.");
+		
 
 		return "forward:/home.do";
 	}
@@ -961,20 +1156,32 @@ public class MovServiceController {
 		memberVO.setMailKey(mailKey);
 
 		int isTrue = movService.verify(memberVO);
+		
+		LogVO logVO = new LogVO();
+		logVO.setUserId("A traveler");
 
 		if (isTrue == 1) {
 			int isVerify = movService.verifyCheck(email);
 			System.out.println("isVerify: " + isVerify);
 			if (isVerify == 1) {
 				model.addAttribute("errorMessage", "이미 인증된 계정입니다.");
+				logVO.setLogType("verify fail(already verified)");
+				logVO.setLogDetail(email);
+				movService.insertLog(logVO);
 				return "forward:/verify.do";
 			} else {
 				movService.updateMailAuth(memberVO);
 				model.addAttribute("errorMessage", "이메일 인증이 완료되었습니다. 이제 로그인이 가능합니다.");
+				logVO.setLogType("verify success");
+				logVO.setLogDetail(email);
+				movService.insertLog(logVO);
 				return "redirect:/main.do";
 			}
 		} else {
 			model.addAttribute("errorMessage", "인증번호가 일치하지 않습니다. 다시 시도해 주세요.");
+			logVO.setLogType("verify fail(not correct)");
+			logVO.setLogDetail(email);
+			movService.insertLog(logVO);
 			return "forward:/verify.do";
 		}
 	}
@@ -984,6 +1191,17 @@ public class MovServiceController {
     	HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("movieList.do");
+		movService.insertLog(logVO);
 		
 		MovieVO movieVO = new MovieVO();
 		GenreVO genreVO = new GenreVO();
@@ -1003,6 +1221,17 @@ public class MovServiceController {
     	HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("genre.do");
+		movService.insertLog(logVO);
 
 		MovieVO movieVO = new MovieVO();
 		GenreVO genreVO = new GenreVO();
@@ -1014,96 +1243,153 @@ public class MovServiceController {
 			String genre = "SF";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g02")) {
 			String genre = "TV 영화";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g03")) {
 			String genre = "가족";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g04")) {
 			String genre = "공포";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g05")) {
 			String genre = "다큐멘터리";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g06")) {
 			String genre = "드라마";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g07")) {
 			String genre = "로맨스";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g08")) {
 			String genre = "모험";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g09")) {
 			String genre = "미스터리";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g10")) {
 			String genre = "범죄";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g11")) {
 			String genre = "서부";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g12")) {
 			String genre = "스릴러";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g13")) {
 			String genre = "애니메이션";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g14")) {
 			String genre = "액션";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g15")) {
 			String genre = "역사";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g16")) {
 			String genre = "음악";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g17")) {
 			String genre = "전쟁";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g18")) {
 			String genre = "코미디";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		if (id.equals("g19")) {
 			String genre = "판타지";
 			movieVO.setGenreDB(genre);
 			model.addAttribute("title", genre);
+			logVO.setLogType("select genre");
+			logVO.setLogDetail(genre);
+			movService.insertLog(logVO);
 		}
 		
 		List<?> movieList = movService.searchByGenre(movieVO);
@@ -1119,6 +1405,17 @@ public class MovServiceController {
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
 		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("seriesList.do");
+		movService.insertLog(logVO);
+		
 		CollectionVO collectionVO = new CollectionVO();
 		
 		List<?> seriesList = movService.seriesList(collectionVO);
@@ -1132,6 +1429,14 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("mypage.do");
+		movService.insertLog(logVO);
 
 		ReviewVO reviewVO = new ReviewVO();
 		LikeVO likeVO = new LikeVO();
@@ -1155,6 +1460,14 @@ public class MovServiceController {
 		String username = request.getUserPrincipal().getName();
 
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("like");
+		logVO.setLogDetail(Integer.toString(movieId));
+		movService.insertLog(logVO);
 
 		LikeVO likeVO = new LikeVO();
 		likeVO.setMovieId(movieId);
@@ -1172,6 +1485,14 @@ public class MovServiceController {
 		String username = request.getUserPrincipal().getName();
 
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("unlike");
+		logVO.setLogDetail(Integer.toString(movieId));
+		movService.insertLog(logVO);
 
 		LikeVO likeVO = new LikeVO();
 		likeVO.setMovieId(movieId);
@@ -1188,12 +1509,32 @@ public class MovServiceController {
 		String username = request.getUserPrincipal().getName();
 		session.setAttribute("username", username);
 		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("identify.do");
+		movService.insertLog(logVO);
+		
 		return "board/checkPass";
 	}
 
 	@RequestMapping(value = "/updateInfo.do", method = RequestMethod.POST)
-	public String updateInfo(@RequestParam("id") String id, @RequestParam("pw") String pass, Model model) throws Exception {
+	public String updateInfo(@RequestParam("id") String id, @RequestParam("pw") String pass, Model model, HttpServletRequest request) throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
+		HttpSession session = request.getSession();
+		String username = request.getUserPrincipal().getName();
+		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("updateInfo.do");
+		movService.insertLog(logVO);
 		
 		MemberVO userVO = new MemberVO();
 		userVO.setId(id);
@@ -1211,9 +1552,15 @@ public class MovServiceController {
 		else {
 			if (pw == null) {
 				model.addAttribute("errorMessage", "비밀번호를 입력해주세요.");
+				logVO.setLogType("move fail");
+				logVO.setLogDetail("updateInfo.do 비밀번호 미입력");
+				movService.insertLog(logVO);
 			}
 			else {
 				model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+				logVO.setLogType("move fail");
+				logVO.setLogDetail("updateInfo.do 비밀번호 미일치");
+				movService.insertLog(logVO);
 			}
 			
 			return "forward:/identify.do";
@@ -1223,6 +1570,17 @@ public class MovServiceController {
 	@RequestMapping(value = "/updatePass.do", method = RequestMethod.POST)
 	public String updatePass(@RequestParam("id") String id, @RequestParam("pass") String pass, Model model,
 			HttpServletRequest request) throws Exception {
+		
+		String username = request.getUserPrincipal().getName();
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("updatePass.do");
+		movService.insertLog(logVO);
+		
 		String encodPW = encoder.encode(pass);
 		System.out.println("encode PW: " + encodPW);
 
@@ -1235,9 +1593,15 @@ public class MovServiceController {
 		model.addAttribute("errorMessage", "비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
 
 		HttpSession session = request.getSession(false);
+		logVO.setLogType("update");
+		logVO.setLogDetail("PW update");
+		movService.insertLog(logVO);
 
 		if (session != null) {
 			System.out.println("Server is still alived!");
+			logVO.setLogType("log-out");
+			logVO.setLogDetail(username);
+			movService.insertLog(logVO);
 			session.invalidate();
 		}
 
@@ -1252,6 +1616,12 @@ public class MovServiceController {
 		System.out.println("난수: " + mailKey);
 		String url = "localhost:8080/verify.do";
 		String auth = "0";
+		String username = request.getUserPrincipal().getName();
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
 
 		memberVO.setId(id);
 		memberVO.setEmail(email);
@@ -1260,6 +1630,8 @@ public class MovServiceController {
 
 		movService.updateEmail(memberVO);
 		model.addAttribute("errorMessage", "이메일이 변경되었습니다. 메일 주소 인증 후 다시 로그인 해주세요.");
+		logVO.setLogType("update");
+		logVO.setLogDetail("PW email");
 		
 		String htmlContent = "<html>" +
 		        "<head>" +
@@ -1292,16 +1664,25 @@ public class MovServiceController {
 
 		try {
 		    mailHandler.sendMail(email, "Film Report 회원가입 인증번호 입니다.", htmlContent, "text/html");
+		    logVO.setLogType("send mail success");
+			logVO.setLogDetail(mailKey);
+			movService.insertLog(logVO);
+		    
 		} catch (Exception e) {
 		    e.printStackTrace();
+		    logVO.setLogType("send mail fail");
+			logVO.setLogDetail(mailKey);
+			movService.insertLog(logVO);
 		    return "FAIL";
 		}
-
 
 		HttpSession session = request.getSession(false);
 
 		if (session != null) {
 			System.out.println("Server is still alived!");
+			logVO.setLogType("log-out");
+			logVO.setLogDetail(username);
+			movService.insertLog(logVO);
 			session.invalidate();
 		}
 
@@ -1314,6 +1695,14 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("commentDetail.do");
+		movService.insertLog(logVO);
 		
 		ReviewVO reviewVO = new ReviewVO();
 		reviewVO.setUserId(username);
@@ -1329,6 +1718,14 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("commentCategory.do");
+		movService.insertLog(logVO);
 		
 		ReviewVO reviewVO = new ReviewVO();
 		ReviewVO seriesReviewVO = new ReviewVO();
@@ -1354,6 +1751,14 @@ public class MovServiceController {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		session.setAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("favoritesDetail.do");
+		movService.insertLog(logVO);
 		
 		LikeVO likeVO = new LikeVO();
 		
@@ -1542,7 +1947,56 @@ public class MovServiceController {
     
     @RequestMapping("/adminAccTable.do")
     public String adminAccTable(Model model) throws Exception {
+    	MemberVO member = new MemberVO();
+    	List<?> memberList = movService.searchAllUsers(member);
+    	
+    	model.addAttribute("memberList", memberList);
+    	
     	return "board/accountTable";
     }
+    
+    @RequestMapping("/adminAccList.do")
+    public String adminAccList(Model model) throws Exception {
+    	MemberVO member = new MemberVO();
+    	List<?> memberList = movService.searchAllAdmin(member);
+    	
+    	model.addAttribute("memberList", memberList);
+    	
+    	return "board/adminList";
+    }
+    
+    @RequestMapping("/adminUserDetail.do")
+    public String adminUserDetail(@RequestParam("id") String id, Model model) throws Exception {
+    	MemberVO member = new MemberVO();
+    	member.setId(id);
+    	
+    	model.addAttribute("userData", movService.searchUserDetail(member));
+    	
+    	return "board/userDetail";
+    }
+    
+    @RequestMapping(value="/adminGrant.do", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> adminGrant(@RequestParam("id") String id) throws Exception {
+
+		int result = movService.upgradeToAdmin(id);
+		System.out.println("result: " + result);
+		
+		Map<String, Integer> response = new HashMap<>();
+		response.put("result", result);
+		return response;
+	}
+    
+    @RequestMapping(value="/adminRevoke.do", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> adminRevoke(@RequestParam("id") String id) throws Exception {
+
+		int result = movService.downToUser(id);
+		System.out.println("result: " + result);
+		
+		Map<String, Integer> response = new HashMap<>();
+		response.put("result", result);
+		return response;
+	}
 
 }

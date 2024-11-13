@@ -17,6 +17,7 @@ import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
@@ -327,5 +328,35 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public List<?> seriesList(CollectionVO vo) throws Exception {
 		return movDAO.seriesList(vo);
+	}
+	// 회원 목록 조회
+	@Override
+	public List<?> searchAllUsers(MemberVO vo) throws Exception {
+		return movDAO.searchAllUsers(vo);
+	}
+	// 관리자 계정 조회
+	@Override
+	public List<?> searchAllAdmin(MemberVO vo) throws Exception {
+		return movDAO.searchAllAdmin(vo);
+	}
+	// 회원 상세 조회
+	@Override
+	public MemberVO searchUserDetail(MemberVO vo) throws Exception {
+		return movDAO.searchUserDetail(vo);
+	}
+	// 관리자 권한 부여
+	@Override
+	public int upgradeToAdmin(String id) throws Exception {
+		return movDAO.upgradeToAdmin(id);
+	}
+	// 관리자 권한 회수
+	@Override
+	public int downToUser(String id) throws Exception {
+		return movDAO.downToUser(id);
+	}
+	// 로그 추가
+	@Override
+	public LogVO insertLog(LogVO vo) throws Exception {
+		return movDAO.insertLog(vo);
 	}
 }

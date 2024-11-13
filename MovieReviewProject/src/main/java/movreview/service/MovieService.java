@@ -120,4 +120,16 @@ public interface MovieService {
 	List<?> searchByGenre(MovieVO vo) throws Exception;
 	// 시리즈 리스트 조회
 	List<?> seriesList(CollectionVO vo) throws Exception;
+	// 회원 목록 조회
+	List<?> searchAllUsers(MemberVO vo) throws Exception;
+	// 관리자 계정 조회
+	List<?> searchAllAdmin(MemberVO vo) throws Exception;
+	// 회원 상세 조회
+	MemberVO searchUserDetail(MemberVO vo) throws Exception;
+	// 관리자 권한 부여
+	int upgradeToAdmin(String id) throws Exception;
+	// 관리자 권한 회수
+	int downToUser(String id) throws Exception;
+	// 로그 추가
+	LogVO insertLog(LogVO vo) throws Exception;
 }

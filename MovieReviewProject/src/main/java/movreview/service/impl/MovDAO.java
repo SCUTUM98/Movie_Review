@@ -14,6 +14,7 @@ import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.ReviewVO;
 
@@ -279,5 +280,29 @@ public class MovDAO extends EgovAbstractDAO {
 	// 시리즈 리스트 조회
 	public List<?> seriesList(CollectionVO vo) throws Exception {
 		return list("movDAO.seriesList", vo);
+	}
+	// 회원 목록 조회
+	public List<?> searchAllUsers(MemberVO vo) throws Exception {
+		return list("movDAO.searchAllUsers", vo);
+	}
+	// 관리자 계정 조회
+	public List<?> searchAllAdmin(MemberVO vo) throws Exception {
+		return list("movDAO.searchAllAdmin", vo);
+	}
+	// 회원 상세 조회
+	public MemberVO searchUserDetail(MemberVO vo) throws Exception {
+		return (MemberVO) select("movDAO.searchUserDetail", vo);
+	}
+	// 관리자 권한 부여
+	public int upgradeToAdmin(String id) throws Exception {
+		return (int) update("movDAO.upgradeToAdmin", id);
+	}
+	// 관리자 권한 회수
+	public int downToUser(String id) throws Exception {
+		return (int) update("movDAO.downToUser", id);
+	}
+	// 로그 추가
+	public LogVO insertLog(LogVO vo) throws Exception {
+		return (LogVO) insert("movDAO.insertLog", vo);
 	}
 }

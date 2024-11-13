@@ -21,23 +21,6 @@
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
         <script>
         
-	        $(document).ready(function() {
-	            $('#datatablesSimple').on('click', 'tbody tr', function() {
-	            	var id = $(this).find('td').eq(0).text();
-	            	moveToDetail(id);
-	            })
-	        } );
-	        
-	        function moveToDetail(id) {
-	            var form = document.forms['memberForm'];
-	            if (form) {
-	                form.id.value = id;
-	                form.action = "<c:url value='/adminUserDetail.do'/>";
-	                form.submit();
-	            } else {
-	                console.error("Form not found");
-	            }
-	        }
         </script>
     </head>
     <body class="sb-nav-fixed">
@@ -139,7 +122,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">회원 현황</h1>
+                        <h1 class="mt-4">관리자 현황</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
@@ -150,42 +133,39 @@
                                 Film Report 회원 현황
                             </div>
                             <div class="card-body">
-                            	<form:form name="memberForm" method="post">
-                            		<input type="hidden" name="id" value="">
-	                                <table id="datatablesSimple">
-	                                    <thead>
-	                                        <tr>
-	                                            <th>ID</th>
-	                                            <th>NAME</th>
-	                                            <th>ROLE</th>
-	                                            <th>E-Mail</th>
-	                                            <th>Verification</th>
-	                                        </tr>
-	                                    </thead>
-	                                    <tfoot>
-	                                        <tr>
-	                                            <th>ID</th>
-	                                            <th>NAME</th>
-	                                            <th>ROLE</th>
-	                                            <th>E-Mail</th>
-	                                            <th>Verification</th>
-	                                        </tr>
-	                                    </tfoot>
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>NAME</th>
+                                            <th>ROLE</th>
+                                            <th>E-Mail</th>
+                                            <th>Verification</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>NAME</th>
+                                            <th>ROLE</th>
+                                            <th>E-Mail</th>
+                                            <th>Verification</th>
+                                        </tr>
+                                    </tfoot>
 	                                    <tbody>
-		                                    <c:forEach items="${memberList }" var="member" varStatus="status">
-			                                    <tr>
-				                                    <td>${member.id }</td>
-				                                    <td>${member.name }</td>
-				                                    <c:if test="${member.levels == 'ROLE_USER' }"><td>사용자</td></c:if>
-				                                    <c:if test="${member.levels == 'ROLE_ADMIN' }"><td>관리자</td></c:if>
-				                                    <td>${member.email }</td>
-				                                    <c:if test="${member.mailAuth == '0' }"><td>미인증</td></c:if>
-				                                    <c:if test="${member.mailAuth == '1' }"><td>인증</td></c:if>
-			                                    </tr>
-		                                    </c:forEach>
+	                                        <c:forEach items="${memberList }" var="member" varStatus="status">
+		                                        <tr>
+		                                        	<td>${member.id }</td>
+		                                        	<td>${member.name }</td>
+		                                        	<c:if test="${member.levels == 'ROLE_USER' }"><td>사용자</td></c:if>
+		                                        	<c:if test="${member.levels == 'ROLE_ADMIN' }"><td>관리자</td></c:if>
+		                                        	<td>${member.email }</td>
+		                                        	<c:if test="${member.mailAuth == '0' }"><td>미인증</td></c:if>
+		                                        	<c:if test="${member.mailAuth == '1' }"><td>인증</td></c:if>
+	                                        	</tr>
+	                                        </c:forEach>
 	                                    </tbody>
-	                                </table>
-                                </form:form>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -193,7 +173,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
+                            <div class="text-muted">Copyright &copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

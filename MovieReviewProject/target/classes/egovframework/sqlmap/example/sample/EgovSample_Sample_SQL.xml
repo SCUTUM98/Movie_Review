@@ -13,6 +13,7 @@
 	<typeAlias  alias="reviewVO" type="movreview.service.ReviewVO"/>
 	<typeAlias  alias="likeVO" type="movreview.service.LikeVO"/>
 	<typeAlias  alias="genreVO" type="movreview.service.GenreVO"/>
+	<typeAlias  alias="logVO" type="movreview.service.LogVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -843,4 +844,57 @@
 				ORDER by cname
 			]]>
 	</select>
+	
+	<!-- 관리자 페이지 -->
+	<!-- 전체 회원 조회 -->
+	<select id="movDAO.searchAllUsers" resultClass="memberVO">
+		<![CDATA[
+			SELECT id, levels, enabled, name, email, mail_auth AS mailAuth
+			FROM member
+		]]>
+	</select>
+	<!-- 관리자 계정 조회 -->
+	<select id="movDAO.searchAllAdmin" resultClass="memberVO">
+		<![CDATA[
+			SELECT id, levels, enabled, name, email, mail_auth AS mailAuth
+			FROM member
+			WHERE levels = 'ROLE_ADMIN'
+		]]>
+	</select>
+	<!-- 회원 상세 정보 조회 -->
+	<select id="movDAO.searchUserDetail" resultClass="memberVO">
+		<![CDATA[
+			SELECT id, levels, enabled, name, email, mail_auth AS mailAuth
+			FROM member
+			WHERE id=#id#
+		]]>
+	</select>
+	<!-- 관리자 권한 부여 -->
+	<update id="movDAO.upgradeToAdmin">
+		<![CDATA[
+			UPDATE member
+			SET levels='ROLE_ADMIN'
+			WHERE id=#id#
+		]]>
+	</update>
+	<!-- 관리자 권한 회수 -->
+	<update id="movDAO.downToUser">
+		<![CDATA[
+			UPDATE member
+			SET levels='ROLE_USER'
+			WHERE id=#id#
+		]]>
+	</update>
+	
+	<!-- 시스템 로그 -->
+	<!-- 로그 추가 -->
+	<insert id="movDAO.insertLog" parameterClass="logVO">
+		<![CDATA[
+			INSERT INTO acc_log (user_id, log_type, log_detail, report_time)
+			VALUES ( #userId#
+					, #logType#
+					, #logDetail#
+					, CURRENT_TIMESTAMP)
+		]]>
+	</insert>
 </sqlMap>
