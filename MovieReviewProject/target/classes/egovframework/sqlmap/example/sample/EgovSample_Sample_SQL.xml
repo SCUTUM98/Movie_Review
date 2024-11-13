@@ -905,4 +905,21 @@
 					, CURRENT_TIMESTAMP)
 		]]>
 	</insert>
+	<!-- 계정 별 로그 조회 -->
+	<select id="movDAO.searchAccLog" resultClass="logVO">
+		<![CDATA[
+			SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+			FROM acc_log
+			WHERE user_id = #userId#
+			ORDER BY report_time DESC
+		]]>
+	</select>
+	<!-- 로그 가이드 조회 -->
+	<select id="movDAO.logCategory" resultClass="logVO">
+		<![CDATA[
+			SELECT id, type_name AS typeName, type_description AS typeDescription
+			FROM logg
+			ORDER BY id
+		]]>
+	</select>
 </sqlMap>

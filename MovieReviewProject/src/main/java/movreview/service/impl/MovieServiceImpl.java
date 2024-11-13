@@ -364,4 +364,14 @@ public class MovieServiceImpl implements MovieService {
 	public LogVO insertLog(LogVO vo) throws Exception {
 		return movDAO.insertLog(vo);
 	}
+	// 계정 별 로그 조회
+	@Override
+	public List<?> searchAccLog(String id) throws Exception {
+		return movDAO.searchAccLog(id);
+	}
+	// 로그 가이드 조회
+	@Override
+	public List<?> logCategory() throws Exception {
+		return movDAO.logCategory();
+	}
 }

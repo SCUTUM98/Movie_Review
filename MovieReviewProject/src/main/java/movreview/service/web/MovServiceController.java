@@ -1973,8 +1973,17 @@ public class MovServiceController {
     	member.setId(id);
     	
     	model.addAttribute("userData", movService.searchUserDetail(member));
+    	model.addAttribute("logList", movService.searchAccLog(id));
     	
     	return "board/userDetail";
+    }
+    
+    @RequestMapping("/adminLogGuide.do")
+    public String adminLogGuide(Model model) throws Exception {
+    	
+    	model.addAttribute("logCategory", movService.logCategory());
+    	
+    	return "board/logGuide";
     }
     
     @RequestMapping(value="/adminGrant.do", method=RequestMethod.POST)

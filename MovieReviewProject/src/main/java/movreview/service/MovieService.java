@@ -134,4 +134,8 @@ public interface MovieService {
 	int checkAdmin(String id) throws Exception;
 	// 로그 추가
 	LogVO insertLog(LogVO vo) throws Exception;
+	// 게정 별 로그 조회
+	List<?> searchAccLog(String id) throws Exception;
+	// 로그 가이드 조회
+	List<?> logCategory() throws Exception;
 }

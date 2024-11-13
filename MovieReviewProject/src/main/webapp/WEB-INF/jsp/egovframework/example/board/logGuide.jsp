@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-    
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,77 +18,9 @@
         <link href="${pageContext.request.contextPath}/css/admin/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
         <script>
-	        function deleteAcc(id) {
-	            console.log(id);
-	            if (confirm("계정을 삭제하시겠습니까?\n탈퇴이후 삭제된 데이터는 복구되지 않습니다.")){
-	            	$.ajax({
-	                    url: './deleteAcc.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("계정이 삭제되었습니다.");
-	                        	self.location.href="/adminAccTable.do";
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
-	            }
-	            
-	        }
-	        function grantAdmin(id) {
-	            console.log(id);
-	            if (confirm("관리자 권한을 부여하시겠습니까?")){
-	            	$.ajax({
-	                    url: './adminGrant.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("관리자 권한이 부여되었습니다.");
-	                        	location.reload(true);
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
-	            }  
-	        }
-	        function rebokeAdmin(id) {
-	            console.log(id);
-	            if (confirm("관리자 권한을 회수하시겠습니까?")){
-	            	$.ajax({
-	                    url: './adminRevoke.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("관리자 권한이 회수되었습니다.");
-	                        	location.reload(true);
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
-	            }  
-	        }
+        
         </script>
     </head>
     <body class="sb-nav-fixed">
@@ -109,10 +41,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">설정</a></li>
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -214,106 +146,47 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">${userData.id } (${userData.name })</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">회원 상세 정보</li>
-                        </ol>
-                        
-                        <div class="row">
-                        	<div class="user-info">
-                        		<div class="input-group">
-		                            <label for="name">이름: ${userData.name } </label>
-		                        </div>
-		                        <div class="input-group">
-		                        	<label for="levels">등급: ${userData.levels }</label> 
-		                        </div>
-		                        <div class="input-group">
-		                            <label for="email">이메일: ${userData.email }</label>
-		                        </div>
-		                        <div class="input-group">
-		                        	<c:if test="${userData.mailAuth == 0 }">
-		                        		<label for="status">계정 상태: 로그인 불가</label>
-		                        	</c:if>
-		                        	<c:if test="${userData.mailAuth == 1 }">
-		                        		<label for="status">계정 상태: 로그인 가능</label>
-		                        	</c:if>
-		                            
-		                        </div>
-                        	</div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                        </div>
+                        <h1 class="mt-4">로그 가이드 북</h1>
+
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>사용자 로그 현황
+                                <i class="fas fa-table me-1"></i>
+                                Film Report 로그 가이드 북
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>로그번호</th>
-                                            <th>사용자 ID</th>
+                                            <th>아이디</th>
                                             <th>로그 타입</th>
-                                            <th>로그 내용</th>
-                                            <th>발생시간</th>
+                                            <th>로그 설명</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>로그번호</th>
-                                            <th>사용자 ID</th>
+                                            <th>아이디</th>
                                             <th>로그 타입</th>
-                                            <th>로그 내용</th>
-                                            <th>발생시간</th>
+                                            <th>로그 설명</th>
                                         </tr>
                                     </tfoot>
-                                    <tbody>
-                                        <c:forEach items="${logList }" var="log" varStatus="status">
-			                                    <tr>
-				                                    <td>${log.logId }</td>
-				                                    <td>${log.userId }</td>
-				                                    <td>${log.logType }</td>
-				                                    <td>${log.logDetail }</td>
-				                                    <td>${log.reportTime }</td>
-			                                    </tr>
-		                                    </c:forEach>
-                                    </tbody>
+	                                    <tbody>
+	                                        <c:forEach items="${logCategory }" var="log" varStatus="status">
+		                                        <tr>
+		                                        	<td>${log.id }</td>
+		                                        	<td>${log.typeName }</td>
+		                                        	<td>${log.typeDescription }</td>
+	                                        	</tr>
+	                                        </c:forEach>
+	                                    </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="button-section">
-                        	<a>
-                        		<button type="button" class="detail-button" onclick="deleteAcc('${userData.id}')">회원 삭제</button>
-                        		<c:if test="${userData.levels == 'ROLE_USER' }">
-                        			<button type="button" class="detail-button" onclick="grantAdmin('${userData.id}')">관리자 설정</button>
-                        		</c:if>
-                        		<c:if test="${userData.levels == 'ROLE_ADMIN' }">
-                        			<button type="button" class="detail-button" onclick="rebokeAdmin('${userData.id}')">관리자 해제</button>
-                        		</c:if>
-                        	</a>
                         </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
+                            <div class="text-muted">𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
@@ -326,10 +199,7 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="${pageContext.request.contextPath}/assets/demo/chart-area-demo.js"></script>
-        <script src="${pageContext.request.contextPath}/assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="${pageContext.request.contextPath}/js/datatables-simple-demo.js"></script>
+        <script src="${pageContext.request.contextPath}js/datatables-simple-demo.js"></script>
     </body>
 </html>

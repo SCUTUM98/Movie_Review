@@ -309,4 +309,12 @@ public class MovDAO extends EgovAbstractDAO {
 	public LogVO insertLog(LogVO vo) throws Exception {
 		return (LogVO) insert("movDAO.insertLog", vo);
 	}
+	// 계정 별 로그 조회
+	public List<?> searchAccLog(String id) throws Exception {
+		return list("movDAO.searchAccLog", id);
+	}
+	// 로그 가이드 조회
+	public List<?> logCategory() throws Exception {
+		return list("movDAO.logCategory");
+	}
 }
