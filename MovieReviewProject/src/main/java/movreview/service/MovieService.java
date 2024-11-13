@@ -130,6 +130,8 @@ public interface MovieService {
 	int upgradeToAdmin(String id) throws Exception;
 	// 관리자 권한 회수
 	int downToUser(String id) throws Exception;
+	// 관리자 확인
+	int checkAdmin(String id) throws Exception;
 	// 로그 추가
 	LogVO insertLog(LogVO vo) throws Exception;
 }

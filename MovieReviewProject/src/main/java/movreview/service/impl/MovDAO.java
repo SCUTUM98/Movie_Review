@@ -301,6 +301,10 @@ public class MovDAO extends EgovAbstractDAO {
 	public int downToUser(String id) throws Exception {
 		return (int) update("movDAO.downToUser", id);
 	}
+	// 관리자 확인
+	public int checkAdmin(String id) throws Exception {
+		return (int) select("movDAO.checkAdmin", id);
+	}
 	// 로그 추가
 	public LogVO insertLog(LogVO vo) throws Exception {
 		return (LogVO) insert("movDAO.insertLog", vo);

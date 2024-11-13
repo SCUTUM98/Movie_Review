@@ -885,6 +885,14 @@
 			WHERE id=#id#
 		]]>
 	</update>
+	<!-- 관리자 확인 -->
+	<select id="movDAO.checkAdmin" resultClass="int">
+		<![CDATA[
+			SELECT count(levels)
+			FROM member
+			WHERE levels='ROLE_ADMIN' AND id=#id#
+		]]>
+	</select>
 	
 	<!-- 시스템 로그 -->
 	<!-- 로그 추가 -->

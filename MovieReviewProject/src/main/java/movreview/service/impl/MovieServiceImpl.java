@@ -354,6 +354,11 @@ public class MovieServiceImpl implements MovieService {
 	public int downToUser(String id) throws Exception {
 		return movDAO.downToUser(id);
 	}
+	// 관리자 확인
+	@Override
+	public int checkAdmin(String id) throws Exception {
+		return movDAO.checkAdmin(id);
+	}
 	// 로그 추가
 	@Override
 	public LogVO insertLog(LogVO vo) throws Exception {

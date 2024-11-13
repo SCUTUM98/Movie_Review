@@ -113,6 +113,7 @@
                         <input type="hidden" name="id" value="">
                         <button type="submit" onclick="updateInfo('${username}')" class="modify-button">회원정보 수정</button>
                     </form:form>
+                    <c:if test="${result > 0 }"><button type="submit" onclick="location.href='/adminMain.do'" class="modify-button">관리자 페이지</button></c:if>
                 </div>
             </div>
 

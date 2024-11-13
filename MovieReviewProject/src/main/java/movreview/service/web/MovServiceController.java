@@ -1447,8 +1447,10 @@ public class MovServiceController {
 
 		List<?> reviewList = movService.checkReview(reviewVO);
 		List<?> likeList = movService.checkLike(likeVO);
+		int result = movService.checkAdmin(username);
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("likeList", likeList);
+		model.addAttribute("result", result);
 
 		return "board/mypage";
 	}
