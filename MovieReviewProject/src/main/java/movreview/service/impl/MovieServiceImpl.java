@@ -374,4 +374,34 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> logCategory() throws Exception {
 		return movDAO.logCategory();
 	}
+	// 로그 조회
+	@Override
+	public List<?> selectLog() throws Exception {
+		return movDAO.selectLog();
+	}
+	// 로그 세부 정보 조회
+	@Override
+	public LogVO logDetail(int logId) throws Exception {
+		return movDAO.logDetail(logId);
+	}
+	// 로그 가이드 조회 by typeName
+	@Override
+	public LogVO logByName(String typeName) throws Exception {
+		return movDAO.logByName(typeName);
+	}
+	// 작성한 영화 리뷰 찾아오기
+	@Override
+	public ReviewVO findReviewByTime(ReviewVO vo) throws Exception {
+		return movDAO.findReviewByTime(vo);
+	}
+	// 시리즈 리뷰 찾아오기
+	@Override
+	public ReviewVO seriesReviewByTime(ReviewVO vo) throws Exception {
+		return movDAO.seriesReviewByTime(vo);
+	}
+	// 작성한 배우 응원글 찾아오기
+	@Override
+	public ReviewVO actorReviewByTime(ReviewVO vo) throws Exception {
+		return movDAO.actorReviewByTime(vo);
+	}
 }

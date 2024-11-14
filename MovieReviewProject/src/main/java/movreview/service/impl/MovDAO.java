@@ -317,4 +317,28 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> logCategory() throws Exception {
 		return list("movDAO.logCategory");
 	}
+	// 로그 조회
+	public List<?> selectLog() throws Exception {
+		return list("movDAO.selectLog");
+	}
+	// 로그 세부 내용 조회
+	public LogVO logDetail(int logId) throws Exception {
+		return (LogVO) select("movDAO.logDetail", logId);
+	}
+	// 로그 가이드 조회 by typeName
+	public LogVO logByName(String typeName) throws Exception {
+		return (LogVO) select("movDAO.logByName", typeName);
+	}
+	// 작성한 영화 리뷰 찾아오기
+	public ReviewVO findReviewByTime(ReviewVO vo) throws Exception {
+		return (ReviewVO) select("movDAO.findReviewByTime", vo);
+	}
+	// 시리즈 리뷰 찾아오기
+	public ReviewVO seriesReviewByTime(ReviewVO vo) throws Exception {
+		return (ReviewVO) select("movDAO.seriesReviewByTime", vo);
+	}
+	// 작성한 배우 응원글 찾아오기
+	public ReviewVO actorReviewByTime(ReviewVO vo) throws Exception {
+		return (ReviewVO) select("movDAO.actorReviewByTime",vo);
+	}
 }

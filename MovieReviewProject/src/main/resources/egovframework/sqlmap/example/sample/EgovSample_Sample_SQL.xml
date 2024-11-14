@@ -801,6 +801,8 @@
 	        		, overview
 	        		, release_date AS releaseDate
 	        		, tagline
+	        		, status
+	        		, submit_date AS submitDate
 	        FROM movie_page
 	        ORDER BY title_er
 		]]>
@@ -921,5 +923,47 @@
 			FROM logg
 			ORDER BY id
 		]]>
+	</select>
+	<!-- 로그  조회 -->
+	<select id="movDAO.selectLog" resultClass="logVO">
+		<![CDATA[
+			SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+			FROM acc_log
+			ORDER BY report_time DESC
+		]]>
+	</select>
+	<!-- 로그 세부 내용 조회 -->
+	<select id="movDAO.logDetail" resultClass="logVO">
+		<![CDATA[
+			SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+			FROM acc_log
+			WHERE log_id = #logId#
+		]]>
+	</select>
+	<!-- 로그 가이드 조회 by typeName -->
+	<select id="movDAO.logByName" resultClass="logVO">
+		<![CDATA[
+			SELECT id, type_name AS typeName, type_description AS typeDescription
+			FROM logg
+			WHERE type_name = #typeName#
+		]]>
+	</select>
+	<!-- 작성한 영화 리뷰 찾아오기 -->
+	<select id="movDAO.findReviewByTime" resultClass="reviewVO">
+		SELECT review_id AS reviewId, movie_id AS movieID, user_id AS userId, rate, detail, submit_time AS submitTime
+		FROM review
+		WHERE movie_id = #movieId# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
+	</select>
+	<!-- 작성한 시리즈 리뷰 찾아오기 -->
+	<select id="movDAO.seriesReviewByTime" resultClass="reviewVO">
+		SELECT review_id AS reviewId, series_id AS seriesID, user_id AS userId, rate, detail, submit_time AS submitTime
+		FROM series_review
+		WHERE series_id = #seriesID# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
+	</select>
+	<!-- 작성한 배우 응원글 찾아오기 -->
+	<select id="movDAO.actorReviewByTime" resultClass="reviewVO">
+		SELECT review_id AS reviewId, actor_id AS actorId, detail, submit_time AS submitTime
+		FROM actor_review
+		WHERE actor_id = #actorId# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
 	</select>
 </sqlMap>

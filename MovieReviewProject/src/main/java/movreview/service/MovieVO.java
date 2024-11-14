@@ -34,6 +34,7 @@ public class MovieVO {
 	private String status;
 	@JsonProperty("tagline")
 	private String tagline;
+	private String submitDate;
 	
 	private boolean adult;
 	private String original_language;
@@ -147,6 +148,12 @@ public class MovieVO {
 	}
 	public void setCname(String cname) {
 		this.cname = cname;
+	}
+	public String getSubmitDate() {
+		return submitDate;
+	}
+	public void setSubmitDate(String submitDate) {
+		this.submitDate = submitDate;
 	}
 
 }

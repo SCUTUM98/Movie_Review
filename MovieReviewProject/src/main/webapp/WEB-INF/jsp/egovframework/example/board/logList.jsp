@@ -124,39 +124,48 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">로그 가이드 북</h1>
+                        <h1 class="mt-4">시스템 로그</h1>
 
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Film Report 로그 가이드 북
+                                Film Report 시스템 로그
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>아이디</th>
-                                            <th>로그 타입</th>
-                                            <th>로그 설명</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>아이디</th>
-                                            <th>로그 타입</th>
-                                            <th>로그 설명</th>
-                                        </tr>
-                                    </tfoot>
+                                <form:form name="memberForm" method="post">
+	                            	<input type="hidden" name="logId" value="">
+	                                <table id="datatablesSimple">
+	                                    <thead>
+	                                        <tr>
+	                                            <th>로그번호</th>
+	                                            <th>사용자 ID</th>
+	                                            <th>로그 타입</th>
+	                                            <th>로그 내용</th>
+	                                            <th>발생시간</th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tfoot>
+	                                        <tr>
+	                                            <th>로그번호</th>
+	                                            <th>사용자 ID</th>
+	                                            <th>로그 타입</th>
+	                                            <th>로그 내용</th>
+	                                            <th>발생시간</th>
+	                                        </tr>
+	                                    </tfoot>
 	                                    <tbody>
-	                                        <c:forEach items="${logCategory }" var="log" varStatus="status">
-		                                        <tr>
-		                                        	<td>${log.id }</td>
-		                                        	<td>${log.typeName }</td>
-		                                        	<td>${log.typeDescription }</td>
-	                                        	</tr>
-	                                        </c:forEach>
+	                                        <c:forEach items="${logList }" var="log" varStatus="status">
+				                                    <tr>
+					                                    <td>${log.logId }</td>
+					                                    <td>${log.userId }</td>
+					                                    <td>${log.logType }</td>
+					                                    <td>${log.logDetail }</td>
+					                                    <td>${log.reportTime }</td>
+				                                    </tr>
+			                                    </c:forEach>
 	                                    </tbody>
-                                </table>
+	                                </table>
+                                </form:form>
                             </div>
                         </div>
                     </div>

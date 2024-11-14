@@ -138,4 +138,16 @@ public interface MovieService {
 	List<?> searchAccLog(String id) throws Exception;
 	// 로그 가이드 조회
 	List<?> logCategory() throws Exception;
+	// 로그 조회
+	List<?> selectLog() throws Exception;
+	// 로그 세부 내용 조회
+	LogVO logDetail(int logId) throws Exception;
+	// 로그 가이드 조회 by typeName
+	LogVO logByName(String typeName) throws Exception;
+	// 작성한 영화 리뷰 찾아오기
+	ReviewVO findReviewByTime(ReviewVO vo) throws Exception;
+	// 시리즈 리뷰 찾아오기
+	ReviewVO seriesReviewByTime(ReviewVO vo) throws Exception;
+	// 작성한 배우 응원글 찾아오기
+	ReviewVO actorReviewByTime(ReviewVO vo) throws Exception;
 }

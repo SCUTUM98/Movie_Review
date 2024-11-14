@@ -29,80 +29,13 @@
 	        
 	        function moveToDetail(id) {
 	            var form = document.forms['memberForm'];
-	            let popOption = "width=650px, height=550px, top=300px, left=300px, scrollbars=yes"
-	           	window.open('/adminLogPop.do?logId=' + id, 'pop', popOption);
-	        }
-        </script>
-        <script>
-	        function deleteAcc(id) {
-	            console.log(id);
-	            if (confirm("계정을 삭제하시겠습니까?\n탈퇴이후 삭제된 데이터는 복구되지 않습니다.")){
-	            	$.ajax({
-	                    url: './deleteAcc.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("계정이 삭제되었습니다.");
-	                        	self.location.href="/adminAccTable.do";
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
+	            if (form) {
+	                form.id.value = id;
+	                form.action = "<c:url value='/adminUserDetail.do'/>";
+	                form.submit();
+	            } else {
+	                console.error("Form not found");
 	            }
-	            
-	        }
-	        function grantAdmin(id) {
-	            console.log(id);
-	            if (confirm("관리자 권한을 부여하시겠습니까?")){
-	            	$.ajax({
-	                    url: './adminGrant.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("관리자 권한이 부여되었습니다.");
-	                        	location.reload(true);
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
-	            }  
-	        }
-	        function rebokeAdmin(id) {
-	            console.log(id);
-	            if (confirm("관리자 권한을 회수하시겠습니까?")){
-	            	$.ajax({
-	                    url: './adminRevoke.do',
-	                    type: 'post',
-	                    data: { id: id },
-	                    dataType: 'json',
-	                    success: function(response) {
-	                        console.log("서버 응답:", response);
-	                        if (response.result === 0) {
-	                        	alert("서버 통신에 에러가 발생했습니다.\n잠시후 다시 시도해 주세요.");
-	                        } else {
-	                        	alert("관리자 권한이 회수되었습니다.");
-	                        	location.reload(true);
-	                        }
-	                    },
-	                    error: function() {
-	                        alert("서버 통신에 에러가 발생했습니다.");
-	                    }
-	                });
-	            }  
 	        }
         </script>
     </head>
@@ -207,32 +140,46 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">${userData.id } (${userData.name })</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">회원 상세 정보</li>
-                        </ol>
-                        
+                        <h1 class="mt-4">영화등록현황</h1>
                         <div class="row">
-                        	<div class="user-info">
-                        		<div class="input-group">
-		                            <label for="name">이름: ${userData.name } </label>
-		                        </div>
-		                        <div class="input-group">
-		                        	<label for="levels">등급: ${userData.levels }</label> 
-		                        </div>
-		                        <div class="input-group">
-		                            <label for="email">이메일: ${userData.email }</label>
-		                        </div>
-		                        <div class="input-group">
-		                        	<c:if test="${userData.mailAuth == 0 }">
-		                        		<label for="status">계정 상태: 로그인 불가</label>
-		                        	</c:if>
-		                        	<c:if test="${userData.mailAuth == 1 }">
-		                        		<label for="status">계정 상태: 로그인 가능</label>
-		                        	</c:if>
-		                            
-		                        </div>
-                        	</div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Success Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -254,62 +201,56 @@
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>사용자 로그 현황
+                                <i class="fas fa-table me-1"></i>
+                                DataTable Example
                             </div>
                             <div class="card-body">
-                            <form:form name="memberForm" method="post">
-                            	<input type="hidden" name="logId" value="">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>로그번호</th>
-                                            <th>사용자 ID</th>
-                                            <th>로그 타입</th>
-                                            <th>로그 내용</th>
-                                            <th>발생시간</th>
+                                            <th>ID</th>
+                                            <th>영화 제목(한국어)</th>
+                                            <th>장르</th>
+                                            <th>개봉일</th>
+                                            <th>시리즈</th>
+                                            <th>상태</th>
+                                            <th>등록일</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>로그번호</th>
-                                            <th>사용자 ID</th>
-                                            <th>로그 타입</th>
-                                            <th>로그 내용</th>
-                                            <th>발생시간</th>
+                                            <th>ID</th>
+                                            <th>영화 제목(한국어)</th>
+                                            <th>영화 제목(본언어)</th>
+                                            <th>장르</th>
+                                            <th>개봉일</th>
+                                            <th>시리즈</th>
+                                            <th>상태</th>
+                                            <th>등록일</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <c:forEach items="${logList }" var="log" varStatus="status">
+                                        <c:forEach items="${movieList }" var="movie" varStatus="status">
 			                                    <tr>
-				                                    <td>${log.logId }</td>
-				                                    <td>${log.userId }</td>
-				                                    <td>${log.logType }</td>
-				                                    <td>${log.logDetail }</td>
-				                                    <td>${log.reportTime }</td>
+				                                    <td>${movie.movieId }</td>
+				                                    <td>${movie.titleEn }</td>
+				                                    <td>${movie.genreDB }</td>
+				                                    <td>${movie.releaseDate }</td>
+				                                    <td>${movie.collectionId }</td>
+				                                    <td>${movie.status }</td>
+				                                    <td>${movie.submitDate }</td>
 			                                    </tr>
 		                                    </c:forEach>
                                     </tbody>
                                 </table>
-                                </form:form>
                             </div>
-                        </div>
-                        <div class="button-section">
-                        	<a>
-                        		<button type="button" class="detail-button" onclick="deleteAcc('${userData.id}')">회원 삭제</button>
-                        		<c:if test="${userData.levels == 'ROLE_USER' }">
-                        			<button type="button" class="detail-button" onclick="grantAdmin('${userData.id}')">관리자 설정</button>
-                        		</c:if>
-                        		<c:if test="${userData.levels == 'ROLE_ADMIN' }">
-                        			<button type="button" class="detail-button" onclick="rebokeAdmin('${userData.id}')">관리자 해제</button>
-                        		</c:if>
-                        	</a>
                         </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
+                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

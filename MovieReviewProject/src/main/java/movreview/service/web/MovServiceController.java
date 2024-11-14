@@ -1986,6 +1986,128 @@ public class MovServiceController {
     	return "board/logGuide";
     }
     
+    @RequestMapping("/adminMovie.do")
+    public String adminMovie(Model model) throws Exception {
+    	MovieVO movieVO = new MovieVO();
+    	
+    	model.addAttribute("movieList", movService.selectAllMovie(movieVO));
+    	
+    	return "board/adminMovie";
+    }
+    
+    @RequestMapping("/adminLogList.do")
+    public String adminLogList(Model model) throws Exception {
+    	List<?> logList = movService.selectLog();
+    	
+    	model.addAttribute("logList", logList);
+    	
+    	return "board/logList";
+    }
+    
+    @RequestMapping("/adminLogPop.do")
+    public String adminLogPop(@RequestParam("logId") int logId, Model model) throws Exception {
+    	LogVO logVO = movService.logDetail(logId);
+    	
+    	String userId = logVO.getUserId();
+    	String logType = logVO.getLogType();
+    	String logDetail = logVO.getLogDetail();
+    	
+    	String tmp = logVO.getReportTime();
+    	String[] arr = tmp.split("[.]");
+    	String eventTime = arr[0];
+
+    	LogVO logDescription = movService.logByName(logType);
+    	int loggId = logDescription.getId();
+    	System.out.println(loggId);
+    	
+    	if(loggId == 4 || loggId == 5 || loggId == 6 || loggId == 7 || loggId == 8 || loggId == 9 || loggId == 19 || loggId == 20 || loggId == 21 || loggId == 22 || loggId == 23 || loggId == 24 || loggId == 25 || loggId == 28 || loggId == 29 || loggId == 32 || loggId == 33) {
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    		String[] logIds = {"4", "5", "6", "7", "8", "9", "19", "20", "21", "22", "23", "24", "25", "28", "29", "32", "33"};
+    		model.addAttribute("logIds", logIds);
+    	}
+    	if(loggId == 10 || loggId == 11 || loggId == 12) {
+    		MovieVO movieVO = new MovieVO();
+    		movieVO.setMovieId(Integer.valueOf(logDetail));
+    		
+    		if(loggId == 10 || loggId == 12) {
+    			String detailData = tmdbService.movieDetail(apiKey, Integer.valueOf(logDetail));
+    			model.addAttribute("movieDetail", detailData);
+    		}
+    		else {
+    			model.addAttribute("movieDetail", movService.selectMovie(movieVO));
+    		}
+    		
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    	}
+    	if(loggId == 13 || loggId == 14 || loggId == 15) {
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    		
+    		ReviewVO reviewVO = new ReviewVO();
+    		
+			reviewVO.setUserId(userId);
+			reviewVO.setSubmitTime(eventTime);
+    		
+    		if(loggId == 13) {
+    			MovieVO movieVO = new MovieVO();
+    			
+        		movieVO.setMovieId(Integer.valueOf(logDetail));
+        		reviewVO.setMovieId(Integer.valueOf(logDetail));
+        		
+        		model.addAttribute("movieDetail", movService.selectMovie(movieVO));
+        		model.addAttribute("reviewDetail", movService.findReviewByTime(reviewVO));
+    		}
+    		if(loggId == 14) {
+    			CollectionVO seriesVO = new CollectionVO();
+    			
+    			seriesVO.setId(Integer.valueOf(logDetail));
+    			reviewVO.setSeriesId(Integer.valueOf(logDetail));
+    			
+    			model.addAttribute("seriesDetail", movService.selectCollection(seriesVO));
+    			model.addAttribute("reviewDetail", movService.seriesReviewByTime(reviewVO));
+    		}
+    		if(loggId == 15) {
+    			ActorVO actorVO = new ActorVO();
+    			
+    			actorVO.setActorId(logDetail);
+    			reviewVO.setActorId(logDetail);
+    			
+    			model.addAttribute("actorDetail", movService.actorDetail(actorVO));
+    			model.addAttribute("reviewDetail", movService.actorReviewByTime(reviewVO));
+    		}
+    	}
+    	if(loggId == 16 || loggId == 17) {
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    		
+    		if(loggId == 16) {
+    			MovieVO movieVO = new MovieVO();
+    			movieVO.setMovieId(Integer.valueOf(logDetail));
+    			
+    			model.addAttribute("movieDetail", movService.selectMovie(movieVO));
+    		}
+    		if(loggId == 17) {
+    			CollectionVO seriesVO = new CollectionVO();
+    			seriesVO.setId(Integer.valueOf(logDetail));
+    			
+    			model.addAttribute("seriesDetail", movService.selectCollection(seriesVO));
+    		}
+    	}
+    	if(loggId == 30 || loggId == 31) {
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    		
+    		MovieVO movieVO = new MovieVO();
+			movieVO.setMovieId(Integer.valueOf(logDetail));
+			
+			model.addAttribute("movieDetail", movService.selectMovie(movieVO));
+    	}
+    	
+    	return "board/logPop";
+    }
+    
     @RequestMapping(value="/adminGrant.do", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Integer> adminGrant(@RequestParam("id") String id) throws Exception {
