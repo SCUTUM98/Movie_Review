@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.header {
+    background-color: #141414;
+    padding: 10px 20px;
+}
+
+.logo {
+    height: 50px;
+}
+
+.container {
+	display: flex;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#logTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#logTable th, #logTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: cener;
+}
+
+#logTable th {
+    background-color: #f2f2f2;
+}
+
+#movieTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+#movieTable th, #movieTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: cener;
+}
+
+#movieTable th {
+    background-color: #f2f2f2;
+}
+
+.left-panel {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    margin: 1%;
+    align: center;
+}
+
+.right-panel {
+	display: inline-block;
+    vertical-align: top;
+    width: 75%;
+    margin: 1%;
+    align: center;
+}
+
+.poster {
+    width: 150px;
+    height: 230px;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.movie-title {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.left-panel {
+    margin-right: 2%;
+}
+
+.right-panel {
+    margin-left: 2%;
+}
+
+.btn-section{
+	display: flex;
+	max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.close-button {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 20%;
+    justify-content: center;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.movie-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.upper-panel {
+    display: flex;
+    vertical-align: top;
+    width: 70%;
+    margin: 1%;
+    align: center;
+}
+
+.down-panel {
+	display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    margin: 1%;
+    align: center;
+}
+
+@media (max-width: 600px) {
+    .left-panel, .right-panel {
+        width: 100%; 
+        margin: 0;
+    }
+}

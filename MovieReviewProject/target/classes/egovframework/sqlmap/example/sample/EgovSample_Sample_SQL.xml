@@ -900,11 +900,12 @@
 	<!-- 로그 추가 -->
 	<insert id="movDAO.insertLog" parameterClass="logVO">
 		<![CDATA[
-			INSERT INTO acc_log (user_id, log_type, log_detail, report_time)
+			INSERT INTO acc_log (user_id, log_type, log_detail, report_time, log_detail2)
 			VALUES ( #userId#
 					, #logType#
 					, #logDetail#
-					, CURRENT_TIMESTAMP)
+					, CURRENT_TIMESTAMP
+					, #logDetail2#)
 		]]>
 	</insert>
 	<!-- 계정 별 로그 조회 -->
@@ -935,7 +936,7 @@
 	<!-- 로그 세부 내용 조회 -->
 	<select id="movDAO.logDetail" resultClass="logVO">
 		<![CDATA[
-			SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+			SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime, log_detail2 AS logDetail2
 			FROM acc_log
 			WHERE log_id = #logId#
 		]]>

@@ -29,7 +29,7 @@
 	        
 	        function moveToDetail(id) {
 	            var form = document.forms['memberForm'];
-	            let popOption = "width=650px, height=550px, top=300px, left=300px, scrollbars=yes"
+	            let popOption = "width=900px, height=1280px, top=300px, left=300px, scrollbars=yes"
 	           	window.open('/adminLogPop.do?logId=' + id, 'pop', popOption);
 	        }
         </script>

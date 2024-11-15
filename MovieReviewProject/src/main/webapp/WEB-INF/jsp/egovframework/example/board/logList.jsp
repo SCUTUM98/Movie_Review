@@ -20,7 +20,18 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
         <script>
-        
+	        $(document).ready(function() {
+	            $('#datatablesSimple').on('click', 'tbody tr', function() {
+	            	var id = $(this).find('td').eq(0).text();
+	            	moveToDetail(id);
+	            })
+	        } );
+	        
+	        function moveToDetail(id) {
+	            //var form = document.forms['memberForm'];
+	            let popOption = "width=900px, height=1280px, top=300px, left=300px, scrollbars=yes"
+	           	window.open('/adminLogPop.do?logId=' + id, 'pop', popOption);
+	        }
         </script>
     </head>
     <body class="sb-nav-fixed">

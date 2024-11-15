@@ -6,6 +6,7 @@ public class LogVO {
 	private String logType;
 	private String logDetail;
 	private String reportTime;
+	private String logDetail2;
 	
 	private int id;
 	private String typeName;
@@ -58,6 +59,12 @@ public class LogVO {
 	}
 	public void setTypeDescription(String typeDescription) {
 		this.typeDescription = typeDescription;
+	}
+	public String getLogDetail2() {
+		return logDetail2;
+	}
+	public void setLogDetail2(String logDetail2) {
+		this.logDetail2 = logDetail2;
 	}
 	
 }

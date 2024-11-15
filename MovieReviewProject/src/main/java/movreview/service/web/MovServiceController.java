@@ -668,6 +668,8 @@ public class MovServiceController {
 
 		logVO.setLogType("movie review");
 		logVO.setLogDetail(Integer.toString(movieId));
+		String tmp = Integer.toString(rate) + "점: " + detail;
+		logVO.setLogDetail2(tmp);
 		movService.insertLog(logVO);
 
 		System.out.println("UserId: " + userId);
@@ -699,6 +701,7 @@ public class MovServiceController {
 
 		logVO.setLogType("series review");
 		logVO.setLogDetail(Integer.toString(seriesId));
+		logVO.setLogDetail2(detail);
 		movService.insertLog(logVO);
 
 
@@ -728,6 +731,7 @@ public class MovServiceController {
 
 		logVO.setLogType("actor review");
 		logVO.setLogDetail(actorId);
+		logVO.setLogDetail2(detail);
 		movService.insertLog(logVO);
 		
 		ReviewVO reviewVO = new ReviewVO();
@@ -2032,7 +2036,10 @@ public class MovServiceController {
     		
     		if(loggId == 10 || loggId == 12) {
     			String detailData = tmdbService.movieDetail(apiKey, Integer.valueOf(logDetail));
-    			model.addAttribute("movieDetail", detailData);
+    			ObjectMapper objectMapper = new ObjectMapper();
+    			JsonNode jsonNode = objectMapper.readTree(detailData);
+    			MovieVO detailVO = objectMapper.convertValue(jsonNode, MovieVO.class);
+    			model.addAttribute("movieDetail", detailVO);
     		}
     		else {
     			model.addAttribute("movieDetail", movService.selectMovie(movieVO));
@@ -2106,6 +2113,31 @@ public class MovServiceController {
     	}
     	
     	return "board/logPop";
+    }
+    
+    @RequestMapping(value="/adminMoviePop.do")
+    public String moviePopup(@RequestParam("id") int id, Model model) throws Exception {
+    	MovieVO movieVO = new MovieVO();
+    	CollectionVO collectionVO = new CollectionVO();
+    	ReviewVO reviewVO = new ReviewVO();
+    	
+    	movieVO.setMovieId(id);
+    	
+    	MovieVO movieDetail = movService.selectMovie(movieVO);
+    	
+    	if (movieDetail.getCollectionId() != 0) {
+    		collectionVO.setId(movieDetail.getCollectionId());
+    		CollectionVO seriesDetail = movService.checkCollection(collectionVO);
+    		model.addAttribute("seriesDetail", seriesDetail);
+    	}
+    	
+    	reviewVO.setMovieId(id);
+    	List<?> reviewDetail = movService.selectReview(reviewVO);
+    	
+    	model.addAttribute("movieDetail", movieDetail);
+    	model.addAttribute("reviewDetail", reviewDetail);
+    	
+    	return "board/moviePopup";
     }
     
     @RequestMapping(value="/adminGrant.do", method=RequestMethod.POST)

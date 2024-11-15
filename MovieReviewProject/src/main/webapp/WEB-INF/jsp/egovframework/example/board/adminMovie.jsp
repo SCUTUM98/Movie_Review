@@ -19,7 +19,6 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script>
-        
 	        $(document).ready(function() {
 	            $('#datatablesSimple').on('click', 'tbody tr', function() {
 	            	var id = $(this).find('td').eq(0).text();
@@ -29,13 +28,8 @@
 	        
 	        function moveToDetail(id) {
 	            var form = document.forms['memberForm'];
-	            if (form) {
-	                form.id.value = id;
-	                form.action = "<c:url value='/adminUserDetail.do'/>";
-	                form.submit();
-	            } else {
-	                console.error("Form not found");
-	            }
+	            let popOption = "width=900px, height=1280px, top=300px, left=300px, scrollbars=yes"
+	           	window.open('/adminMoviePop.do?id=' + id, 'pop', popOption);
 	        }
         </script>
     </head>
@@ -141,44 +135,7 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">영화등록현황</h1>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -205,44 +162,47 @@
                                 DataTable Example
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>영화 제목(한국어)</th>
-                                            <th>장르</th>
-                                            <th>개봉일</th>
-                                            <th>시리즈</th>
-                                            <th>상태</th>
-                                            <th>등록일</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>영화 제목(한국어)</th>
-                                            <th>영화 제목(본언어)</th>
-                                            <th>장르</th>
-                                            <th>개봉일</th>
-                                            <th>시리즈</th>
-                                            <th>상태</th>
-                                            <th>등록일</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <c:forEach items="${movieList }" var="movie" varStatus="status">
-			                                    <tr>
-				                                    <td>${movie.movieId }</td>
-				                                    <td>${movie.titleEn }</td>
-				                                    <td>${movie.genreDB }</td>
-				                                    <td>${movie.releaseDate }</td>
-				                                    <td>${movie.collectionId }</td>
-				                                    <td>${movie.status }</td>
-				                                    <td>${movie.submitDate }</td>
-			                                    </tr>
-		                                    </c:forEach>
-                                    </tbody>
-                                </table>
+                            	<form:form name="memberForm" method="post">
+                            		<input type="hidden" name="id" value="">
+	                                <table id="datatablesSimple">
+	                                    <thead>
+	                                        <tr>
+	                                            <th>ID</th>
+	                                            <th>영화 제목(한국어)</th>
+	                                            <th>장르</th>
+	                                            <th>개봉일</th>
+	                                            <th>시리즈</th>
+	                                            <th>상태</th>
+	                                            <th>등록일</th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tfoot>
+	                                        <tr>
+	                                            <th>ID</th>
+	                                            <th>영화 제목(한국어)</th>
+	                                            <th>영화 제목(본언어)</th>
+	                                            <th>장르</th>
+	                                            <th>개봉일</th>
+	                                            <th>시리즈</th>
+	                                            <th>상태</th>
+	                                            <th>등록일</th>
+	                                        </tr>
+	                                    </tfoot>
+	                                    <tbody>
+	                                        <c:forEach items="${movieList }" var="movie" varStatus="status">
+				                                    <tr>
+					                                    <td>${movie.movieId }</td>
+					                                    <td>${movie.titleEn }</td>
+					                                    <td>${movie.genreDB }</td>
+					                                    <td>${movie.releaseDate }</td>
+					                                    <td>${movie.collectionId }</td>
+					                                    <td>${movie.status }</td>
+					                                    <td>${movie.submitDate }</td>
+				                                    </tr>
+			                                    </c:forEach>
+	                                    </tbody>
+	                                </table>
+	                            </form:form>
                             </div>
                         </div>
                     </div>
