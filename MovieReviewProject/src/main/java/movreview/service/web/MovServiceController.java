@@ -55,6 +55,7 @@ import movreview.service.ReviewVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogChartVO;
 import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.ActorVO;
@@ -860,8 +861,8 @@ public class MovServiceController {
 		else {
 			logVO.setUserId("A traveler");
 		}
-		logVO.setLogType("move");
-		logVO.setLogDetail("seriesDetail.do");
+		logVO.setLogType("load series");
+		logVO.setLogDetail(Integer.toString(collectionId));
 		movService.insertLog(logVO);
 
 		CollectionVO collectionVO = new CollectionVO();
@@ -890,6 +891,17 @@ public class MovServiceController {
 	    String username = (String) session.getAttribute("username");
 
 	    model.addAttribute("username", username);
+	    
+	    LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("load actor");
+		logVO.setLogDetail(Integer.toString(actorId));
+		movService.insertLog(logVO);
 
 	    ActorVO actorVO = new ActorVO();
 	    ActorSnsVO snsVO = new ActorSnsVO();
@@ -1947,7 +1959,20 @@ public class MovServiceController {
     }
     
     @RequestMapping("/adminMain.do")
-    public String adminMain() throws Exception {
+    public String adminMain(Model model) throws Exception {
+    	LogChartVO chartVO = movService.logCnt();
+    	List<?> loginCnt = movService.loginCnt();
+    	List<?> mainLogTable = movService.mainLogTable();
+    	
+    	ObjectMapper om = new ObjectMapper();
+
+    	String userList = om.writeValueAsString(loginCnt);
+    	System.out.println(userList);
+    	
+    	model.addAttribute("chartData", chartVO);
+    	model.addAttribute("loginCnt", loginCnt);
+    	model.addAttribute("log", mainLogTable);
+    	
     	return "board/admin";
     }
     
@@ -2006,6 +2031,42 @@ public class MovServiceController {
     	model.addAttribute("logList", logList);
     	
     	return "board/logList";
+    }
+    
+    @RequestMapping("/adminSearchCard.do")
+    public String adminSearchCard(Model model) throws Exception {
+    	LogChartVO chartVO = movService.logCnt();
+    	LogChartVO genreVO = movService.genreCnt();
+    	List<?> searchLogTable = movService.searchLogTable();
+    	
+    	model.addAttribute("chartData", chartVO);
+    	model.addAttribute("genreData", genreVO);
+    	model.addAttribute("log", searchLogTable);
+    	
+    	return "board/adminSearchCard";
+    }
+    
+    @RequestMapping("/adminDetailCard.do")
+    public String adminDetailCard(Model model) throws Exception {
+    	
+    	return "board/adminDetailCard";
+    }
+    
+    @RequestMapping("/adminReviewCard.do")
+    public String adminReviewCard(Model model) throws Exception {
+    	
+    	return "board/adminReviewCard";
+    }
+    
+    @RequestMapping("/adminInsertCard.do")
+    public String adminInsertCard(Model model) throws Exception {
+    	LogChartVO chartVO = movService.logCnt();
+    	List<?> insertLogTable = movService.insertLogTable();
+    	
+    	model.addAttribute("chartData", chartVO);
+    	model.addAttribute("log", insertLogTable);
+    	
+    	return "board/adminInsertCard";
     }
     
     @RequestMapping("/adminLogPop.do")
@@ -2110,6 +2171,28 @@ public class MovServiceController {
 			movieVO.setMovieId(Integer.valueOf(logDetail));
 			
 			model.addAttribute("movieDetail", movService.selectMovie(movieVO));
+    	}
+    	if(loggId == 34) {
+    		CollectionVO seriesVO = new CollectionVO();
+    		seriesVO.setId(Integer.valueOf(logDetail));
+    		
+    		seriesVO = movService.selectCollection(seriesVO);
+    		
+			model.addAttribute("seriesDetail", seriesVO);
+    		
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
+    	}
+    	if(loggId == 35) {
+    		ActorVO actorVO = new ActorVO();
+    		actorVO.setActorId(logDetail);
+    		
+    		actorVO =  movService.actorDetail(actorVO);
+    		
+			model.addAttribute("actorDetail", actorVO);
+    		
+    		model.addAttribute("log", logVO);
+    		model.addAttribute("logDescription", logDescription);
     	}
     	
     	return "board/logPop";

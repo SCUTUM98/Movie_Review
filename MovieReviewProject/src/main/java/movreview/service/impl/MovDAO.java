@@ -14,6 +14,7 @@ import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogChartVO;
 import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.ReviewVO;
@@ -340,5 +341,29 @@ public class MovDAO extends EgovAbstractDAO {
 	// 작성한 배우 응원글 찾아오기
 	public ReviewVO actorReviewByTime(ReviewVO vo) throws Exception {
 		return (ReviewVO) select("movDAO.actorReviewByTime",vo);
+	}
+	// 로그 종류별 개수 조회
+	public LogChartVO logCnt() throws Exception {
+		return (LogChartVO) select("movDAO.logCnt");
+	}
+	// 날짜 별 로그인 횟수 조회
+	public List<?> loginCnt() throws Exception {
+		return list("movDAO.loginCnt");
+	}
+	// 메인화면 로그 테이블
+	public List<?> mainLogTable() throws Exception {
+		return list("movDAO.mainLogTable");
+	}
+	// 장르 별 검색 횟수 조회
+	public LogChartVO genreCnt() throws Exception {
+		return (LogChartVO) select("movDAO.genreCnt");
+	}
+	// 검색 로그 테이블
+	public List<?> searchLogTable() throws Exception {
+		return list("movDAO.searchLogTable");
+	}
+	// 삽입 로그 테이블
+	public List<?> insertLogTable() throws Exception {
+		return list("movDAO.insertLogTable");
 	}
 }

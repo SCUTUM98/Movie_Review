@@ -17,6 +17,7 @@ import movreview.service.ActorVO;
 import movreview.service.CollectionVO;
 import movreview.service.GenreVO;
 import movreview.service.LikeVO;
+import movreview.service.LogChartVO;
 import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.MovieService;
@@ -403,5 +404,35 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public ReviewVO actorReviewByTime(ReviewVO vo) throws Exception {
 		return movDAO.actorReviewByTime(vo);
+	}
+	// 로그 종류별 개수 조회
+	@Override
+	public LogChartVO logCnt() throws Exception {
+		return movDAO.logCnt();
+	}
+	// 날짜 별 로그인 횟수 조회
+	@Override
+	public List<?> loginCnt() throws Exception {
+		return movDAO.loginCnt();
+	}
+	// 메인화면 로그 테이블
+	@Override
+	public List<?> mainLogTable() throws Exception {
+		return movDAO.mainLogTable();
+	}
+	// 장르 별 검색 횟수 조회
+	@Override
+	public LogChartVO genreCnt() throws Exception {
+		return movDAO.genreCnt();
+	}
+	// 검색 로그 테이블
+	@Override
+	public List<?> searchLogTable() throws Exception {
+		return movDAO.searchLogTable();
+	}
+	// 삽입 로그 테이블
+	@Override
+	public List<?> insertLogTable() throws Exception {
+		return movDAO.insertLogTable();
 	}
 }

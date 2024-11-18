@@ -400,6 +400,68 @@
     			</tbody>
     		</table>
     	</c:if>
+    	<c:if test="${logDescription.id == 34 || logDescription.id == 35}">
+    		<div class="left-panel">
+    			<c:if test="${logDescription.id == 34 }">
+	    			<c:if test="${not empty seriesDetail.posterPath }">
+	    				<img src="http://image.tmdb.org/t/p/w780${seriesDetail.posterPath}" alt="${seriesDetail.name }" class="poster">
+	    				<p class="movie-title">${seriesDetail.name }</p>
+	    			</c:if>
+	    			<c:if test="${empty seriesDetail.posterPath }">
+	    				<img src="${pageContext.request.contextPath}/images/profile.png" alt="${seriesDetail.name }" class="poster">
+	    				<p class="movie-title">${seriesDetail.name }</p>
+	    			</c:if>
+    			</c:if>
+    			<c:if test="${logDescription.id == 35 }">
+	    			<c:if test="${not empty actorDetail.profilePath }">
+	    				<img src="http://image.tmdb.org/t/p/w780${actorDetail.profilePath}" alt="${actorDetail.actName }" class="poster">
+	    				<p class="movie-title">${actorDetail.actName }</p>
+	    			</c:if>
+	    			<c:if test="${empty actorDetail.profilePath }">
+	    				<img src="${pageContext.request.contextPath}/images/profile.png" alt="${actorDetail.actName }" class="poster">
+	    				<p class="movie-title">${actorDetail.actName }</p>
+	    			</c:if>
+    			</c:if>
+    			
+    		</div>
+    		<div class="right-panel">
+    			<table id="logTable">
+    			<tbody>
+    				<tr>
+    					<th scope="row">로그 ID</th>
+    					<td colspan="2">${log.logId }</td>
+    					<th scope="row" colspan="2">사용자 ID</th>
+    					<td colspan="2">${log.userId }</td>
+    				</tr>
+    				<tr>
+    					<th scope="row">로그 타입</th>
+    					<td colspan="2">${log.logType }</td>
+    					<th scope="row" colspan="2">로그 설명</th>
+    					<td colspan="2">${logDescription.typeDescription }</td>
+    					
+    				</tr>
+    				<tr>
+    					<c:if test="${logDescription.id == 34 }">
+    						<th scope="row">시리즈 ID</th>
+	    					<td>${log.logDetail }</td>
+	    					<th scope="row">시리즈 이름</th>
+	    					<td colspan="3">${seriesDetail.name }</td>
+    					</c:if>
+    					<c:if test="${logDescription.id == 35 }">
+    						<th scope="row">배우 ID</th>
+	    					<td>${log.logDetail }</td>
+	    					<th scope="row">배우 이름</th>
+	    					<td colspan="3">${actorDetail.actName }</td>
+    					</c:if>
+    				</tr>
+    				<tr>
+    					<th scope="row" colspan="3">로그 일시</th>
+    					<td colspan="3">${log.reportTime }</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    		</div>
+    	</c:if>
     </div>
     <div class="btn-section">
     	<button type="button" class="close-button" onClick="window.close()">확인</button>

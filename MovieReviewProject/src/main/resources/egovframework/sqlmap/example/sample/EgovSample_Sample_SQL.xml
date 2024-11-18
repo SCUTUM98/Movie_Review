@@ -14,6 +14,7 @@
 	<typeAlias  alias="likeVO" type="movreview.service.LikeVO"/>
 	<typeAlias  alias="genreVO" type="movreview.service.GenreVO"/>
 	<typeAlias  alias="logVO" type="movreview.service.LogVO"/>
+	<typeAlias  alias="logChartVO" type="movreview.service.LogChartVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -966,5 +967,106 @@
 		SELECT review_id AS reviewId, actor_id AS actorId, detail, submit_time AS submitTime
 		FROM actor_review
 		WHERE actor_id = #actorId# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
+	</select>
+	<!-- 로그 종류별 개수 조회 -->
+	<select id="movDAO.logCnt" resultClass="logChartVO">
+	 SELECT COUNT(log_id) FILTER (WHERE log_type ='move') AS log06
+	 		, COUNT(log_id) FILTER (WHERE log_type='search') AS log09
+	 		, COUNT(log_id) FILTER (WHERE log_type='load tmdb') AS log10
+	 		, COUNT(log_id) FILTER (WHERE log_type='load Film Report') AS log11
+	 		, COUNT(log_id) FILTER (WHERE log_type='update moive') AS log12
+	 		, COUNT(log_id) FILTER (WHERE log_type='movie review') AS log13
+	 		, COUNT(log_id) FILTER (WHERE log_type='series review') AS log14
+	 		, COUNT(log_id) FILTER (WHERE log_type='actor review') AS log15
+	 		, COUNT(log_id) FILTER (WHERE log_type='add movie') AS log16
+	 		, COUNT(log_id) FILTER (WHERE log_type='add series') AS log17
+	 		, COUNT(log_id) FILTER (WHERE log_type='select genre') AS log29
+	 		, COUNT(log_id) FILTER (WHERE log_type='update') AS log33
+	 		, COUNT(log_id) FILTER (WHERE log_type='load series') AS log34
+	 		, COUNT(log_id) FILTER (WHERE log_type='load actor') AS log35
+	 FROM acc_log
+	</select>
+	<!-- 날짜 별 로그인 횟수 조회 -->
+	<select id="movDAO.loginCnt" resultClass="logChartVO">
+		WITH date_series AS (
+	    SELECT 
+	        (CURRENT_DATE - INTERVAL '6 days' + (i * INTERVAL '1 day'))::date AS reportDate
+	    FROM 
+	        generate_series(0, 6) AS i
+		)
+		
+		SELECT 
+		    ds.reportDate,
+		    COALESCE(COUNT(al.log_id), 0) AS reportCount
+		FROM 
+		    date_series ds
+		LEFT JOIN 
+		    public.acc_log al ON 
+		        TO_DATE(al.report_time, 'YYYY-MM-DD HH24:MI:SS')::date = ds.reportDate
+		        AND al.log_type = 'log-in success'
+		GROUP BY 
+		    ds.reportDate
+		ORDER BY 
+		    ds.reportDate;
+	</select>
+	<!-- 메인화면 로그 테이블 -->
+	<select id="movDAO.mainLogTable" resultClass="logVO">
+		SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+		FROM acc_log
+		WHERE log_type ='move' 
+				OR log_type='search'
+				OR log_type='load tmdb'
+				OR log_type='load Film Report'
+				OR log_type='update moive'
+				OR log_type='movie review'
+				OR log_type='series review'
+				OR log_type='actor review'
+				OR log_type='add movie'
+				OR log_type='add series'
+				OR log_type='select genre'
+				OR log_type='update'
+				OR log_type='load series'
+				OR log_type='load actor'
+		ORDER BY report_time DESC
+	</select>
+	<!-- 장르 별 검색 횟수 조회 -->
+	<select id="movDAO.genreCnt" resultClass="logChartVO">
+		SELECT COUNT(log_id) FILTER (WHERE log_detail = 'SF') AS sf
+				, COUNT(log_id) FILTER (WHERE log_detail = 'TV 영화') AS tv
+				, COUNT(log_id) FILTER (WHERE log_detail = '가족') AS family
+				, COUNT(log_id) FILTER (WHERE log_detail = '공포') AS horror
+				, COUNT(log_id) FILTER (WHERE log_detail = '다큐멘터리') AS docu
+				, COUNT(log_id) FILTER (WHERE log_detail = '드라마') AS drama
+				, COUNT(log_id) FILTER (WHERE log_detail = '로맨스') AS romance
+				, COUNT(log_id) FILTER (WHERE log_detail = '모험') AS adventure
+				, COUNT(log_id) FILTER (WHERE log_detail = '미스터리') AS mystery
+				, COUNT(log_id) FILTER (WHERE log_detail = '범죄') AS crime
+				, COUNT(log_id) FILTER (WHERE log_detail = '서부') AS western
+				, COUNT(log_id) FILTER (WHERE log_detail = '스릴러') AS thriller
+				, COUNT(log_id) FILTER (WHERE log_detail = '애니메이션') AS ani
+				, COUNT(log_id) FILTER (WHERE log_detail = '액션') AS actrion
+				, COUNT(log_id) FILTER (WHERE log_detail = '역사') AS history
+				, COUNT(log_id) FILTER (WHERE log_detail = '음악') AS music
+				, COUNT(log_id) FILTER (WHERE log_detail = '전쟁') AS war
+				, COUNT(log_id) FILTER (WHERE log_detail = '코미디') AS comedy
+				, COUNT(log_id) FILTER (WHERE log_detail = '판타지') AS fantasy
+		FROM acc_log
+		WHERE log_type = 'select genre'
+	</select>
+	<!-- 검색 로그 테이블 -->
+	<select id="movDAO.searchLogTable" resultClass="logVO">
+		SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+		FROM acc_log
+		WHERE log_type='search'
+				OR log_type='select genre'
+		ORDER BY report_time DESC
+	</select>
+	<!-- 삽입 로그 테이블 -->
+	<select id="movDAO.insertLogTable" resultClass="logVO">
+		SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+		FROM acc_log
+		WHERE log_type='add movie'
+				OR log_type='add series'
+		ORDER BY report_time DESC
 	</select>
 </sqlMap>

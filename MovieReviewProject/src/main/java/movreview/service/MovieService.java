@@ -150,4 +150,16 @@ public interface MovieService {
 	ReviewVO seriesReviewByTime(ReviewVO vo) throws Exception;
 	// 작성한 배우 응원글 찾아오기
 	ReviewVO actorReviewByTime(ReviewVO vo) throws Exception;
+	// 로그 종류별 개수 조회
+	LogChartVO logCnt() throws Exception;
+	// 날짜 별 로그인 횟수 조회
+	List<?> loginCnt() throws Exception;
+	// 메인화면 로그 테이블
+	List<?> mainLogTable() throws Exception;
+	// 장르 별 검색 횟수 조회
+	LogChartVO genreCnt() throws Exception;
+	// 검색 로그 테이블
+	List<?> searchLogTable() throws Exception;
+	// 삽입 로그 테이블
+	List<?> insertLogTable() throws Exception;
 }

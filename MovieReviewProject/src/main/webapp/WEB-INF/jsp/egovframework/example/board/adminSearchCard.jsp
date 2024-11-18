@@ -4,6 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page import="movreview.service.LogChartVO" %>
+<%@ page import="java.util.List" %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -17,21 +19,93 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/css/admin/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script>
-	        $(document).ready(function() {
-	            $('#datatablesSimple').on('click', 'tbody tr', function() {
-	            	var id = $(this).find('td').eq(0).text();
-	            	moveToDetail(id);
-	            })
-	        } );
-	        
-	        function moveToDetail(id) {
-	            var form = document.forms['memberForm'];
-	            let popOption = "width=900px, height=1280px, top=300px, left=300px, scrollbars=yes"
-	           	window.open('/adminMoviePop.do?id=' + id, 'pop', popOption);
-	        }
-        </script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+	    <script type="text/javascript">
+		      google.charts.load("current", {packages:["corechart"]});
+		      google.charts.setOnLoadCallback(drawChart);
+		      function drawChart() {
+		        var data = google.visualization.arrayToDataTable([
+		          ['Used', 'Count'],
+		          ['검색 페이지', ${chartData.log09}],
+		          ['장르 선택', ${chartData.log29}]
+		        ]);
+		
+		        var options = {
+		          is3D: true,
+		        };
+		
+		        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+		        chart.draw(data, options);
+		      }
+	    </script>
+	    <script type="text/javascript">
+		      google.charts.load("current", {packages:["corechart"]});
+		      google.charts.setOnLoadCallback(drawChart2);
+		      function drawChart2() {
+		        var data = google.visualization.arrayToDataTable([
+		          ['Used', 'Count'],
+		          ['SF', ${genreData.sf}],
+		          ['TV 영화', ${genreData.tv}],
+		          ['가족', ${genreData.family}],
+		          ['공포', ${genreData.horror}],
+		          ['다큐멘터리', ${genreData.docu}],
+		          ['로맨스', ${genreData.romance}],
+		          ['모험', ${genreData.adventure}],
+		          ['미스터리', ${genreData.mystery}],
+		          ['범죄', ${genreData.crime}],
+		          ['서부', ${genreData.western}],
+		          ['스릴러', ${genreData.thriller}],
+		          ['애니메이션', ${genreData.ani}],
+		          ['액션', ${genreData.action}],
+		          ['역사', ${genreData.history}],
+		          ['음악', ${genreData.music}],
+		          ['전쟁', ${genreData.war}],
+		          ['코미디', ${genreData.comedy}],
+		          ['판타지', ${genreData.fantasy}]
+		        ]);
+		
+		        var options = {
+		          is3D: true,
+		        };
+		
+		        var chart = new google.visualization.PieChart(document.getElementById('genrechart_3d'));
+		        chart.draw(data, options);
+		      }
+	    </script>
+	    <%-- <script type="text/javascript">
+	        google.charts.load('current', {'packages':['bar']});
+	        google.charts.setOnLoadCallback(drawStuff);
+	
+	        function drawStuff() {
+	            var data = new google.visualization.arrayToDataTable([
+	                ['Date', 'Login Count'],
+	                <% 
+	                    List<LogChartVO> loginCountList = (List<LogChartVO>) request.getAttribute("loginCnt");
+	                    for (LogChartVO loginCount : loginCountList) {
+	                %>
+	                    ['<%= loginCount.getReportDate() %>', <%= loginCount.getReportCount() %>],
+	                <% 
+	                    } 
+	                %>
+	            ]);
+
+	            var options = {
+	                width: 600,
+	                legend: { position: 'none' },
+	                chart: {},
+	                axes: {
+	                    x: {
+	                        0: { side: 'top', label: 'Date'}
+	                    }
+	                },
+	                bar: { groupWidth: "90%" }
+	            };
+	
+	            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+	            chart.draw(data, google.charts.Bar.convertOptions(options));
+	        };
+	    </script> --%>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -77,11 +151,11 @@
                             <div class="collapse" id="logLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="/adminLogGuide.do">로그 가이드</a>
-                                    <a class="nav-link" href="/adminAccList.do">시스템 로그</a>
+                                    <a class="nav-link" href="/adminLogList.do">시스템 로그</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Contents</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="/adminMovie.do">
                                 <div class="sb-nav-link-icon"><i class="fas fa-film"></i></div>
                                 Movie
                             </a>
@@ -125,86 +199,99 @@
                             </a>
                         </div>
                     </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
-                    </div>
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">영화등록현황</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Movie</li>
-                        </ol>
+                        <h1 class="mt-4">Film Report 검색 현황</h1>
+                        <div class="row">
+                            
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Detail Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="/adminDetailCard.do">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Review Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="/adminReviewCard.do">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Insert Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="/adminInsertCard.do">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Film Report 검색 현황
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div id="piechart_3d" style="width: auto; height: 500px;"></div>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        	장르 검색 현황
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                    <div id="genrechart_3d" style="width: auto; height: 500px;"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Film Report 검색 현황
                             </div>
                             <div class="card-body">
-                            	<form:form name="memberForm" method="post">
-                            		<input type="hidden" name="id" value="">
-	                                <table id="datatablesSimple">
-	                                    <thead>
-	                                        <tr>
-	                                            <th>ID</th>
-	                                            <th>영화 제목(한국어)</th>
-	                                            <th>장르</th>
-	                                            <th>개봉일</th>
-	                                            <th>시리즈</th>
-	                                            <th>상태</th>
-	                                            <th>등록일</th>
-	                                        </tr>
-	                                    </thead>
-	                                    <tfoot>
-	                                        <tr>
-	                                            <th>ID</th>
-	                                            <th>영화 제목(한국어)</th>
-	                                            <th>영화 제목(본언어)</th>
-	                                            <th>장르</th>
-	                                            <th>개봉일</th>
-	                                            <th>시리즈</th>
-	                                            <th>상태</th>
-	                                            <th>등록일</th>
-	                                        </tr>
-	                                    </tfoot>
-	                                    <tbody>
-	                                        <c:forEach items="${movieList }" var="movie" varStatus="status">
-				                                    <tr>
-					                                    <td>${movie.movieId }</td>
-					                                    <td>${movie.titleEn }</td>
-					                                    <td>${movie.genreDB }</td>
-					                                    <td>${movie.releaseDate }</td>
-					                                    <td>${movie.collectionId }</td>
-					                                    <td>${movie.status }</td>
-					                                    <td>${movie.submitDate }</td>
-				                                    </tr>
-			                                    </c:forEach>
-	                                    </tbody>
-	                                </table>
-	                            </form:form>
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>로그번호</th>
+                                            <th>사용자 ID</th>
+                                            <th>로그 타입</th>
+                                            <th>로그 내용</th>
+                                            <th>발생시간</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>로그번호</th>
+                                            <th>사용자 ID</th>
+                                            <th>로그 타입</th>
+                                            <th>로그 내용</th>
+                                            <th>발생시간</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <c:forEach items="${log }" var="log" varStatus="status">
+			                                    <tr>
+				                                    <td>${log.logId }</td>
+				                                    <td>${log.userId }</td>
+				                                    <td>${log.logType }</td>
+				                                    <td>${log.logDetail }</td>
+				                                    <td>${log.reportTime }</td>
+			                                    </tr>
+		                                    </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -212,7 +299,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div class="text-muted">&copy; 𝓕𝓸𝓻 𝓶𝔂 𝓸𝔀𝓷 𝓗𝓪𝓹𝓹𝓲𝓷𝓮𝓼𝓼</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
