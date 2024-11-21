@@ -958,9 +958,9 @@
 	</select>
 	<!-- 작성한 시리즈 리뷰 찾아오기 -->
 	<select id="movDAO.seriesReviewByTime" resultClass="reviewVO">
-		SELECT review_id AS reviewId, series_id AS seriesID, user_id AS userId, rate, detail, submit_time AS submitTime
+		SELECT review_id AS reviewId, series_id AS seriesId, user_id AS userId, rate, detail, submit_time AS submitTime
 		FROM series_review
-		WHERE series_id = #seriesID# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
+		WHERE series_id = #seriesId# AND user_id = #userId# AND submit_time LIKE '%' || #submitTime# || '%'
 	</select>
 	<!-- 작성한 배우 응원글 찾아오기 -->
 	<select id="movDAO.actorReviewByTime" resultClass="reviewVO">
@@ -1068,5 +1068,104 @@
 		WHERE log_type='add movie'
 				OR log_type='add series'
 		ORDER BY report_time DESC
+	</select>
+	<!-- 리뷰 등록 횟수 조회 -->
+	<select id="movDAO.reviewCnt" resultClass="logChartVO">
+		SELECT COUNT(log_id) FILTER (WHERE log_type = 'movie review') AS movie
+				, COUNT(log_id) FILTER (WHERE log_type = 'series review') AS series
+				, COUNT(log_id) FILTER (WHERE log_type = 'actor review') AS actor
+		FROM acc_log
+	</select>
+	<!-- 날짜 별 리뷰 등록 횟수 조회 -->
+	<select id="movDAO.reviewBarChart" resultClass="logChartVO">
+		WITH date_series AS (
+	    SELECT 
+	        (CURRENT_DATE - INTERVAL '4 days' + (i * INTERVAL '1 day'))::date AS reportDate
+	    FROM 
+	        generate_series(0, 4) AS i
+		)
+		
+		SELECT 
+		    ds.reportDate,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'movie review' THEN 1 ELSE 0 END), 0) AS movie,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'series review' THEN 1 ELSE 0 END), 0) AS series,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'actor review' THEN 1 ELSE 0 END), 0) AS actor
+		FROM 
+		    date_series ds
+		LEFT JOIN 
+		    public.acc_log al ON 
+		        TO_DATE(al.report_time, 'YYYY-MM-DD HH24:MI:SS')::date = ds.reportDate
+		GROUP BY 
+		    ds.reportDate
+		ORDER BY 
+		    ds.reportDate;
+	</select>
+	<!-- 리뷰 로그 테이블 -->
+	<select id="movDAO.reviewLogTable" resultClass="logVO">
+		SELECT log_id AS logId, user_id AS userId, log_type AS logType, log_detail AS logDetail, report_time AS reportTime
+		FROM acc_log
+		WHERE log_type='movie review' OR log_type='series review' OR log_type='actor review'
+		ORDER BY report_time DESC
+	</select>
+	<!-- 등록 컨텐츠 개수 조회 -->
+	<select id="movDAO.contentsCnt" resultClass="logChartVO">
+		SELECT (SELECT COUNT(*) FROM movie_page) AS movie
+				, (SELECT COUNT(*) FROM collection) AS series
+				, (SELECT COUNT(*) FROM actor) AS actor
+	</select>
+	<!-- 컨텐츠 호출 회수 조회 -->
+	<select id="movDAO.contentsCall" resultClass="logChartVO">
+		SELECT COUNT(log_id) FILTER (WHERE log_type = 'load tmdb') AS tmdb
+				, COUNT(log_id) FILTER (WHERE log_type = 'load Film Report') AS movie
+				, COUNT(log_id) FILTER (WHERE log_type = 'load series') AS series
+				, COUNT(log_id) FILTER (WHERE log_type = 'load actor') AS actor
+		FROM acc_log
+	</select>
+	<!-- 사용자 활동 회수 -->
+	<select id="movDAO.userActivityCnt" resultClass="logChartVO">
+		WITH date_series AS (
+		    SELECT 
+		        (CURRENT_DATE - INTERVAL '7 days' + (i * INTERVAL '1 day'))::date AS reportDate
+		    FROM 
+		        generate_series(0, 7) AS i
+		)
+		
+		SELECT 
+		    ds.reportDate,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'log-in success' THEN 1 ELSE 0 END), 0) AS logIn,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'load tmdb' OR al.log_type = 'load Film Report' OR al.log_type = 'load series' OR al.log_type = 'load actor'  THEN 1 ELSE 0 END), 0) AS movie,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'movie review' OR al.log_type = 'series review' OR al.log_type = 'actor review' THEN 1 ELSE 0 END), 0) AS review,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'add movie' OR al.log_type = 'add series' THEN 1 ELSE 0 END), 0) AS register,
+		    COALESCE(SUM(CASE WHEN al.log_type = 'like' THEN 1 ELSE 0 END), 0) AS like
+		FROM 
+		    date_series ds
+		LEFT JOIN 
+		    public.acc_log al ON 
+		        TO_DATE(al.report_time, 'YYYY-MM-DD HH24:MI:SS')::date = ds.reportDate
+		        AND user_id = #userId#
+		GROUP BY 
+		    ds.reportDate
+		ORDER BY 
+		    ds.reportDate
+	</select>
+	<!-- 사용자 조회 활동 회수 -->
+	<select id="movDAO.userLoadCnt" resultClass="logChartVO">
+		WITH date_series AS (
+		    SELECT 
+		        (CURRENT_DATE - INTERVAL '7 days' + (i * INTERVAL '1 day'))::date AS reportDate
+		    FROM 
+		        generate_series(0, 7) AS i
+		)
+		
+		SELECT
+			ds.reportDate,
+			COALESCE(SUM(CASE WHEN al.log_type = 'load tmdb' OR al.log_type = 'load Film Report' THEN 1 ELSE 0 END), 0) AS movie,
+			COALESCE(SUM(CASE WHEN al.log_type = 'load series' THEN 1 ELSE 0 END), 0) AS series,
+			COALESCE(SUM(CASE WHEN al.log_type = 'load actor' THEN 1 ELSE 0 END), 0) AS actor
+		FROM date_series ds
+		LEFT JOIN acc_log al ON TO_DATE(al.report_time, 'YYYY-MM-DD HH24:MI:SS')::date = ds.reportDate
+								AND user_id = #userId#
+		GROUP BY ds.reportDate
+		ORDER BY ds.reportDate
 	</select>
 </sqlMap>

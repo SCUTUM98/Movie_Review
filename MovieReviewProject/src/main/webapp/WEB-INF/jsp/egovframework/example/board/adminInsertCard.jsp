@@ -153,7 +153,7 @@
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Film Report 신규 등록 현황</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Insert Card</li>
+                            <li class="breadcrumb-item active">Dashboard > Insert Card</li>
                         </ol>
                         <div class="row">
                             <div class="col-xl-3 col-md-6">

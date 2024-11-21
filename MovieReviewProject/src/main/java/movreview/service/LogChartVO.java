@@ -53,7 +53,16 @@ public class LogChartVO {
     private int war;
     private int comedy;
     private int fantasy;
-
+    
+    private int movie;
+    private int series;
+    private int actor;
+    private int tmdb;
+    private int review;
+    private int register;
+    private int logIn;
+    private int like;
+	
 	
 	public int getLog04() {
 		return log04;
@@ -354,6 +363,54 @@ public class LogChartVO {
 	}
 	public void setFantasy(int fantasy) {
 		this.fantasy = fantasy;
+	}
+	public int getMovie() {
+		return movie;
+	}
+	public void setMovie(int movie) {
+		this.movie = movie;
+	}
+	public int getSeries() {
+		return series;
+	}
+	public void setSeries(int series) {
+		this.series = series;
+	}
+	public int getActor() {
+		return actor;
+	}
+	public void setActor(int actor) {
+		this.actor = actor;
+	}
+	public int getTmdb() {
+		return tmdb;
+	}
+	public void setTmdb(int tmdb) {
+		this.tmdb = tmdb;
+	}
+	public int getReview() {
+		return review;
+	}
+	public void setReview(int review) {
+		this.review = review;
+	}
+	public int getRegister() {
+		return register;
+	}
+	public void setRegister(int register) {
+		this.register = register;
+	}
+	public int getLogIn() {
+		return logIn;
+	}
+	public void setLogIn(int logIn) {
+		this.logIn = logIn;
+	}
+	public int getLike() {
+		return like;
+	}
+	public void setLike(int like) {
+		this.like = like;
 	}
 
 }

@@ -162,4 +162,18 @@ public interface MovieService {
 	List<?> searchLogTable() throws Exception;
 	// 삽입 로그 테이블
 	List<?> insertLogTable() throws Exception;
+	// 리뷰 등록 횟수 조회
+	LogChartVO reviewCnt() throws Exception;
+	// 날짜 별 리뷰 등록 횟수 조회
+	List<?> reviewBarChart() throws Exception;
+	// 리뷰 로그 테이블
+	List<?> reviewLogTable() throws Exception;
+	// 등록 컨텐츠 개수 조회
+	LogChartVO contentsCnt() throws Exception;
+	// 컨텐츠 호출 회수 조회
+	LogChartVO contentsCall() throws Exception;
+	// 사용자 활동 회수
+	List<?> userActivityCnt(String userId) throws Exception;
+	// 사용자 조회 활동 회수
+	List<?> userLoadCnt(String userId) throws Exception;
 }

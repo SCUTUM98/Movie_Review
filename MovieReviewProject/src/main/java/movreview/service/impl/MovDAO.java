@@ -366,4 +366,32 @@ public class MovDAO extends EgovAbstractDAO {
 	public List<?> insertLogTable() throws Exception {
 		return list("movDAO.insertLogTable");
 	}
+	// 리뷰 등록 횟수 조회
+	public LogChartVO reviewCnt() throws Exception {
+		return (LogChartVO) select("movDAO.reviewCnt");
+	}
+	// 날짜 별 리뷰 등록 횟수 조회
+	public List<?> reviewBarChart() throws Exception {
+		return list("movDAO.reviewBarChart");
+	}
+	// 리뷰 로그 테이블
+	public List<?> reviewLogTable() throws Exception {
+		return list("movDAO.reviewLogTable");
+	}
+	// 등록 컨텐츠 개수 조회
+	public LogChartVO contentsCnt() throws Exception {
+		return (LogChartVO) select("movDAO.contentsCnt");
+	}
+	// 컨텐츠 호출 회수 조회
+	public LogChartVO contentsCall() throws Exception {
+		return (LogChartVO) select("movDAO.contentsCall");
+	}
+	// 사용자 활동 회수
+	public List<?> userActivityCnt(String userId) throws Exception {
+		return list("movDAO.userActivityCnt", userId);
+	}
+	// 사용자 조회 활동 회수
+	public List<?> userLoadCnt(String userId) throws Exception {
+		return list("movDAO.userLoadCnt", userId);
+	}
 }

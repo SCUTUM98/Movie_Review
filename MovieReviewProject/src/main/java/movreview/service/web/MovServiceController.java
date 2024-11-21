@@ -1999,10 +1999,19 @@ public class MovServiceController {
     @RequestMapping("/adminUserDetail.do")
     public String adminUserDetail(@RequestParam("id") String id, Model model) throws Exception {
     	MemberVO member = new MemberVO();
+    	List<?> activityCnt = movService.userActivityCnt(id);
+    	List<?> loadCnt = movService.userLoadCnt(id);
     	member.setId(id);
+    	
+    	ObjectMapper om = new ObjectMapper();
+
+    	String userList = om.writeValueAsString(loadCnt);
+    	System.out.println(userList);
     	
     	model.addAttribute("userData", movService.searchUserDetail(member));
     	model.addAttribute("logList", movService.searchAccLog(id));
+    	model.addAttribute("activityCnt", activityCnt);
+    	model.addAttribute("loadCnt", loadCnt);
     	
     	return "board/userDetail";
     }
@@ -2048,12 +2057,29 @@ public class MovServiceController {
     
     @RequestMapping("/adminDetailCard.do")
     public String adminDetailCard(Model model) throws Exception {
+    	LogChartVO chartVO = movService.contentsCnt();
+    	LogChartVO callChartVO = movService.contentsCall();
+    	
+    	model.addAttribute("chartData", chartVO);
+    	model.addAttribute("callData", callChartVO);
     	
     	return "board/adminDetailCard";
     }
     
     @RequestMapping("/adminReviewCard.do")
     public String adminReviewCard(Model model) throws Exception {
+    	LogChartVO chartVO = movService.reviewCnt();
+    	List<?> reviewCnt = movService.reviewBarChart();
+    	List<?> reviewLogTable = movService.reviewLogTable();
+    	
+    	ObjectMapper om = new ObjectMapper();
+
+    	String userList = om.writeValueAsString(reviewCnt);
+    	System.out.println(userList);
+    	
+    	model.addAttribute("chartData", chartVO);
+    	model.addAttribute("reviewCnt", reviewCnt);
+    	model.addAttribute("log", reviewLogTable);
     	
     	return "board/adminReviewCard";
     }
@@ -2131,6 +2157,7 @@ public class MovServiceController {
     			CollectionVO seriesVO = new CollectionVO();
     			
     			seriesVO.setId(Integer.valueOf(logDetail));
+    			System.out.println(seriesVO.getId());
     			reviewVO.setSeriesId(Integer.valueOf(logDetail));
     			
     			model.addAttribute("seriesDetail", movService.selectCollection(seriesVO));

@@ -435,4 +435,39 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> insertLogTable() throws Exception {
 		return movDAO.insertLogTable();
 	}
+	// 리뷰 등록 횟수 조회
+	@Override
+	public LogChartVO reviewCnt() throws Exception {
+		return movDAO.reviewCnt();
+	}
+	// 날짜 별 리뷰 등록 횟수 조회
+	@Override
+	public List<?> reviewBarChart() throws Exception {
+		return movDAO.reviewBarChart();
+	}
+	// 리뷰 로그 테이블
+	@Override
+	public List<?> reviewLogTable() throws Exception {
+		return movDAO.reviewLogTable();
+	}
+	// 등록 컨텐츠 개수 조회
+	@Override
+	public LogChartVO contentsCnt() throws Exception {
+		return movDAO.contentsCnt();
+	}
+	// 컨텐츠 호출 회수 조회
+	@Override
+	public LogChartVO contentsCall() throws Exception {
+		return movDAO.contentsCall();
+	}
+	// 사용자 활동 회수
+	@Override
+	public List<?> userActivityCnt(String userId) throws Exception {
+		return movDAO.userActivityCnt(userId);
+	}
+	//
+	@Override
+	public List<?> userLoadCnt(String userId) throws Exception {
+		return movDAO.userLoadCnt(userId);
+	}
 }

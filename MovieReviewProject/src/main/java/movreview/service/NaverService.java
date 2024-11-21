@@ -33,24 +33,21 @@ public class NaverService {
     }
     
     public String searchNews(String client, String secretKey, String actorName) throws Exception {
-        // UriComponentsBuilder를 사용하여 URL을 생성
         String url = UriComponentsBuilder.fromHttpUrl("https://openapi.naver.com/v1/search/news.json")
-                .queryParam("query", actorName) // 자동으로 인코딩됨
+                .queryParam("query", actorName)
                 .queryParam("display", 10)
                 .queryParam("start", 1)
-                .toUriString(); // 최종 URL 문자열 생성
+                .toUriString();
 
         System.out.println(url);
         
-        // 요청 헤더 설정
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", client);
         requestHeaders.put("X-Naver-Client-Secret", secretKey);
         
-        // GET 요청 실행
         String responseBody = get(url, requestHeaders);
         System.out.println(responseBody);
-        return responseBody; // 결과를 반환
+        return responseBody;
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){

@@ -73,39 +73,7 @@
 		        chart.draw(data, options);
 		      }
 	    </script>
-	    <%-- <script type="text/javascript">
-	        google.charts.load('current', {'packages':['bar']});
-	        google.charts.setOnLoadCallback(drawStuff);
-	
-	        function drawStuff() {
-	            var data = new google.visualization.arrayToDataTable([
-	                ['Date', 'Login Count'],
-	                <% 
-	                    List<LogChartVO> loginCountList = (List<LogChartVO>) request.getAttribute("loginCnt");
-	                    for (LogChartVO loginCount : loginCountList) {
-	                %>
-	                    ['<%= loginCount.getReportDate() %>', <%= loginCount.getReportCount() %>],
-	                <% 
-	                    } 
-	                %>
-	            ]);
 
-	            var options = {
-	                width: 600,
-	                legend: { position: 'none' },
-	                chart: {},
-	                axes: {
-	                    x: {
-	                        0: { side: 'top', label: 'Date'}
-	                    }
-	                },
-	                bar: { groupWidth: "90%" }
-	            };
-	
-	            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-	            chart.draw(data, google.charts.Bar.convertOptions(options));
-	        };
-	    </script> --%>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -205,6 +173,9 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Film Report 검색 현황</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dashboard > Search Card</li>
+                        </ol>
                         <div class="row">
                             
                             <div class="col-xl-3 col-md-6">

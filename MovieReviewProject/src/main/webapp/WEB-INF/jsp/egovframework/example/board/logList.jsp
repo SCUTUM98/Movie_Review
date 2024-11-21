@@ -66,7 +66,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="/adminMain.do">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -78,11 +78,11 @@
                             <div class="collapse" id="logLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="/adminLogGuide.do">로그 가이드</a>
-                                    <a class="nav-link" href="/adminAccList.do">시스템 로그</a>
+                                    <a class="nav-link" href="/adminLogList.do">시스템 로그</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Contents</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="/adminMovie.do">
                                 <div class="sb-nav-link-icon"><i class="fas fa-film"></i></div>
                                 Movie
                             </a>
@@ -125,10 +125,6 @@
                                	메인페이지
                             </a>
                         </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
                     </div>
                 </nav>
             </div>

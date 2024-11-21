@@ -4,6 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page import="movreview.service.LogChartVO" %>
+<%@ page import="java.util.List" %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +20,67 @@
         <link href="${pageContext.request.contextPath}/css/admin/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	    <script type="text/javascript">
+		      google.charts.load('current', {'packages':['corechart']});
+		      google.charts.setOnLoadCallback(drawChart);
+		
+		      function drawChart() {
+		        var data = google.visualization.arrayToDataTable([
+		          ['DATE', '로그인', '좋아요', '조회', '댓글', '등록'],
+		          <%
+		          	List<LogChartVO> activityCnt = (List<LogChartVO>) request.getAttribute("activityCnt");
+		          	for(LogChartVO entry:activityCnt) {
+		          		int login = entry.getLogIn();
+		          		int like = entry.getLike();
+		          		int movie = entry.getMovie();
+		          		int review = entry.getReview();
+		          		int register = entry.getRegister();
+		          %>
+		          	['<%= entry.getReportDate() %>', <%= login %>, <%= like %>, <%= movie %>, <%= review %>, <%= register %>],
+		          <%
+		          	}
+		          %>
+		        ]);
+		
+		        var options = {
+		          hAxis: {title: 'DATE',  titleTextStyle: {color: '#333'}},
+		          vAxis: {minValue: 0}
+		        };
+		
+		        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+		        chart.draw(data, options);
+		      }
+	    </script>
+	    <script type="text/javascript">
+		      google.charts.load('current', {'packages':['corechart']});
+		      google.charts.setOnLoadCallback(drawChart2);
+		
+		      function drawChart2() {
+		        var data = google.visualization.arrayToDataTable([
+		          ['DATE', '영화', '시리즈', '배우'],
+		          <%
+		          	List<LogChartVO> loadCnt = (List<LogChartVO>) request.getAttribute("loadCnt");
+		          	for(LogChartVO entry:loadCnt) {
+		          		int movie = entry.getMovie();
+		          		int series = entry.getSeries();
+		          		int actor = entry.getActor();
+		          %>
+		          	['<%= entry.getReportDate() %>', <%= movie %>, <%= series %>, <%= actor %>],
+		          <%
+		          	}
+		          %>
+		        ]);
+		
+		        var options = {
+		          hAxis: {title: 'DATE',  titleTextStyle: {color: '#333'}},
+		          vAxis: {minValue: 0}
+		        };
+		
+		        var chart = new google.visualization.AreaChart(document.getElementById('chart_load'));
+		        chart.draw(data, options);
+		      }
+	    </script>
         <script>
         
 	        $(document).ready(function() {
@@ -237,18 +300,18 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        ${userData.id } 님의 활동 근황
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div id="chart_div" style="width: 100%; height: 300px;"></div>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        	조회 현황
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                    <div id="chart_load" style="width: 100%; height: 300px;"></div>
                                 </div>
                             </div>
                         </div>
