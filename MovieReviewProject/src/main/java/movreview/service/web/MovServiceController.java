@@ -49,6 +49,7 @@ import javax.servlet.http.HttpSession;
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
 import movreview.service.TmdbService;
+import movreview.service.TvVO;
 import movreview.service.NaverService;
 import movreview.service.MovieVO;
 import movreview.service.ReviewVO;
@@ -99,8 +100,6 @@ public class MovServiceController {
 	public String mainPage(Model model, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
-		System.out.println("UserName: " + username);
-
 		model.addAttribute("username", username);
 		
 		LogVO logVO = new LogVO();
@@ -2273,5 +2272,192 @@ public class MovServiceController {
 		response.put("result", result);
 		return response;
 	}
+    
+    
+    // TV 프로그램
+    @RequestMapping("/tvMain.do")
+    public String tvMain(Model model, HttpServletRequest request) throws Exception {
+    	HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		
+		logVO.setLogType("move");
+		logVO.setLogDetail("tvMain.do");
+		movService.insertLog(logVO);
+		
+		String trendingData = tmdbService.tvTrending(apiKey);
+		String newestAniKR = tmdbService.newestAniKR(apiKey);
+		String newestAniJP = tmdbService.newestAniJP(apiKey);
+		String newestAniUS = tmdbService.newestAniUS(apiKey);
+		String popularRealityKR = tmdbService.popularRealityKR(apiKey);
+		String popularRealityJP = tmdbService.popularRealityJP(apiKey);
+		String popularRealityUS = tmdbService.popularRealityUS(apiKey);
+		String popularDramaKR = tmdbService.popularDramaKR(apiKey);
+		String popularDramaJP = tmdbService.popularDramaJP(apiKey);
+		String popularDramaUS = tmdbService.popularDramaUS(apiKey);
+		
+		if (trendingData == null || trendingData.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: trendingData");
+		}
+		if (newestAniKR == null || newestAniKR.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: newestAniKR");
+		}
+		if (newestAniJP == null || newestAniJP.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: newestAniJP");
+		}
+		if (newestAniUS == null || newestAniUS.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: newestAniUS");
+		}
+		if (popularRealityKR == null || popularRealityKR.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularReality");
+		}
+		if (popularRealityJP == null || popularRealityJP.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularReality");
+		}
+		if (popularRealityUS == null || popularRealityUS.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularReality");
+		}
+		if (popularDramaKR == null || popularDramaKR.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularDramaKR");
+		}
+		if (popularDramaJP == null || popularDramaJP.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularDramaJP");
+		}
+		if (popularDramaUS == null || popularDramaUS.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: popularDramaUS");
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode KRNode = objectMapper.readTree(popularRealityKR);
+			JsonNode reKRNode = KRNode.get("results");
+			
+			JsonNode JPNode = objectMapper.readTree(popularRealityJP);
+			JsonNode reJPNode = JPNode.get("results");
+			
+			JsonNode USNode = objectMapper.readTree(popularRealityUS);
+			JsonNode reUSNode = USNode.get("results");
+			
+			if (reKRNode == null || !reKRNode.isArray()) {
+				throw new RuntimeException("No results found in the response: reKRNode");
+			}
+			if (reJPNode == null || !reJPNode.isArray()) {
+				throw new RuntimeException("No results found in the response: reJPNode");
+			}
+			if (reUSNode == null || !reUSNode.isArray()) {
+				throw new RuntimeException("No results found in the response: reUSNode");
+			}
+			
+			List<TvVO> reKRVO = objectMapper.convertValue(reKRNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> reJPVO = objectMapper.convertValue(reJPNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> reUSVO = objectMapper.convertValue(reUSNode, new TypeReference<List<TvVO>>() {
+			});
+			
+			model.addAttribute("reKR", reKRVO);
+			model.addAttribute("reJP", reJPVO);
+			model.addAttribute("reUS", reUSVO);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		}
+		
+		try {
+			JsonNode KRNode = objectMapper.readTree(popularDramaKR);
+			JsonNode dramaKRNode = KRNode.get("results");
+			
+			JsonNode JPNode = objectMapper.readTree(popularDramaJP);
+			JsonNode dramaJPNode = JPNode.get("results");
+			
+			JsonNode USNode = objectMapper.readTree(popularDramaUS);
+			JsonNode dramaUSNode = USNode.get("results");
+			
+			if (dramaKRNode == null || !dramaKRNode.isArray()) {
+				throw new RuntimeException("No results found in the response: dramaKRNode");
+			}
+			if (dramaJPNode == null || !dramaJPNode.isArray()) {
+				throw new RuntimeException("No results found in the response: dramaJPNode");
+			}
+			if (dramaUSNode == null || !dramaUSNode.isArray()) {
+				throw new RuntimeException("No results found in the response: dramaUSNode");
+			}
+			
+			List<TvVO> dramaKRVO = objectMapper.convertValue(dramaKRNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> dramaJPVO = objectMapper.convertValue(dramaJPNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> dramaUSVO = objectMapper.convertValue(dramaUSNode, new TypeReference<List<TvVO>>() {
+			});
+			
+			model.addAttribute("dramaKR", dramaKRVO);
+			model.addAttribute("dramaJP", dramaJPVO);
+			model.addAttribute("dramaUS", dramaUSVO);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		}
+		
+		
+		try {
+			JsonNode jsonNode = objectMapper.readTree(trendingData);
+			JsonNode trendingNode = jsonNode.get("results");
+			
+			JsonNode KRNode = objectMapper.readTree(newestAniKR);
+			JsonNode aniKRNode = KRNode.get("results");
+			
+			JsonNode JPNode = objectMapper.readTree(newestAniJP);
+			JsonNode aniJPNode = JPNode.get("results");
+			
+			JsonNode USNode = objectMapper.readTree(newestAniUS);
+			JsonNode aniUSNode = USNode.get("results");
+			
+			if (trendingNode == null || !trendingNode.isArray()) {
+				throw new RuntimeException("No results found in the response: trendingData");
+			}
+			if (aniKRNode == null || !aniKRNode.isArray()) {
+				throw new RuntimeException("No results found in the response: newestAniKR");
+			}
+			if (aniJPNode == null || !aniJPNode.isArray()) {
+				throw new RuntimeException("No results found in the response: newestAniJP");
+			}
+			if (aniUSNode == null || !aniUSNode.isArray()) {
+				throw new RuntimeException("No results found in the response: newestAniUS");
+			}
+
+			List<TvVO> trendingVO = objectMapper.convertValue(trendingNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> aniKRVO = objectMapper.convertValue(aniKRNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> aniJPVO = objectMapper.convertValue(aniJPNode, new TypeReference<List<TvVO>>() {
+			});
+			List<TvVO> aniUSVO = objectMapper.convertValue(aniUSNode, new TypeReference<List<TvVO>>() {
+			});
+			
+			model.addAttribute("trendingData", trendingVO);
+			model.addAttribute("aniKR", aniKRVO);
+			model.addAttribute("aniJP", aniJPVO);
+			model.addAttribute("aniUS", aniUSVO);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		}
+    	
+    	
+    	return "board/tvShowMain";
+    }
+    
 
 }

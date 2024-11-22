@@ -196,6 +196,7 @@
                 <li><a href="/main.do">홈</a></li>
                 <li><a href="/movieList.do">영화</a></li>
                 <li><a href="/seriesList.do">시리즈</a></li>
+                <li><a href="/tvMain.do">TV 프로그램</a></li>
                 <li><a href="/search.do">검색</a></li>
                 <c:if test="${not empty username }"><li><a href="/mypage.do">마이페이지</a></li></c:if>
                 <c:if test="${empty username }"><li><a href="/home.do">로그인</a></li></c:if>

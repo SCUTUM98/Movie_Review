@@ -1,5 +1,8 @@
 package movreview.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -215,6 +218,174 @@ public class TmdbService {
     
     public String upComing(String apiKey) {
     	String url = String.format("https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&page=1");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String tvTrending(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/trending/tv/day?language=ko-KR");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String newestAniKR(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=first_air_date.desc&with_genres=16&with_origin_country=KR", year);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String newestAniJP(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=first_air_date.desc&with_genres=16&with_origin_country=JP");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String newestAniUS(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=first_air_date.desc&with_genres=16&with_origin_country=US");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularRealityKR(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=10764&with_origin_country=KR");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularRealityJP(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=10764&with_origin_country=JP");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularRealityUS(String apiKey) {
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=10764&with_origin_country=US");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularDramaKR(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&includeadult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=18&with_origin_country=KR");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularDramaJP(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&includeadult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=18&with_origin_country=JP");
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String popularDramaUS(String apiKey) {
+    	LocalDate now = LocalDate.now();
+    	int year = now.getYear();
+    	
+    	String url = String.format("https://api.themoviedb.org/3/discover/tv?first_air_date_year=" + year + "&includeadult=false&include_null_first_air_dates=false&language=ko-KR&page=1&sort_by=popularity.desc&with_genres=18&with_origin_country=US");
     	
     	HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
