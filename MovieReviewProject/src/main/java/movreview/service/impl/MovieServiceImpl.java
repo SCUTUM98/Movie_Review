@@ -23,6 +23,8 @@ import movreview.service.MemberVO;
 import movreview.service.MovieService;
 import movreview.service.MovieVO;
 import movreview.service.ReviewVO;
+import movreview.service.TvSeasonVO;
+import movreview.service.TvVO;
 
 @Service("movService")
 public class MovieServiceImpl implements MovieService {
@@ -465,9 +467,32 @@ public class MovieServiceImpl implements MovieService {
 	public List<?> userActivityCnt(String userId) throws Exception {
 		return movDAO.userActivityCnt(userId);
 	}
-	//
+	// 사용자 조회 활동 회수
 	@Override
 	public List<?> userLoadCnt(String userId) throws Exception {
 		return movDAO.userLoadCnt(userId);
+	}
+	
+	// TV 프로그램
+	// 중복확인
+	@Override
+	public int checkTV(TvVO vo) throws Exception {
+		return movDAO.checkTV(vo);
+	}
+	// TV 시리즈 등록
+	@Override
+	public TvVO insertTvSeries(TvVO vo) throws Exception {
+		return movDAO.insertTvSeries(vo);
+	}
+	// TV 시리즈 시즌 등록
+	@Override
+	public TvSeasonVO insertTvSeason(TvSeasonVO vo) throws Exception {
+		return movDAO.insertTvSeason(vo);
+	}
+	
+	// 시리즈 등록 확인
+	@Override
+	public int tvSeriesCheck(int id) throws Exception {
+		return movDAO.tvSeriesCheck(id);
 	}
 }

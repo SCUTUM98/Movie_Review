@@ -18,6 +18,8 @@ import movreview.service.LogChartVO;
 import movreview.service.LogVO;
 import movreview.service.MemberVO;
 import movreview.service.ReviewVO;
+import movreview.service.TvSeasonVO;
+import movreview.service.TvVO;
 
 @Repository("movDAO")
 public class MovDAO extends EgovAbstractDAO {
@@ -393,5 +395,24 @@ public class MovDAO extends EgovAbstractDAO {
 	// 사용자 조회 활동 회수
 	public List<?> userLoadCnt(String userId) throws Exception {
 		return list("movDAO.userLoadCnt", userId);
+	}
+	
+	// TV 프로그램
+	// 중복확인
+	public int checkTV(TvVO vo) throws Exception {
+		return (int) select("movDAO.checkTV", vo);
+	}
+	// TV 시리즈 등록
+	public TvVO insertTvSeries(TvVO vo) throws Exception {
+		return (TvVO) insert("movDAO.insertTvSeries", vo);
+	}
+	// TV 시리즈 시즌 등록
+	public TvSeasonVO insertTvSeason(TvSeasonVO vo) throws Exception {
+		return (TvSeasonVO) insert("movDAO.insertTvSeason", vo);
+	}
+	
+	// 시리즈 등록 확인
+	public int tvSeriesCheck(int id) throws Exception {
+		return (int) select("movDAO.tvSeriesCheck", id);
 	}
 }

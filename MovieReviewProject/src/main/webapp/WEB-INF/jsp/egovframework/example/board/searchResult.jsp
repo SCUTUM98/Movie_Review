@@ -120,6 +120,21 @@
 		  </form:form>
 	  </c:if>
 	  
+	  <c:if test="${not empty resultData }">
+	      <h1 id="unregistered">Unregistered TV Program</h1>
+		  <form:form commandName="movieVO" name="tmdbForm" method="post">
+			  <input type="hidden" name="id" value="">
+			  <div class="box">
+				 <c:forEach items="${tvResult }" var="result" varStatus="status">
+				 	<a href="javascript:movieSelect('${result.id}')">
+				 		<img src="http://image.tmdb.org/t/p/w780${result.posterPath }" alt="${result.originalName }" class="movie-poster">
+				 		<p class="movie-title">${result.name}</p>
+				 	</a>
+				 </c:forEach>
+			  </div>    
+		  </form:form>
+	  </c:if>
+	  
 	  <c:if test="${not empty collectionList }">
 		  <h1 id="unregistered">Series</h1>
 		  <form:form commandName="collectionVO" name="collectionForm" method="post">

@@ -21,16 +21,16 @@
 	    	
 	    	var id = id;
 	    	$.ajax({
-	    		url: './movieCheck.do',
+	    		url: './tvSeriesCheck.do',
 	    		type: 'post',
 	    		data: {id:id},
 	    		dataType: 'json',
 	    		success: function(response) {
 	    			console.log("서버 응답:", response); 
 	                if (response.cnt === 0) { 
-	                    movieSelect(id);
+	                    seriesSelect(id);
 	                } else { 
-	                    localMovieSelect(id);
+	                    localSeriesSelect(id);
 	                }
 	    		},
 	    		error: function() {
@@ -184,23 +184,72 @@
 	            behavior: 'smooth'
 	        });
 	    }
+	    function drKR_scrollLeft(event) {
+	    	console.log("Left button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drKR-list');
+	        container.scrollBy({
+	            left: -200,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function drKR_scrollRight(event) {
+	    	console.log("Right button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drKR-list');
+	        container.scrollBy({
+	            left: 200,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function drJP_scrollLeft(event) {
+	    	console.log("Left button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drJP-list');
+	        container.scrollBy({
+	            left: -200,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function drJP_scrollRight(event) {
+	    	console.log("Right button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drJP-list');
+	        container.scrollBy({
+	            left: 200,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function drUS_scrollLeft(event) {
+	    	console.log("Left button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drUS-list');
+	        container.scrollBy({
+	            left: -200,
+	            behavior: 'smooth'
+	        });
+	    }
+	    function drUS_scrollRight(event) {
+	    	console.log("Right button clicked")
+	    	event.preventDefault();
+	        const container = document.querySelector('.drUS-list');
+	        container.scrollBy({
+	            left: 200,
+	            behavior: 'smooth'
+	        });
+	    }
 	    
-	    function movieSelect(id) {
+	    
+	    function seriesSelect(id) {
 			console.log(id);
 	    	document.listForm.id.value = id;
-	       	document.listForm.action = "<c:url value='/detail.do'/>";
+	       	document.listForm.action = "<c:url value='/detailTv.do'/>";
 	       	document.listForm.submit();
 	       	}
-		function localMovieSelect(id) {
+		function localseriesSelect(id) {
 			console.log(id);
 			document.listForm.id.value = id;
 			document.listForm.action = "<c:url value='/localDetail.do'/>";
-			document.listForm.submit();
-		}
-		function seriesDetail(id) {
-			console.log(id);
-			document.listForm.collectionId.value = id;
-			document.listForm.action = "<c:url value='/seriesDetail.do'/>";
 			document.listForm.submit();
 		}
 
@@ -303,6 +352,39 @@
             updateReBigPoster('.big-reposter-section-us', '.reUS-list');
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            function updateReBigPoster(section, list) {
+                let currentIndex = 0;
+                const posters = $(list).children('.movie-item');
+                
+                $(posters).hover(function() {
+                    currentIndex = $(this).index();
+                    updatePoster(section, currentIndex);
+                }, function() {
+                    updatePoster(section, currentIndex);
+                });
+
+                function updatePoster(section, index) {
+                    const posterData = $(posters).eq(index);
+                    const posterSrc = posterData.find('img').attr('src');
+                    const posterName = posterData.find('.movie-name').text();
+                    const overview = posterData.find('.movie-overview').val();
+                    console.log(overview);
+                    
+                    $(section).find('.big-poster').attr('src', posterSrc);
+                    $(section).find('.big-poster-title').text(posterName);
+                    $(section).find('.big-poster-overview').text(overview);
+                }
+
+                updatePoster(section, currentIndex);
+            }
+
+            updateReBigPoster('.big-dposter-section-kr', '.drKR-list');
+            updateReBigPoster('.big-dposter-section-jp', '.drJP-list');
+            updateReBigPoster('.big-dposter-section-us', '.drUS-list');
+        });
+    </script>
 </head>
 <body>
     <div class="header">
@@ -354,10 +436,10 @@
 	                <c:forEach items="${trendingData}" var="trending">
 	                    <div class="movie-item">
 	                        <c:if test="${empty trending.posterPath}">
-	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${trending.originalName}" class="movie-poster">
+	                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${trending.id})" alt="${trending.originalName}" class="movie-poster">
 	                        </c:if>
 	                        <c:if test="${not empty trending.posterPath}">
-	                            <img src="http://image.tmdb.org/t/p/w780${trending.posterPath}" onclick="" alt="${trending.originalName}" class="movie-poster">
+	                            <img src="http://image.tmdb.org/t/p/w780${trending.posterPath}" onclick="checkMovie(${trending.id})" alt="${trending.originalName}" class="movie-poster">
 	                        </c:if>
 	                        <div class="movie-info">
 	                            <p class="movie-name">${trending.name}</p>
@@ -384,10 +466,10 @@
                         <c:forEach items="${reKR}" var="kr">
                             <div class="movie-item">
                                 <c:if test="${empty kr.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${kr.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty kr.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="" alt="${kr.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${kr.name}</p>
@@ -412,10 +494,10 @@
                         <c:forEach items="${reJP}" var="jp">
                             <div class="movie-item">
                                 <c:if test="${empty jp.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${jp.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty jp.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="" alt="${jp.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${jp.name}</p>
@@ -439,10 +521,10 @@
                         <c:forEach items="${reUS}" var="us">
                             <div class="movie-item">
                                 <c:if test="${empty us.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${us.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty us.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="" alt="${us.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${us.name}</p>
@@ -460,15 +542,15 @@
 		    <div class="kr-section">
 		        <h3>KOREA</h3>
 		        <div class="small-dposter-section">
-		            <button type="button" class="scroll-btn" onclick="javascript:reKR_scrollLeft(event)">◀</button>
-		            <div class="reKR-list">
-		                <c:forEach items="${reKR}" var="kr">
+		            <button type="button" class="scroll-btn" onclick="javascript:drKR_scrollLeft(event)">◀</button>
+		            <div class="drKR-list">
+		                <c:forEach items="${dramaKR}" var="kr">
 		                    <div class="movie-item">
 		                        <c:if test="${empty kr.posterPath}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${kr.originalName}" class="movie-poster">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <c:if test="${not empty kr.posterPath}">
-		                            <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="" alt="${kr.originalName}" class="movie-poster">
+		                            <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <div class="movie-info">
 		                            <p class="movie-name">${kr.name}</p>
@@ -477,26 +559,26 @@
 		                    </div>
 		                </c:forEach>
 		            </div>
-		            <button type="button" class="scroll-btn" onclick="javascript:reKR_scrollRight(event)">▶</button>
+		            <button type="button" class="scroll-btn" onclick="javascript:drKR_scrollRight(event)">▶</button>
 		        </div>
-		        <div class="big-dposter-section">
-		            <img src="http://image.tmdb.org/t/p/w780${reKR[0].posterPath}" alt="Big Poster" class="big-poster kr-big-poster">
-		            <h4 class="big-poster-title kr-big-poster-title">${reKR[0].name}</h4>
-		            <h4 class="big-poster-overview">${reKR[0].overview}</h4>
+		        <div class="big-dposter-section-kr">
+		            <img src="http://image.tmdb.org/t/p/w780${dramaKR[0].posterPath}" alt="Big Poster" class="big-poster kr-big-poster">
+		            <h4 class="big-poster-title kr-big-poster-title">${dramaKR[0].name}</h4>
+		            <h4 class="big-poster-overview">${dramaKR[0].overview}</h4>
 		        </div>
 		    </div>
 		    <div class="jp-section">
 		        <h3>JAPAN</h3>
 		        <div class="small-dposter-section">
-		            <button type="button" class="scroll-btn" onclick="javascript:reJP_scrollLeft(event)">◀</button>
-		            <div class="reJP-list">
-		                <c:forEach items="${reJP}" var="jp">
+		            <button type="button" class="scroll-btn" onclick="javascript:drJP_scrollLeft(event)">◀</button>
+		            <div class="drJP-list">
+		                <c:forEach items="${dramaJP}" var="jp">
 		                    <div class="movie-item">
 		                        <c:if test="${empty jp.posterPath}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${jp.originalName}" class="movie-poster">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <c:if test="${not empty jp.posterPath}">
-		                            <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="" alt="${jp.originalName}" class="movie-poster">
+		                            <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <div class="movie-info">
 		                            <p class="movie-name">${jp.name}</p>
@@ -504,26 +586,26 @@
 		                    </div>
 		                </c:forEach>
 		            </div>
-		            <button type="button" class="scroll-btn" onclick="javascript:reJP_scrollRight(event)">▶</button>
+		            <button type="button" class="scroll-btn" onclick="javascript:drJP_scrollRight(event)">▶</button>
 		        </div>
-		        <div class="big-dposter-section">
-		            <img src="http://image.tmdb.org/t/p/w780${reJP[0].posterPath}" alt="Big Poster" class="big-poster jp-big-poster">
-		            <h4 class="big-poster-title jp-big-poster-title">${reJP[0].name}</h4>
-		            <h4 class="big-poster-overview">${reJP[0].overview}</h4>
+		        <div class="big-dposter-section-jp">
+		            <img src="http://image.tmdb.org/t/p/w780${dramaJP[0].posterPath}" alt="Big Poster" class="big-poster jp-big-poster">
+		            <h4 class="big-poster-title jp-big-poster-title">${dramaJP[0].name}</h4>
+		            <h4 class="big-poster-overview">${dramaJP[0].overview}</h4>
 		        </div>
 		    </div>
 		    <div class="us-section">
 		        <h3>US</h3>
 		        <div class="small-dposter-section">
-		            <button type="button" class="scroll-btn" onclick="javascript:reUS_scrollLeft(event)">◀</button>
-		            <div class="reUS-list">
-		                <c:forEach items="${reUS}" var="us">
+		            <button type="button" class="scroll-btn" onclick="javascript:drUS_scrollLeft(event)">◀</button>
+		            <div class="drUS-list">
+		                <c:forEach items="${dramaUS}" var="us">
 		                    <div class="movie-item">
 		                        <c:if test="${empty us.posterPath}">
-		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${us.originalName}" class="movie-poster">
+		                            <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <c:if test="${not empty us.posterPath}">
-		                            <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="" alt="${us.originalName}" class="movie-poster">
+		                            <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
 		                        </c:if>
 		                        <div class="movie-info">
 		                            <p class="movie-name">${us.name}</p>
@@ -531,12 +613,12 @@
 		                    </div>
 		                </c:forEach>
 		            </div>
-		            <button type="button" class="scroll-btn" onclick="javascript:reUS_scrollRight(event)">▶</button>
+		            <button type="button" class="scroll-btn" onclick="javascript:drUS_scrollRight(event)">▶</button>
 		        </div>
-		        <div class="big-dposter-section">
-		            <img src="http://image.tmdb.org/t/p/w780${reUS[0].posterPath}" alt="Big Poster" class="big-poster us-big-poster">
-		            <h4 class="big-poster-title us-big-poster-title">${reUS[0].name}</h4>
-		            <h4 class="big-poster-overview">${reUS[0].overview}</h4>
+		        <div class="big-dposter-section-us">
+		            <img src="http://image.tmdb.org/t/p/w780${dramaUS[0].posterPath}" alt="Big Poster" class="big-poster us-big-poster">
+		            <h4 class="big-poster-title us-big-poster-title">${dramaUS[0].name}</h4>
+		            <h4 class="big-poster-overview">${dramaUS[0].overview}</h4>
 		        </div>
 		    </div>
 		</div>
@@ -557,10 +639,10 @@
                         <c:forEach items="${aniKR}" var="kr">
                             <div class="movie-item">
                                 <c:if test="${empty kr.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${kr.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty kr.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="" alt="${kr.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${kr.posterPath}" onclick="checkMovie(${kr.id})" alt="${kr.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${kr.name}</p>
@@ -585,10 +667,10 @@
                         <c:forEach items="${aniJP}" var="jp">
                             <div class="movie-item">
                                 <c:if test="${empty jp.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${jp.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty jp.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="" alt="${jp.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${jp.posterPath}" onclick="checkMovie(${jp.id})" alt="${jp.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${jp.name}</p>
@@ -612,10 +694,10 @@
                         <c:forEach items="${aniUS}" var="us">
                             <div class="movie-item">
                                 <c:if test="${empty us.posterPath}">
-                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="" alt="${us.originalName}" class="movie-poster">
+                                    <img src="${pageContext.request.contextPath}/images/profile.png" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
                                 </c:if>
                                 <c:if test="${not empty us.posterPath}">
-                                    <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="" alt="${us.originalName}" class="movie-poster">
+                                    <img src="http://image.tmdb.org/t/p/w780${us.posterPath}" onclick="checkMovie(${us.id})" alt="${us.originalName}" class="movie-poster">
                                 </c:if>
                                 <div class="movie-info">
                                     <p class="movie-name">${us.name}</p>

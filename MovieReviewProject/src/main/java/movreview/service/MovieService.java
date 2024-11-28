@@ -176,4 +176,15 @@ public interface MovieService {
 	List<?> userActivityCnt(String userId) throws Exception;
 	// 사용자 조회 활동 회수
 	List<?> userLoadCnt(String userId) throws Exception;
+	
+	// TV 프로그램
+	// 중복확인
+	int checkTV(TvVO vo) throws Exception;
+	// TV 시리즈 등록
+	TvVO insertTvSeries(TvVO vo) throws Exception;
+	// TV 시리즈 시즌 등록
+	TvSeasonVO insertTvSeason(TvSeasonVO vo) throws Exception;
+	
+	// 시리즈 등록 확인
+	int tvSeriesCheck(int id) throws Exception;
 }

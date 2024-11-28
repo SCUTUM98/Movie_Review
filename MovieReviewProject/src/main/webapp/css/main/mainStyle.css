@@ -120,7 +120,7 @@ body {
     position: relative;
 }
 
-.collection-list, .reco-list, .aniKR-list, .aniJP-list, .aniUS-list, .reKR-list, .reJP-list, .reUS-list {
+.collection-list, .movie-list, .coming-list, .reco-list, .aniKR-list, .aniJP-list, .aniUS-list, .reKR-list, .reJP-list, .reUS-list, .drKR-list, .drJP-list, .drUS-list {
     display: flex;
     overflow-x: hidden;
     width: calc(100% - 80px);
@@ -128,7 +128,7 @@ body {
     position: relative;
 }
 
-.aniKR-list, .aniJP-list, .aniUS-list, .reKR-list, .reJP-list, .reUS-list {
+.aniKR-list, .aniJP-list, .aniUS-list, .reKR-list, .reJP-list, .reUS-list, .drKR-list, .drJP-list, .drUS-list {
     margin-top: 50px;    
 }
 
@@ -191,17 +191,27 @@ body {
     height: 400px;
 }
 
-.big-poster-section-kr, .big-reposter-section-kr {
+.big-poster-section-kr {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/aniKR.jpg);
     background-size: cover;
 }
 
-.big-poster-section-jp, .big-reposter-section-jp {
+.big-reposter-section-kr {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/reKR.jpg);
+    background-size: cover;
+}
+
+.big-poster-section-jp {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/aniJP.jpg);
     background-size: cover;
 }
 
-.big-poster-section-us, {
+.big-reposter-section-jp {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/reJP.jpg);
+    background-size: cover;
+}
+
+.big-poster-section-us {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/aniUS.jpg);
     background-size: contain;
 }
@@ -247,17 +257,33 @@ body {
     width: 58%;
 }
 
-.big-dposter-section {
+.big-dposter-section-kr, .big-dposter-section-jp, .big-dposter-section-us {
+    width: 40%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    width: 40%;
-    margin-left: auto;
+    align-items: center;
+    position: relative;
+    height: 400px;
+}
+
+.big-dposter-section-kr {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/drKR.jpg);
+    background-size: cover;
+}
+
+.big-dposter-section-jp {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/drJP.jpg);
+    background-size: cover;
+}
+.big-dposter-section-us {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../images/drUS.jpg);
+    background-size: cover;
 }
 
 .drama-section {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
+	position: relative;
+    background-color: #141414;
+    padding: 10px;
+    z-index: 3;
 }
 

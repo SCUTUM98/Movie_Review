@@ -15,6 +15,8 @@
 	<typeAlias  alias="genreVO" type="movreview.service.GenreVO"/>
 	<typeAlias  alias="logVO" type="movreview.service.LogVO"/>
 	<typeAlias  alias="logChartVO" type="movreview.service.LogChartVO"/>
+	<typeAlias  alias="tvVO" type="movreview.service.TvVO"/>
+	<typeAlias  alias="tvSeasonVO" type="movreview.service.TvSeasonVO"/>
 	
 	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
 		<result property="id" column="id"/>
@@ -1167,5 +1169,58 @@
 								AND user_id = #userId#
 		GROUP BY ds.reportDate
 		ORDER BY ds.reportDate
+	</select>
+	
+	<!-- TV 프로그램 -->
+	<!-- 중복 확인 -->
+	<select id="movDAO.checkTV" resultClass="int">
+		SELECT COUNT(id)
+		FROM tv_program
+		WHERE id = #id#
+	</select>
+	<!-- TV 시리즈 등록 -->
+	<insert id="movDAO.insertTvSeries" parameterClass="tvVO">
+		INSERT INTO tv_program (id
+								, name
+								, original_name
+								, backdrop_path
+								, poster_path
+								, adult
+								, genre
+								, first_air_date
+								, origin_country
+								, overview)
+		VALUES (#id#
+				, #name#
+				, #originalName#
+				, #backdropPath#
+				, #posterPath#
+				, #adult#
+				, #genreDB#
+				, #firstAirDate#
+				, #originCountryDB#
+				, #overview#)
+	</insert>
+	<!-- TV 시리즈 시즌 등록 -->
+	<insert id="movDAO.insertTvSeason" parameterClass="tvSeasonVO">
+		INSERT INTO tv_season (id
+								, series_id
+								, name
+								, air_date
+								, episode_count
+								, poster_path)
+		VALUES (#id#
+				, #seriesId#
+				, #name#
+				, #airDate#
+				, #episodeCount#
+				, #posterPath#)
+	</insert>
+	
+	<!-- 시리즈 등록 확인 -->
+	<select id="movDAO.tvSeriesCheck" resultClass="int">
+		SELECT COUNT(id)
+		FROM tv_program
+		WHERE id=#id#
 	</select>
 </sqlMap>

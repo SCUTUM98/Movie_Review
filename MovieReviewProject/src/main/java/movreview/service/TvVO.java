@@ -24,9 +24,13 @@ public class TvVO {
 	private String firstAirDate;
 	@JsonProperty("origin_country")
 	private List<String> originCountry;
+	private String originCountryDB;
+	@JsonProperty("season_number")
+	private int seasonNumber;
+	@JsonProperty("episode_count")
+	private String episodeCount;
 	
 	private boolean last;
-	
 
 	public String getBackdropPath() {
 		return backdropPath;
@@ -99,5 +103,23 @@ public class TvVO {
 	}
 	public void setLast(boolean last) {
 		this.last = last;
+	}
+	public int getSeasonNumber() {
+		return seasonNumber;
+	}
+	public void setSeasonNumber(int seasonNumber) {
+		this.seasonNumber = seasonNumber;
+	}
+	public String getOriginCountryDB() {
+		return originCountryDB;
+	}
+	public void setOriginCountryDB(String originCountryDB) {
+		this.originCountryDB = originCountryDB;
+	}
+	public String getEpisodeCount() {
+		return episodeCount;
+	}
+	public void setEpisodeCount(String episodeCount) {
+		this.episodeCount = episodeCount;
 	}
 }

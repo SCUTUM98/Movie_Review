@@ -49,6 +49,7 @@ import javax.servlet.http.HttpSession;
 import egovframework.example.sample.service.impl.EgovSampleServiceImpl;
 import movreview.service.MovieService;
 import movreview.service.TmdbService;
+import movreview.service.TvSeasonVO;
 import movreview.service.TvVO;
 import movreview.service.NaverService;
 import movreview.service.MovieVO;
@@ -236,10 +237,12 @@ public class MovServiceController {
 		ActorVO actorVO = new ActorVO();
 		CollectionVO collectionVO = new CollectionVO();
 		MovieVO overviewVO = new MovieVO();
+		TvVO tvVO = new TvVO();
 		searchVO.setTitleEn(searchKeyword);
 		actorVO.setActName(searchKeyword);
 		collectionVO.setName(searchKeyword);
 		overviewVO.setTitleEn(searchKeyword);
+		tvVO.setName(searchKeyword);
 
 		List<?> searchList = movService.searchMovie(searchVO);
 		List<?> actorList = movService.searchActor(actorVO);
@@ -273,6 +276,7 @@ public class MovServiceController {
 
 		String suggestData = tmdbService.suggestMovie(apiKey);
 		String searchResult = tmdbService.searchByName(apiKey, searchKeyword);
+		String tvList = tmdbService.searchTv(apiKey, searchKeyword);
 
 		if (suggestData == null || suggestData.isEmpty()) {
 			throw new RuntimeException("Received null or empty response from the API");
@@ -288,6 +292,8 @@ public class MovServiceController {
 			JsonNode resultsNode = jsonNode.get("results");
 			JsonNode searchNode = objectMapper.readTree(searchResult);
 			JsonNode searchResultNode = searchNode.get("results");
+			JsonNode tvNode = objectMapper.readTree(tvList);
+			JsonNode tvResult = tvNode.get("results");
 
 			if (resultsNode == null || !resultsNode.isArray()) {
 				throw new RuntimeException("No results found in the response");
@@ -298,8 +304,12 @@ public class MovServiceController {
 
 			List<MovieVO> resultVO = objectMapper.convertValue(searchResultNode, new TypeReference<List<MovieVO>>() {
 			});
+			
+			List<TvVO> tvResultVO = objectMapper.convertValue(tvResult, new TypeReference<List<TvVO>>() {
+			});
 
 			List<MovieVO> uniqueMovies = new ArrayList<>();
+			List<TvVO> uniqueTV = new ArrayList<>();
 
 			for (MovieVO movie : resultVO) {
 				int count = movService.checkMovie(movie);
@@ -307,11 +317,19 @@ public class MovServiceController {
 					uniqueMovies.add(movie);
 				}
 			}
+			
+			for (TvVO tv : tvResultVO) {
+				int count = movService.checkTV(tv);
+				if (count == 0) {
+					uniqueTV.add(tv);
+				}
+			}
 
 			model.addAttribute("suggestData", suggestVO);
 			model.addAttribute("totalPages", jsonNode.get("total_pages").asInt());
 			model.addAttribute("totalResults", jsonNode.get("total_results").asInt());
 			model.addAttribute("resultData", uniqueMovies);
+			model.addAttribute("tvResult", uniqueTV);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2459,5 +2477,186 @@ public class MovServiceController {
     	return "board/tvShowMain";
     }
     
+    @RequestMapping(value = "/detailTv.do")
+	public String tvDetail(@RequestParam("id") int id, HttpServletRequest request, Model model) throws Exception {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+
+		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		else {
+			logVO.setUserId("A traveler");
+		}
+		logVO.setLogType("move");
+		logVO.setLogDetail("detailTv.do");
+		movService.insertLog(logVO);
+		
+		logVO.setLogType("load tmdb");
+		logVO.setLogDetail(Integer.toString(id));
+		movService.insertLog(logVO);
+
+		String detailData = tmdbService.detailTv(apiKey, id);
+		String videoData = tmdbService.getTvTrailer(apiKey, id);
+		String recoData = tmdbService.TvRecommendation(apiKey, id);
+		String seasonData = tmdbService.getSeasonInfo(apiKey, id);
+		System.out.println("DetailData: " + detailData);
+		System.out.println("SeasonData: " + seasonData);
+
+		if (detailData == null || detailData.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API");
+		}
+		if (seasonData == null || seasonData.isEmpty()) {
+			throw new RuntimeException("Received null or empty response from the API: seasonData");
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode jsonNode = objectMapper.readTree(detailData);
+			JsonNode videoNode = objectMapper.readTree(videoData);
+			JsonNode vidNode = videoNode.path("results");
+			JsonNode recoNode = objectMapper.readTree(recoData);
+			JsonNode recNode = recoNode.findPath("results");
+			JsonNode seasonNode = objectMapper.readTree(seasonData);
+			JsonNode seasonInfo = seasonNode.findPath("seasons");
+
+			TvVO detailVO = objectMapper.convertValue(jsonNode, TvVO.class);
+
+			model.addAttribute("detailData", detailVO);
+
+			List<String> genres = new ArrayList<>();
+			for (JsonNode genreNode : jsonNode.path("genres")) {
+				genres.add(genreNode.path("name").asText());
+			}
+			detailVO.setGenre(genres);
+			
+			List<Map<String, Object>> recList = new ArrayList<>();
+			for (JsonNode actor : recNode) {
+				Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+				recList.add(actorMap);
+			}
+			System.out.println(recList);
+			model.addAttribute("recommendData", recList);
+			
+			List<Map<String, Object>> seasonList = new ArrayList<>();
+			for (JsonNode actor : seasonInfo) {
+				Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+				seasonList.add(actorMap);
+			}
+			System.out.println("SeasonList: " + seasonList);
+			model.addAttribute("seasonList", seasonList);
+
+			int seriesId = jsonNode.path("id").asInt();
+			String actorData = tmdbService.searchTvActor(apiKey, seriesId);
+
+			if (actorData != null && !actorData.isEmpty()) {
+				JsonNode actorNode = objectMapper.readTree(actorData);
+				JsonNode castNode = actorNode.path("cast");
+
+				List<Map<String, Object>> actorList = new ArrayList<>();
+				for (JsonNode actor : castNode) {
+					Map<String, Object> actorMap = objectMapper.convertValue(actor, Map.class);
+					actorList.add(actorMap);
+				}
+				LOGGER.debug("Actor List: " + actorList);
+				model.addAttribute("actorData", actorList);
+			}
+			if (vidNode.isArray()) {
+				for (JsonNode video : vidNode) {
+					VideoVO videoVO = objectMapper.convertValue(video, VideoVO.class);
+					LOGGER.debug("VIDEO KEY: " + videoVO.getKey());
+					model.addAttribute("videoData", videoVO);
+				}
+			} else {
+				LOGGER.warn("No video data found or not an array");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error processing the API response: " + e.getMessage());
+		}
+
+		return "board/tvDetail";
+	}
+    
+    @RequestMapping(value = "/addTvSeries.do", method = RequestMethod.POST)
+    public String addTvSeries(SessionStatus status, HttpServletRequest request, Model model
+    		, @RequestParam("programId") int programId
+    		, @RequestParam("programName") String programName
+    		, @RequestParam("programOriginalName") String programOriginalName
+    		, @RequestParam("programOverview") String programOverview
+    		, @RequestParam("programBackdropPath") String programBackdropPath
+    		, @RequestParam("programPosterPath") String programPosterPath
+    		, @RequestParam("programAdult") boolean programAdult
+    		, @RequestParam("programGenre") String programGenre
+    		, @RequestParam("programFirstAirDate") String programFirstAirDate
+    		, @RequestParam("programOriginCountry") String[] programOriginCountry
+    		, @RequestParam("seasonId") String[] seasonIds
+    		, @RequestParam("seriesId") String[] seriesId
+    		, @RequestParam("seasonName") String[] seasonNameList
+    		, @RequestParam("seasonAirDate") String[] seasonAirDateList
+    		, @RequestParam("seasonEpisodeCount") String[] seasonEpisodeCountList
+    		, @RequestParam("seasonPosterPath") String[] seasonPosterPathList) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		model.addAttribute("username", username);
+		
+		LogVO logVO = new LogVO();
+		if (username != null) {
+			logVO.setUserId(username);
+		}
+		logVO.setLogType("add TV Series");
+		logVO.setLogDetail(Integer.toString(programId));
+		movService.insertLog(logVO);
+		
+		TvVO tvVO = new TvVO();
+		
+		tvVO.setId(programId);
+		tvVO.setName(programName);
+		tvVO.setOriginalName(programOriginalName);
+		tvVO.setOverview(programOverview);
+		tvVO.setBackdropPath(programBackdropPath);
+		tvVO.setPosterPath(programPosterPath);
+		tvVO.setAdult(programAdult);
+		tvVO.setGenreDB(programGenre);
+		tvVO.setFirstAirDate(programFirstAirDate);
+		tvVO.setOriginCountryDB(programOriginCountry[0]);
+		
+		movService.insertTvSeries(tvVO);
+		
+		for (int i = 0; i < seasonIds.length; i++) {
+			TvSeasonVO seasonVO = new TvSeasonVO();
+			seasonVO.setId(Integer.parseInt(seasonIds[i]));
+			seasonVO.setSeriesId(programId);
+			seasonVO.setName(seasonNameList[i]);
+			seasonVO.setAirDate(seasonAirDateList[i]);
+			seasonVO.setEpisodeCount(Integer.parseInt(seasonEpisodeCountList[i]));
+			seasonVO.setPosterPath(seasonPosterPathList[i]);
+			
+			logVO.setLogType("add Season");
+			logVO.setLogDetail(programId + "(" + seasonIds[i] + ")");
+			movService.insertLog(logVO);
+			
+			movService.insertTvSeason(seasonVO);
+		}
+    	
+    	return "fuck";
+    }
+    
+    @RequestMapping(value = "/tvSeriesCheck.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Integer> tvSeriesCheck(@RequestParam("id") int id) throws Exception {
+		
+        int cnt = movService.tvSeriesCheck(id);
+        System.out.println("cnt: " + cnt);
+        
+        Map<String, Integer> response = new HashMap<>();
+        response.put("cnt", cnt); 
+        return response;
+    }
 
 }

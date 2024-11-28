@@ -398,4 +398,94 @@ public class TmdbService {
         
         return response.getBody();
     }
+    
+    public String searchTv(String apiKey, String searchKeyword) {
+    	String url = String.format("https://api.themoviedb.org/3/search/tv?query=%s&include_adult=false&language=ko-KR&page=1", searchKeyword);
+
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String detailTv(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/tv/%s?language=ko-KR", id);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String searchTvActor(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/tv/%s/aggregate_credits?language=ko-KR", id);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String getTvTrailer(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/tv/%s/videos?language=ko-KR", id);
+
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String TvRecommendation(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/tv/%s/recommendations?language=ko-KR&page=1", id);
+
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
+    
+    public String getSeasonInfo(String apiKey, int id) {
+    	String url = String.format("https://api.themoviedb.org/3/tv/%s?language=ko-KR", id);
+
+    	HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + apiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        
+        LOGGER.debug("Response Body: " + response.getBody());
+        
+        return response.getBody();
+    }
 }
